@@ -1,10 +1,10 @@
 {
 	"compilerOptions": {
 		"strict": true,
-		"module": "ES2022",
-		"target": "ES2022",
+		"module": "ESNext",
+		"target": "ESNext",
 		"lib": [
-			"ES2022"
+			"ESNext"
 		],
 		"allowJs": true,
 		"esModuleInterop": true,
@@ -16,7 +16,11 @@
 		"emitDecoratorMetadata": true,
 		"baseUrl": "./src",
 		"outDir": "./dist",
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"noImplicitAny": true,
+		"sourceMap": true,
+		"declaration": false,
+		"importHelpers": true
 	},
 	"ts-node": {
 		"transpileOnly": true,

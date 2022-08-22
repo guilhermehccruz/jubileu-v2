@@ -1,4 +1,4 @@
-import { dirname, importx } from '@discordx/importer';
+import { importx } from '@discordx/importer';
 import { IntentsBitField } from 'discord.js';
 import { Client } from 'discordx';
 
@@ -32,7 +32,7 @@ bot.once('ready', async () => {
 });
 
 async function run() {
-	await importx(`${dirname(import.meta.url)}/{events,commands}/**/*.{ts,js}`);
+	await importx('./{events,commands}/**/*.{ts,js}');
 
 	// Let's start the bot
 	if (!process.env.BOT_TOKEN) {
