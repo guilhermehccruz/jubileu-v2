@@ -91,7 +91,8 @@ module.exports = {
 				'useTabs': true,
 				'tabWidth': 4,
 			}
-		]
+		],
+		'@typescript-eslint/no-non-null-assertion': 'off'
 	},
 	'settings': {
 		'import/resolver': {
