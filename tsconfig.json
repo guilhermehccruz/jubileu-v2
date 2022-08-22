@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
 		"strict": true,
-		"target": "ES2022",
 		"module": "ES2022",
+		"target": "ES2022",
 		"lib": [
 			"ES2022"
 		],
@@ -17,5 +17,10 @@
 		"baseUrl": "./src",
 		"outDir": "./dist",
 		"skipLibCheck": true
+	},
+	"ts-node": {
+		"transpileOnly": true,
+		"files": true,
+		"esm": true,
 	}
 }
