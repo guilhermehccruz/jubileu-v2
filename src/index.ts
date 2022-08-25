@@ -1,5 +1,5 @@
 import { dirname, importx } from '@discordx/importer';
-import { IntentsBitField } from 'discord.js';
+import { IntentsBitField, Interaction } from 'discord.js';
 import { Client } from 'discordx';
 
 import 'dotenv/config';
@@ -12,7 +12,9 @@ const client = new Client({
 	// Discord intents
 	intents: [
 		IntentsBitField.Flags.Guilds,
+		IntentsBitField.Flags.GuildMembers,
 		IntentsBitField.Flags.GuildMessages,
+		IntentsBitField.Flags.GuildMessageReactions,
 		IntentsBitField.Flags.GuildVoiceStates,
 		IntentsBitField.Flags.DirectMessages,
 		IntentsBitField.Flags.MessageContent,
@@ -27,15 +29,13 @@ const client = new Client({
 	},
 });
 
+client.on('interactionCreate', (interaction: Interaction) => {
+	client.executeInteraction(interaction);
+});
+
 async function run() {
 	await importx(dirname(import.meta.url) + '/{events,commands}/**/*.{ts,js}');
 
-	// Let's start the bot
-	if (!process.env.BOT_TOKEN) {
-		throw Error('Could not find BOT_TOKEN in your environment');
-	}
-
-	// Log in with your bot token
 	await client.login(process.env.BOT_TOKEN);
 }
 

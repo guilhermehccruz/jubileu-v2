@@ -1,0 +1,29 @@
+version: "3.7"
+
+networks:
+    jubileu-network:
+        name: jubileu-network
+
+services:
+    lavalink:
+        build:
+            context: .
+            dockerfile: docker/Lavalink.Dockerfile
+        expose:
+            - 2333
+            - 2333/udp
+        networks:
+            - jubileu-network
+    app:
+        ports:
+            - 9229:9229
+        env_file:
+            - .env
+        depends_on:
+            - lavalink
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+        networks:
+            - jubileu-network
+        command: node dist/index.js

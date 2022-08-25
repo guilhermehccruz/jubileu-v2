@@ -11,6 +11,8 @@ declare global {
 			SERVERS_CHANNEL_ID: string;
 			ERROR_CHANNEL_ID: string;
 			LOG_CHANNEL_ID: string;
+			LAVA_HOST: string;
+			LAVA_PORT: number;
 		}
 	}
 }
