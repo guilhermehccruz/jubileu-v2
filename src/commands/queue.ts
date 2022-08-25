@@ -1,24 +1,14 @@
-import { Status } from "@discordx/lava-player";
-import type { Player } from "@discordx/lava-queue";
-import { Queue } from "@discordx/lava-queue";
-import {
-	Pagination,
-	PaginationResolver,
-	PaginationType,
-} from "@discordx/pagination";
+import { Status } from '@discordx/lava-player';
+import type { Player } from '@discordx/lava-queue';
+import { Queue } from '@discordx/lava-queue';
+import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagination';
 import type {
 	CommandInteraction,
 	ContextMenuCommandInteraction,
 	MessageActionRowComponentBuilder,
 	TextBasedChannel,
-} from "discord.js";
-import {
-	ActionRowBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	EmbedBuilder,
-	Message,
-} from "discord.js";
+} from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Message } from 'discord.js';
 
 export class MusicQueue extends Queue {
 	lastControlMessage?: Message;
@@ -32,90 +22,84 @@ export class MusicQueue extends Queue {
 
 	constructor(player: Player, guildId: string) {
 		super(player, guildId);
-		setInterval(() => this.updateControlMessage(), 1e4);
+		setInterval(() => {
+			this.updateControlMessage().catch((error) => console.log(error));
+		}, 1e4);
 	}
 
 	private controlsRow(): ActionRowBuilder<MessageActionRowComponentBuilder>[] {
 		const nextButton = new ButtonBuilder()
-			.setLabel("Next")
-			.setEmoji("⏭")
+			.setLabel('Next')
+			.setEmoji('⏭')
 			.setStyle(ButtonStyle.Primary)
 			.setDisabled(!this.isPlaying)
-			.setCustomId("btn-next");
+			.setCustomId('btn-next');
 
 		const pauseButton = new ButtonBuilder()
-			.setLabel(this.isPlaying ? "Pause" : "Resume")
-			.setEmoji(this.isPlaying ? "⏸️" : "▶️")
+			.setLabel(this.isPlaying ? 'Pause' : 'Resume')
+			.setEmoji(this.isPlaying ? '⏸️' : '▶️')
 			.setStyle(ButtonStyle.Primary)
-			.setCustomId("btn-pause");
+			.setCustomId('btn-pause');
 
-		const stopButton = new ButtonBuilder()
-			.setLabel("Stop")
-			.setStyle(ButtonStyle.Danger)
-			.setCustomId("btn-leave");
+		const stopButton = new ButtonBuilder().setLabel('Stop').setStyle(ButtonStyle.Danger).setCustomId('btn-leave');
 
 		const repeatButton = new ButtonBuilder()
-			.setLabel("Repeat")
-			.setEmoji("🔂")
+			.setLabel('Repeat')
+			.setEmoji('🔂')
 			.setDisabled(!this.isPlaying)
 			.setStyle(this.repeat ? ButtonStyle.Danger : ButtonStyle.Primary)
-			.setCustomId("btn-repeat");
+			.setCustomId('btn-repeat');
 
 		const loopButton = new ButtonBuilder()
-			.setLabel("Loop")
-			.setEmoji("🔁")
+			.setLabel('Loop')
+			.setEmoji('🔁')
 			.setDisabled(!this.isPlaying)
 			.setStyle(this.loop ? ButtonStyle.Danger : ButtonStyle.Primary)
-			.setCustomId("btn-loop");
+			.setCustomId('btn-loop');
 
-		const row1 =
-			new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-				stopButton,
-				pauseButton,
-				nextButton,
-				repeatButton
-			);
+		const row1 = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+			stopButton,
+			pauseButton,
+			nextButton,
+			repeatButton
+		);
 
 		const queueButton = new ButtonBuilder()
-			.setLabel("Queue")
-			.setEmoji("🎵")
+			.setLabel('Queue')
+			.setEmoji('🎵')
 			.setStyle(ButtonStyle.Primary)
-			.setCustomId("btn-queue");
+			.setCustomId('btn-queue');
 
 		const mixButton = new ButtonBuilder()
-			.setLabel("Shuffle")
-			.setEmoji("🎛️")
+			.setLabel('Shuffle')
+			.setEmoji('🎛️')
 			.setDisabled(!this.isPlaying)
 			.setStyle(ButtonStyle.Primary)
-			.setCustomId("btn-mix");
+			.setCustomId('btn-mix');
 
 		const controlsButton = new ButtonBuilder()
-			.setLabel("Controls")
-			.setEmoji("🔄")
+			.setLabel('Controls')
+			.setEmoji('🔄')
 			.setStyle(ButtonStyle.Primary)
-			.setCustomId("btn-controls");
+			.setCustomId('btn-controls');
 
-		const row2 =
-			new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-				loopButton,
-				queueButton,
-				mixButton,
-				controlsButton
-			);
+		const row2 = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+			loopButton,
+			queueButton,
+			mixButton,
+			controlsButton
+		);
 		return [row1, row2];
 	}
 
-	public async updateControlMessage(options?: {
-		force?: boolean;
-		text?: string;
-	}): Promise<void> {
+	public async updateControlMessage(options?: { force?: boolean; text?: string }): Promise<void> {
 		if (this.lockUpdate) {
 			return;
 		}
 
 		this.lockUpdate = true;
 		const embed = new EmbedBuilder();
-		embed.setTitle("Music Controls");
+		embed.setTitle('Music Controls');
 		const currentTrack = this.currentTrack;
 		const nextTrack = this.nextTrack;
 
@@ -130,15 +114,13 @@ export class MusicQueue extends Queue {
 		}
 
 		embed.addFields({
-			name:
-				"Now Playing" +
-				(this.size > 2 ? ` (Total: ${this.size} tracks queued)` : ""),
+			name: 'Now Playing' + (this.size > 2 ? ` (Total: ${this.size} tracks queued)` : ''),
 			value: `[${currentTrack.info.title}](${currentTrack.info.uri})`,
 		});
 
 		const progressBarOptions = {
-			arrow: "🔘",
-			block: "━",
+			arrow: '🔘',
+			block: '━',
 			size: 15,
 		};
 
@@ -149,23 +131,19 @@ export class MusicQueue extends Queue {
 		const progress = Math.round((size * timeNow) / timeTotal);
 		const emptyProgress = size - (Number.isFinite(progress) ? progress : 0);
 
-		const progressString =
-			block.repeat(progress) + arrow + block.repeat(emptyProgress);
+		const progressString = block.repeat(progress) + arrow + block.repeat(emptyProgress);
 
-		const bar = (this.isPlaying ? "▶️" : "⏸️") + " " + progressString;
+		const bar = (this.isPlaying ? '▶️' : '⏸️') + ' ' + progressString;
 		const currentTime = this.fromMS(timeNow);
 		const endTime = this.fromMS(timeTotal);
 		const spacing = bar.length - currentTime.length - endTime.length;
-		const time =
-			"`" + currentTime + " ".repeat(spacing * 3 - 2) + endTime + "`";
+		const time = '`' + currentTime + ' '.repeat(spacing * 3 - 2) + endTime + '`';
 
 		embed.addFields({ name: bar, value: time });
 
 		embed.addFields({
-			name: "Next Song",
-			value: nextTrack
-				? `[${nextTrack.info.title}](${nextTrack.info.uri})`
-				: "No upcoming song",
+			name: 'Next Song',
+			value: nextTrack ? `[${nextTrack.info.title}](${nextTrack.info.uri})` : 'No upcoming song',
 		});
 
 		const pMsg = {
@@ -191,34 +169,34 @@ export class MusicQueue extends Queue {
 		this.lockUpdate = false;
 	}
 
-	public async view(
-		interaction: CommandInteraction | ContextMenuCommandInteraction
-	): Promise<void> {
+	public async view(interaction: CommandInteraction | ContextMenuCommandInteraction): Promise<void> {
 		if (!this.currentTrack) {
 			const pMsg = await interaction.followUp({
-				content:
-					"> The queue could not be processed at the moment, please try again later!",
+				content: '> The queue could not be processed at the moment, please try again later!',
 				ephemeral: true,
 			});
 
 			if (pMsg instanceof Message) {
-				setTimeout(() => pMsg.delete().catch(() => null), 3000);
+				setTimeout(() => {
+					pMsg.delete().catch(() => null);
+				}, 3000);
 			}
 			return;
 		}
 
 		if (!this.size) {
-			const pMsg = await interaction.followUp(
-				`> Playing **${this.currentTrack.info.title}**`
-			);
+			const pMsg = await interaction.followUp(`> Playing **${this.currentTrack.info.title}**`);
 			if (pMsg instanceof Message) {
-				setTimeout(() => pMsg.delete().catch(() => null), 1e4);
+				setTimeout(() => {
+					pMsg.delete().catch(() => null);
+				}, 1e4);
 			}
 			return;
 		}
 
-		const current = `> Playing **[${this.currentTrack.info.title}](<${this.currentTrack.info.uri
-			}>)** out of ${this.size + 1}`;
+		const current = `> Playing **[${this.currentTrack.info.title}](<${this.currentTrack.info.uri}>)** out of ${
+			this.size + 1
+		}`;
 
 		const pageOptions = new PaginationResolver((index, paginator) => {
 			paginator.maxLength = this.size / 10;
@@ -232,10 +210,10 @@ export class MusicQueue extends Queue {
 				.slice(currentPage * 10, currentPage * 10 + 10)
 				.map(
 					(track, index1) =>
-						`${currentPage * 10 + index1 + 1}. [${track.info.title}](<${track.info.uri
-						}>)` + ` (${this.fromMS(track.info.length)})`
+						`${currentPage * 10 + index1 + 1}. [${track.info.title}](<${track.info.uri}>)` +
+						` (${this.fromMS(track.info.length)})`
 				)
-				.join("\n\n");
+				.join('\n\n');
 
 			return { content: `${current}\n\n${queue}` };
 		}, Math.round(this.size / 10));
@@ -248,10 +226,7 @@ export class MusicQueue extends Queue {
 				}
 			},
 			time: 6e4,
-			type:
-				Math.round(this.size / 10) <= 5
-					? PaginationType.Button
-					: PaginationType.SelectMenu,
+			type: Math.round(this.size / 10) <= 5 ? PaginationType.Button : PaginationType.SelectMenu,
 		})
 			.send()
 			.catch(() => null);

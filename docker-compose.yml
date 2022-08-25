@@ -26,4 +26,4 @@ services:
             dockerfile: docker/Dockerfile
         networks:
             - jubileu-network
-        command: node dist/index.js
+        command: npm run start

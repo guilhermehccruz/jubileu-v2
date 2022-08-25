@@ -1,29 +1,13 @@
-import type { TrackResponse } from "@discordx/lava-player";
-import { LoadType, Status } from "@discordx/lava-player";
-import { Player } from "@discordx/lava-queue";
-import type {
-	ButtonInteraction,
-	CommandInteraction,
-	Guild,
-	TextBasedChannel,
-} from "discord.js";
-import {
-	ApplicationCommandOptionType,
-	EmbedBuilder,
-	GuildMember,
-} from "discord.js";
-import type { ArgsOf, Client } from "discordx";
-import {
-	ButtonComponent,
-	Discord,
-	Once,
-	Slash,
-	SlashChoice,
-	SlashOption,
-} from "discordx";
+import type { TrackResponse } from '@discordx/lava-player';
+import { LoadType, Status } from '@discordx/lava-player';
+import { Player } from '@discordx/lava-queue';
+import type { ButtonInteraction, CommandInteraction, Guild, TextBasedChannel } from 'discord.js';
+import { ApplicationCommandOptionType, EmbedBuilder, GuildMember } from 'discord.js';
+import type { Client } from 'discordx';
+import { ButtonComponent, Discord, Once, Slash, SlashChoice, SlashOption } from 'discordx';
 
-import { getNode } from "./node.js";
-import { MusicQueue } from "./queue.js";
+import { getNode } from './node.js';
+import { MusicQueue } from './queue.js';
 
 function wait(ms: number) {
 	return new Promise((resolve) => {
@@ -39,9 +23,6 @@ export class MusicPlayer {
 
 	GetQueue(botId: string, guildId: string): MusicQueue | null {
 		const player = this.player[botId];
-		if (!player) {
-			return null;
-		}
 
 		const queue = new MusicQueue(player, guildId);
 		return player.queue(guildId, () => queue);
@@ -53,11 +34,11 @@ export class MusicPlayer {
 		skipBotChannel = false
 	): Promise<
 		| {
-			channel: TextBasedChannel;
-			guild: Guild;
-			member: GuildMember;
-			queue: MusicQueue;
-		}
+				channel: TextBasedChannel;
+				guild: Guild;
+				member: GuildMember;
+				queue: MusicQueue;
+		  }
 		| undefined
 	> {
 		await interaction.deferReply();
@@ -68,38 +49,31 @@ export class MusicPlayer {
 			!interaction.guild ||
 			!interaction.client.user
 		) {
-			interaction.followUp(
-				"The command could not be processed. Please try again"
-			);
+			await interaction.followUp('The command could not be processed. Please try again');
 			return;
 		}
 
 		if (!interaction.member.voice.channelId) {
-			interaction.followUp("Join a voice channel first");
+			await interaction.followUp('Join a voice channel first');
 			return;
 		}
 
-		const bot = interaction.guild?.members.cache.get(
-			interaction.client.user?.id
-		);
+		const bot = interaction.guild.members.cache.get(interaction.client.user.id);
 
 		if (!bot) {
-			interaction.followUp("Having difficulty finding my place in this world");
+			await interaction.followUp('Having difficulty finding my place in this world');
 			return;
 		}
 
-		if (
-			!skipBotChannel &&
-			interaction.member.voice.channelId !== bot.voice.channelId
-		) {
-			interaction.followUp("join to my voice channel");
+		if (!skipBotChannel && interaction.member.voice.channelId !== bot.voice.channelId) {
+			await interaction.followUp('join to my voice channel');
 			return;
 		}
 
 		const queue = this.GetQueue(client.botId, interaction.guild.id);
 
 		if (!queue) {
-			interaction.followUp("The player is not ready yet, please wait");
+			await interaction.followUp('The player is not ready yet, please wait');
 			return;
 		}
 
@@ -114,7 +88,7 @@ export class MusicPlayer {
 	// events
 
 	@Once()
-	async ready([]: ArgsOf<"ready">, client: Client): Promise<void> {
+	async ready([client]: [Client]): Promise<void> {
 		await wait(5e3);
 		this.player[client.botId] = new Player(getNode(client));
 	}
@@ -123,10 +97,10 @@ export class MusicPlayer {
 
 	@Slash()
 	async play(
-		@SlashChoice("URL", "SEARCH")
-		@SlashOption({ name: "type", type: ApplicationCommandOptionType.String })
-		type: "URL" | "SEARCH",
-		@SlashOption({ name: "input", type: ApplicationCommandOptionType.String })
+		@SlashChoice('URL', 'SEARCH')
+		@SlashOption({ name: 'type', type: ApplicationCommandOptionType.String })
+		type: 'URL' | 'SEARCH',
+		@SlashOption({ name: 'input', type: ApplicationCommandOptionType.String })
 		input: string,
 		interaction: CommandInteraction,
 		client: Client
@@ -140,15 +114,11 @@ export class MusicPlayer {
 
 		let response: TrackResponse;
 
-		if (type === "URL") {
+		if (type === 'URL') {
 			response = await queue.enqueue(input);
 		} else {
 			const searchResponse = await queue.search(input);
 			const track = searchResponse.tracks[0];
-			if (!track) {
-				interaction.followUp("> no search result");
-				return;
-			}
 
 			queue.tracks.push(track);
 			response = {
@@ -173,26 +143,22 @@ export class MusicPlayer {
 		}
 
 		const embed = new EmbedBuilder();
-		embed.setTitle("Enqueued");
+		embed.setTitle('Enqueued');
 		if (response.playlistInfo.name) {
-			embed.setDescription(
-				`Enqueued song ${response.tracks.length} from ${response.playlistInfo.name}`
-			);
+			embed.setDescription(`Enqueued song ${response.tracks.length} from ${response.playlistInfo.name}`);
 		} else if (response.tracks.length === 1) {
-			embed.setDescription(
-				`Enqueued [${response.tracks[0]?.info.title}](<${response.tracks[0]?.info.uri}>)`
-			);
+			embed.setDescription(`Enqueued [${response.tracks[0]?.info.title}](<${response.tracks[0]?.info.uri}>)`);
 		} else {
 			embed.setDescription(`Enqueued ${response.tracks.length} tracks`);
 		}
 
-		interaction.followUp({ embeds: [embed] });
+		await interaction.followUp({ embeds: [embed] });
 		return;
 	}
 
 	@Slash()
 	async seek(
-		@SlashOption({ name: "seconds" }) seconds: number,
+		@SlashOption({ name: 'seconds' }) seconds: number,
 		interaction: CommandInteraction,
 		client: Client
 	): Promise<void> {
@@ -204,29 +170,26 @@ export class MusicPlayer {
 		const { queue } = cmd;
 
 		if (!queue.currentTrack) {
-			interaction.followUp("> I am not sure, I am playing anything");
+			await interaction.followUp('> I am not sure, I am playing anything');
 			return;
 		}
 
 		if (seconds * 1000 > queue.currentTrack.info.length) {
 			queue.playNext();
-			interaction.followUp("> skipped the track instead");
+			await interaction.followUp('> skipped the track instead');
 			return;
 		}
 
-		queue.lavaPlayer.play(queue.currentTrack, { start: seconds * 1000 });
+		await queue.lavaPlayer.play(queue.currentTrack, { start: seconds * 1000 });
 
-		interaction.followUp("> current track seeked");
+		await interaction.followUp('> current track seeked');
 		return;
 	}
 
 	// buttons
 
-	@ButtonComponent({ id: "btn-next" })
-	async nextControl(
-		interaction: ButtonInteraction,
-		client: Client
-	): Promise<void> {
+	@ButtonComponent({ id: 'btn-next' })
+	async nextControl(interaction: ButtonInteraction, client: Client): Promise<void> {
 		const cmd = await this.ParseCommand(client, interaction);
 		if (!cmd) {
 			return;
@@ -235,17 +198,14 @@ export class MusicPlayer {
 		const { queue } = cmd;
 
 		queue.playNext();
-		queue.updateControlMessage();
+		await queue.updateControlMessage();
 
 		// delete interaction
-		interaction.deleteReply();
+		await interaction.deleteReply();
 	}
 
-	@ButtonComponent({ id: "btn-pause" })
-	async pauseControl(
-		interaction: ButtonInteraction,
-		client: Client
-	): Promise<void> {
+	@ButtonComponent({ id: 'btn-pause' })
+	async pauseControl(interaction: ButtonInteraction, client: Client): Promise<void> {
 		const cmd = await this.ParseCommand(client, interaction);
 		if (!cmd) {
 			return;
@@ -254,17 +214,14 @@ export class MusicPlayer {
 		const { queue } = cmd;
 
 		queue.isPlaying ? queue.pause() : queue.resume();
-		queue.updateControlMessage();
+		await queue.updateControlMessage();
 
 		// delete interaction
-		interaction.deleteReply();
+		await interaction.deleteReply();
 	}
 
-	@ButtonComponent({ id: "btn-leave" })
-	async leaveControl(
-		interaction: ButtonInteraction,
-		client: Client
-	): Promise<void> {
+	@ButtonComponent({ id: 'btn-leave' })
+	async leaveControl(interaction: ButtonInteraction, client: Client): Promise<void> {
 		const cmd = await this.ParseCommand(client, interaction);
 		if (!cmd) {
 			return;
@@ -274,17 +231,14 @@ export class MusicPlayer {
 
 		queue.stop();
 		await queue.lavaPlayer.leave();
-		queue.updateControlMessage();
+		await queue.updateControlMessage();
 
 		// delete interaction
-		interaction.deleteReply();
+		await interaction.deleteReply();
 	}
 
-	@ButtonComponent({ id: "btn-repeat" })
-	async repeatControl(
-		interaction: ButtonInteraction,
-		client: Client
-	): Promise<void> {
+	@ButtonComponent({ id: 'btn-repeat' })
+	async repeatControl(interaction: ButtonInteraction, client: Client): Promise<void> {
 		const cmd = await this.ParseCommand(client, interaction);
 		if (!cmd) {
 			return;
@@ -293,17 +247,14 @@ export class MusicPlayer {
 		const { queue } = cmd;
 
 		queue.setRepeat(!queue.repeat);
-		queue.updateControlMessage();
+		await queue.updateControlMessage();
 
 		// delete interaction
-		interaction.deleteReply();
+		await interaction.deleteReply();
 	}
 
-	@ButtonComponent({ id: "btn-loop" })
-	async loopControl(
-		interaction: ButtonInteraction,
-		client: Client
-	): Promise<void> {
+	@ButtonComponent({ id: 'btn-loop' })
+	async loopControl(interaction: ButtonInteraction, client: Client): Promise<void> {
 		const cmd = await this.ParseCommand(client, interaction);
 		if (!cmd) {
 			return;
@@ -312,17 +263,14 @@ export class MusicPlayer {
 		const { queue } = cmd;
 
 		queue.setLoop(!queue.loop);
-		queue.updateControlMessage();
+		await queue.updateControlMessage();
 
 		// delete interaction
-		interaction.deleteReply();
+		await interaction.deleteReply();
 	}
 
-	@ButtonComponent({ id: "btn-queue" })
-	async queueControl(
-		interaction: ButtonInteraction,
-		client: Client
-	): Promise<void> {
+	@ButtonComponent({ id: 'btn-queue' })
+	async queueControl(interaction: ButtonInteraction, client: Client): Promise<void> {
 		const cmd = await this.ParseCommand(client, interaction);
 		if (!cmd) {
 			return;
@@ -330,14 +278,11 @@ export class MusicPlayer {
 
 		const { queue } = cmd;
 
-		queue.view(interaction as unknown as CommandInteraction);
+		await queue.view(interaction as unknown as CommandInteraction);
 	}
 
-	@ButtonComponent({ id: "btn-mix" })
-	async mixControl(
-		interaction: ButtonInteraction,
-		client: Client
-	): Promise<void> {
+	@ButtonComponent({ id: 'btn-mix' })
+	async mixControl(interaction: ButtonInteraction, client: Client): Promise<void> {
 		const cmd = await this.ParseCommand(client, interaction);
 		if (!cmd) {
 			return;
@@ -346,17 +291,14 @@ export class MusicPlayer {
 		const { queue } = cmd;
 
 		queue.shuffle();
-		queue.updateControlMessage();
+		await queue.updateControlMessage();
 
 		// delete interaction
 		await interaction.deleteReply();
 	}
 
-	@ButtonComponent({ id: "btn-controls" })
-	async controlsControl(
-		interaction: ButtonInteraction,
-		client: Client
-	): Promise<void> {
+	@ButtonComponent({ id: 'btn-controls' })
+	async controlsControl(interaction: ButtonInteraction, client: Client): Promise<void> {
 		const cmd = await this.ParseCommand(client, interaction);
 		if (!cmd) {
 			return;
@@ -364,9 +306,9 @@ export class MusicPlayer {
 
 		const { queue } = cmd;
 
-		queue.updateControlMessage({ force: true });
+		await queue.updateControlMessage({ force: true });
 
 		// delete interaction
-		interaction.deleteReply();
+		await interaction.deleteReply();
 	}
 }

@@ -2,5 +2,3 @@ dist
 logs
 node_modules
 .eslintrc.cjs
-src/commands/v3.cmd.ts
-src/commands/queue.ts

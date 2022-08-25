@@ -20,11 +20,11 @@ export function getNode(client: Client): Node {
 	});
 
 	client.ws.on(GatewayDispatchEvents.VoiceStateUpdate, (data: VoiceStateUpdate) => {
-		lavaNode.voiceStateUpdate(data);
+		lavaNode.voiceStateUpdate(data).catch((error) => console.log(error));
 	});
 
 	client.ws.on(GatewayDispatchEvents.VoiceServerUpdate, (data: VoiceServerUpdate) => {
-		lavaNode.voiceServerUpdate(data);
+		lavaNode.voiceServerUpdate(data).catch((error) => console.log(error));
 	});
 
 	return lavaNode;
