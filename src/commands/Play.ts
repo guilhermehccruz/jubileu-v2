@@ -2,7 +2,7 @@ import type { TrackResponse } from '@discordx/lava-player';
 import { LoadType, Status } from '@discordx/lava-player';
 import type { CommandInteraction } from 'discord.js';
 import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
-import type { Client } from 'discordx';
+import { Client } from 'discordx';
 import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
 import { inject, injectable } from 'tsyringe';
 
@@ -16,7 +16,7 @@ export class Play {
 		private musicPlayer: MusicPlayer
 	) {}
 
-	@Slash()
+	@Slash({ description: 'Toca o audio do link enviado ou procura no youtube o que foi digitado' })
 	async play(
 		@SlashChoice('LINK', 'PROCURAR')
 		@SlashOption({ name: 'tipo', type: ApplicationCommandOptionType.String })

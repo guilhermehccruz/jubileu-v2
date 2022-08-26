@@ -1,6 +1,6 @@
 import {} from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
-import type { Client } from 'discordx';
+import { Client } from 'discordx';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { inject, injectable } from 'tsyringe';
 
@@ -14,7 +14,7 @@ export class Seek {
 		private musicPlayer: MusicPlayer
 	) {}
 
-	@Slash()
+	@Slash({ description: 'Toca a música a partir do segundo digitado' })
 	async seek(
 		@SlashOption({ name: 'segundos' }) seconds: number,
 		interaction: CommandInteraction,
