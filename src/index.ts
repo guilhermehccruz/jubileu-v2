@@ -1,5 +1,5 @@
 import { dirname, importx } from '@discordx/importer';
-import { IntentsBitField, Interaction } from 'discord.js';
+import { IntentsBitField } from 'discord.js';
 import { Client, DIService, tsyringeDependencyRegistryEngine } from 'discordx';
 import { container } from 'tsyringe';
 
@@ -34,6 +34,10 @@ async function run() {
 	DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
 
 	await importx(dirname(import.meta.url) + '/{events,commands,buttons}/**/*.{ts,js}');
+
+	if (!process.env.BOT_TOKEN) {
+		throw Error('BOT_TOKEN in not set in your environment');
+	}
 
 	await client.login(process.env.BOT_TOKEN);
 }

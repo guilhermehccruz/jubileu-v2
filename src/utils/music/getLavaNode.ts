@@ -7,9 +7,9 @@ export function getLavaNode(client: Client): Node {
 		password: process.env.LAVA_PASSWORD ?? '',
 		userId: client.user?.id ?? '',
 		host: {
-			address: process.env.LAVA_HOST,
+			address: process.env.LAVA_HOST ?? 'lavalink',
 			connectionOptions: { resumeKey: client.botId, resumeTimeout: 15 },
-			port: process.env.LAVA_PORT,
+			port: process.env.LAVA_PORT ?? 2333,
 		},
 		send(guildId, packet) {
 			const guild = client.guilds.cache.get(guildId);
@@ -20,11 +20,11 @@ export function getLavaNode(client: Client): Node {
 	});
 
 	client.ws.on(GatewayDispatchEvents.VoiceStateUpdate, (data: VoiceStateUpdate) => {
-		lavaNode.voiceStateUpdate(data).catch((error) => console.log(error));
+		lavaNode.voiceStateUpdate(data).catch((error) => console.error(error, client));
 	});
 
 	client.ws.on(GatewayDispatchEvents.VoiceServerUpdate, (data: VoiceServerUpdate) => {
-		lavaNode.voiceServerUpdate(data).catch((error) => console.log(error));
+		lavaNode.voiceServerUpdate(data).catch((error) => console.error(error));
 	});
 
 	return lavaNode;

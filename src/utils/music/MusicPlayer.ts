@@ -50,7 +50,7 @@ export class MusicPlayer {
 
 		const bot = interaction.guild.members.cache.get(interaction.client.user.id);
 
-		if (!skipBotChannel && interaction.member.voice.channelId !== bot!.voice.channelId) {
+		if (!skipBotChannel && interaction.member.voice.channelId !== bot?.voice.channelId) {
 			await interaction.followUp('Entre no mesmo canal de voz que eu primeiro');
 			return;
 		}

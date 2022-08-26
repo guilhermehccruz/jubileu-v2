@@ -108,7 +108,7 @@ export class MusicQueue extends Queue {
 
 		if (!currentTrack) {
 			if (this.lastControlMessage) {
-				await this.lastControlMessage.delete().catch(() => null);
+				await this.lastControlMessage.delete().catch((error) => console.error(error));
 				this.lastControlMessage = undefined;
 			}
 
@@ -157,16 +157,16 @@ export class MusicQueue extends Queue {
 
 		if (!this.lastControlMessage || options?.force) {
 			if (this.lastControlMessage) {
-				await this.lastControlMessage.delete().catch(() => null);
+				await this.lastControlMessage.delete().catch((error) => console.error(error));
 				this.lastControlMessage = undefined;
 			}
 
-			const msg = await this.channel?.send(pMsg).catch(() => null);
+			const msg = await this.channel?.send(pMsg).catch((error) => console.error(error));
 			if (msg) {
 				this.lastControlMessage = msg;
 			}
 		} else {
-			await this.lastControlMessage.edit(pMsg).catch(() => null);
+			await this.lastControlMessage.edit(pMsg).catch((error) => console.error(error));
 		}
 
 		this.lockUpdate = false;
@@ -181,7 +181,7 @@ export class MusicQueue extends Queue {
 
 			if (pMsg instanceof Message) {
 				setTimeout(() => {
-					pMsg.delete().catch(() => null);
+					pMsg.delete().catch((error) => console.error(error));
 				}, 3000);
 			}
 			return;
@@ -191,7 +191,7 @@ export class MusicQueue extends Queue {
 			const pMsg = await interaction.followUp(`> Tocando **${this.currentTrack.info.title}**`);
 			if (pMsg instanceof Message) {
 				setTimeout(() => {
-					pMsg.delete().catch(() => null);
+					pMsg.delete().catch((error) => console.error(error));
 				}, 1e4);
 			}
 			return;
@@ -225,7 +225,7 @@ export class MusicQueue extends Queue {
 			enableExit: true,
 			onTimeout: (index, message) => {
 				if (message.deletable) {
-					message.delete().catch(() => null);
+					message.delete().catch((error) => console.error(error));
 				}
 			},
 			time: 6e4,
@@ -237,6 +237,6 @@ export class MusicQueue extends Queue {
 			exit: { label: 'Fechar' },
 		})
 			.send()
-			.catch(() => null);
+			.catch((error) => console.error(error));
 	}
 }
