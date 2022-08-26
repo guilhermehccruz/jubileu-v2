@@ -12,6 +12,9 @@ services:
         expose:
             - 2333
             - 2333/udp
+        ports:
+            - 2333:2333
+        env_file: .env
         networks:
             - jubileu-network
     app:

@@ -36,5 +36,5 @@ logging:
     path: ./logs/
 
     level:
-        root: INFO
-        lavalink: INFO
+        root: WARN
+        lavalink: WARN
