@@ -29,29 +29,32 @@ export class MusicQueue extends Queue {
 
 	private controlsRow(): ActionRowBuilder<MessageActionRowComponentBuilder>[] {
 		const nextButton = new ButtonBuilder()
-			.setLabel('Next')
+			.setLabel('Próximo')
 			.setEmoji('⏭')
 			.setStyle(ButtonStyle.Primary)
 			.setDisabled(!this.isPlaying)
 			.setCustomId('btn-next');
 
 		const pauseButton = new ButtonBuilder()
-			.setLabel(this.isPlaying ? 'Pause' : 'Resume')
+			.setLabel(this.isPlaying ? 'Pausar' : 'Continuar')
 			.setEmoji(this.isPlaying ? '⏸️' : '▶️')
 			.setStyle(ButtonStyle.Primary)
 			.setCustomId('btn-pause');
 
-		const stopButton = new ButtonBuilder().setLabel('Stop').setStyle(ButtonStyle.Danger).setCustomId('btn-leave');
+		const stopButton = new ButtonBuilder()
+			.setLabel('Parar e sair')
+			.setStyle(ButtonStyle.Danger)
+			.setCustomId('btn-leave');
 
 		const repeatButton = new ButtonBuilder()
-			.setLabel('Repeat')
+			.setLabel('Repetir Música atual')
 			.setEmoji('🔂')
 			.setDisabled(!this.isPlaying)
 			.setStyle(this.repeat ? ButtonStyle.Danger : ButtonStyle.Primary)
 			.setCustomId('btn-repeat');
 
 		const loopButton = new ButtonBuilder()
-			.setLabel('Loop')
+			.setLabel('Loop na fila')
 			.setEmoji('🔁')
 			.setDisabled(!this.isPlaying)
 			.setStyle(this.loop ? ButtonStyle.Danger : ButtonStyle.Primary)
@@ -65,20 +68,20 @@ export class MusicQueue extends Queue {
 		);
 
 		const queueButton = new ButtonBuilder()
-			.setLabel('Queue')
+			.setLabel('Fila')
 			.setEmoji('🎵')
 			.setStyle(ButtonStyle.Primary)
 			.setCustomId('btn-queue');
 
 		const mixButton = new ButtonBuilder()
-			.setLabel('Shuffle')
+			.setLabel('Aleatorizar')
 			.setEmoji('🎛️')
 			.setDisabled(!this.isPlaying)
 			.setStyle(ButtonStyle.Primary)
 			.setCustomId('btn-mix');
 
 		const controlsButton = new ButtonBuilder()
-			.setLabel('Controls')
+			.setLabel('Atualizar controles')
 			.setEmoji('🔄')
 			.setStyle(ButtonStyle.Primary)
 			.setCustomId('btn-controls');
@@ -99,7 +102,7 @@ export class MusicQueue extends Queue {
 
 		this.lockUpdate = true;
 		const embed = new EmbedBuilder();
-		embed.setTitle('Music Controls');
+		embed.setTitle('Controles da música');
 		const currentTrack = this.currentTrack;
 		const nextTrack = this.nextTrack;
 
@@ -114,7 +117,7 @@ export class MusicQueue extends Queue {
 		}
 
 		embed.addFields({
-			name: 'Now Playing' + (this.size > 2 ? ` (Total: ${this.size} tracks queued)` : ''),
+			name: 'Agora tocando' + (this.size > 2 ? ` (Total: ${this.size} músicas na fila)` : ''),
 			value: `[${currentTrack.info.title}](${currentTrack.info.uri})`,
 		});
 
@@ -142,8 +145,8 @@ export class MusicQueue extends Queue {
 		embed.addFields({ name: bar, value: time });
 
 		embed.addFields({
-			name: 'Next Song',
-			value: nextTrack ? `[${nextTrack.info.title}](${nextTrack.info.uri})` : 'No upcoming song',
+			name: 'Próxima música',
+			value: nextTrack ? `[${nextTrack.info.title}](${nextTrack.info.uri})` : 'Nenhuma',
 		});
 
 		const pMsg = {
@@ -172,7 +175,7 @@ export class MusicQueue extends Queue {
 	public async view(interaction: CommandInteraction | ContextMenuCommandInteraction): Promise<void> {
 		if (!this.currentTrack) {
 			const pMsg = await interaction.followUp({
-				content: '> The queue could not be processed at the moment, please try again later!',
+				content: '> Não foi possível processar a fila, tente novamente mais tarde',
 				ephemeral: true,
 			});
 
@@ -185,7 +188,7 @@ export class MusicQueue extends Queue {
 		}
 
 		if (!this.size) {
-			const pMsg = await interaction.followUp(`> Playing **${this.currentTrack.info.title}**`);
+			const pMsg = await interaction.followUp(`> Tocando **${this.currentTrack.info.title}**`);
 			if (pMsg instanceof Message) {
 				setTimeout(() => {
 					pMsg.delete().catch(() => null);
@@ -194,9 +197,9 @@ export class MusicQueue extends Queue {
 			return;
 		}
 
-		const current = `> Playing **[${this.currentTrack.info.title}](<${this.currentTrack.info.uri}>)** out of ${
+		const current = `> Tocando **[${this.currentTrack.info.title}](<${this.currentTrack.info.uri}>)** de ${
 			this.size + 1
-		}`;
+		} músicas`;
 
 		const pageOptions = new PaginationResolver((index, paginator) => {
 			paginator.maxLength = this.size / 10;
@@ -227,6 +230,11 @@ export class MusicQueue extends Queue {
 			},
 			time: 6e4,
 			type: Math.round(this.size / 10) <= 5 ? PaginationType.Button : PaginationType.SelectMenu,
+			start: { label: 'Início' },
+			previous: { label: 'Anterior' },
+			next: { label: 'Próximo' },
+			end: { label: 'Fim' },
+			exit: { label: 'Fechar' },
 		})
 			.send()
 			.catch(() => null);

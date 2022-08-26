@@ -1,37 +1,49 @@
-// import { EmbedBuilder } from 'discord.js';
-// import { Discord, Once } from 'discordx';
-// import type { Client } from 'discordx';
+import { Player } from '@discordx/lava-queue';
+import { EmbedBuilder } from 'discord.js';
+import { Discord, Once } from 'discordx';
+import type { Client } from 'discordx';
+import { container, injectable } from 'tsyringe';
 
-// @Discord()
-// export class Ready {
-// 	@Once({ event: 'ready' })
-// 	async ready([client]: [Client]): Promise<void> {
-// 		// Make sure all guilds are cached
-// 		await client.guilds.fetch();
+import { getLavaNode } from '../utils/music/getLavaNode.js';
+import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 
-// 		// Synchronize applications commands with Discord
-// 		await client.initApplicationCommands();
+@Discord()
+@injectable()
+export class Ready {
+	@Once({ event: 'ready' })
+	async ready([client]: [Client]): Promise<void> {
+		// Make sure all guilds are cached
+		await client.guilds.fetch();
 
-// 		const readyChannel = client.channels.cache.get(process.env.READY_CHANNEL_ID);
+		// Synchronize applications commands with Discord
+		await client.initApplicationCommands();
 
-// 		const readyAtDate = client.readyAt!.toLocaleString('pt-BR').split(' ').reverse().join(' - ');
+		// Send ready message
+		const readyChannel = client.channels.cache.get(process.env.READY_CHANNEL_ID);
 
-// 		const readyEmbed = new EmbedBuilder().setTitle('Pai ta on').setDescription(readyAtDate);
+		const readyAtDate = client.readyAt!.toLocaleString('pt-BR').split(' ').reverse().join(' - ');
 
-// 		if (readyChannel!.isTextBased()) {
-// 			await readyChannel.send({ embeds: [readyEmbed] });
-// 		}
+		const readyEmbed = new EmbedBuilder().setTitle('Pai ta on').setDescription(readyAtDate);
 
-// 		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID);
+		if (readyChannel!.isTextBased()) {
+			await readyChannel.send({ embeds: [readyEmbed] });
+		}
 
-// 		const serversEmbed = new EmbedBuilder()
-// 			.setTitle('Lista de servidores na hora que ligou')
-// 			.setDescription(client.guilds.cache.map((server) => server.name).join('\n'));
+		// Send servers message
+		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID);
 
-// 		if (serversChannel!.isTextBased()) {
-// 			await serversChannel.send({ embeds: [serversEmbed] });
-// 		}
+		const serversEmbed = new EmbedBuilder()
+			.setTitle('Lista de servidores na hora que ligou')
+			.setDescription(client.guilds.cache.map((server) => server.name).join('\n'));
 
-// 		console.log('>> Bot started');
-// 	}
-// }
+		if (serversChannel!.isTextBased()) {
+			await serversChannel.send({ embeds: [serversEmbed] });
+		}
+
+		//
+		const musicPlayer = container.resolve(MusicPlayer);
+		musicPlayer.player[client.botId] = new Player(getLavaNode(client));
+
+		console.log('>> Bot started');
+	}
+}

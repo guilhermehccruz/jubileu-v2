@@ -2,7 +2,7 @@ import { Node, VoiceServerUpdate, VoiceStateUpdate } from '@discordx/lava-player
 import { GatewayDispatchEvents } from 'discord.js';
 import type { Client } from 'discordx';
 
-export function getNode(client: Client): Node {
+export function getLavaNode(client: Client): Node {
 	const lavaNode = new Node({
 		password: process.env.LAVA_PASSWORD ?? '',
 		userId: client.user?.id ?? '',

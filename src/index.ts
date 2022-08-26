@@ -1,6 +1,7 @@
 import { dirname, importx } from '@discordx/importer';
 import { IntentsBitField, Interaction } from 'discord.js';
-import { Client } from 'discordx';
+import { Client, DIService, tsyringeDependencyRegistryEngine } from 'discordx';
+import { container } from 'tsyringe';
 
 import 'dotenv/config';
 import 'reflect-metadata';
@@ -29,12 +30,10 @@ const client = new Client({
 	},
 });
 
-client.on('interactionCreate', (interaction: Interaction) => {
-	client.executeInteraction(interaction);
-});
-
 async function run() {
-	await importx(dirname(import.meta.url) + '/{events,commands}/**/*.{ts,js}');
+	DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
+
+	await importx(dirname(import.meta.url) + '/{events,commands,buttons}/**/*.{ts,js}');
 
 	await client.login(process.env.BOT_TOKEN);
 }

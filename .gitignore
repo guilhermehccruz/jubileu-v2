@@ -9,6 +9,3 @@ node_modules/
 
 # build / generate output
 dist
-
-# local configurations
-.vscode
