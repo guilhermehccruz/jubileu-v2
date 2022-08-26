@@ -18,6 +18,4 @@ Run `docker-compose up`
 
 #### TODO
 
-Create move command
-
 Learn and implement ci/cd with github actions, railway or another service
