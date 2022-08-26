@@ -15,3 +15,9 @@ Run `npm i`
 ### Initiate docker
 
 Run `docker-compose up`
+
+#### TODO
+
+Create remove command?
+
+Learn and implement ci/cd with github actions, railway or another service

@@ -13,8 +13,15 @@
 		"type": "git",
 		"url": "git+https://github.com/guilhermehccruz/jubileu-v2.git"
 	},
-	"keywords": [],
-	"author": "",
+	"keywords": [
+		"typescript",
+		"discord",
+		"bot",
+		"jubileu",
+		"docker",
+		"di"
+	],
+	"author": "Guilherme Cruz <guihccruz60@gmail.com> (https://github.com/guilhermehccruz)",
 	"license": "ISC",
 	"bugs": {
 		"url": "https://github.com/guilhermehccruz/jubileu-v2/issues"
