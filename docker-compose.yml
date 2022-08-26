@@ -8,7 +8,7 @@ services:
     lavalink:
         build:
             context: .
-            dockerfile: docker/Lavalink.Dockerfile
+            dockerfile: docker/Dockerfile.lavalink
         expose:
             - 2333
             - 2333/udp
@@ -17,8 +17,7 @@ services:
     app:
         ports:
             - 9229:9229
-        env_file:
-            - .env
+        env_file: .env
         depends_on:
             - lavalink
         build:
