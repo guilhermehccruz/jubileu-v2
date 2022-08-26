@@ -18,6 +18,6 @@ Run `docker-compose up`
 
 #### TODO
 
-Create remove command?
+Create move command
 
 Learn and implement ci/cd with github actions, railway or another service
