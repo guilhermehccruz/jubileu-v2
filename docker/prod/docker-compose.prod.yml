@@ -7,25 +7,22 @@ networks:
 services:
     lavalink:
         build:
-            context: .
+            context: ../..
             dockerfile: docker/Dockerfile.lavalink
         expose:
             - 2333
             - 2333/udp
         ports:
             - 2333:2333
-        env_file: .env
+        env_file: ../../.env
         networks:
             - jubileu-network
     app:
-        ports:
-            - 9229:9229
-        env_file: .env
         depends_on:
             - lavalink
         build:
-            context: .
-            dockerfile: docker/Dockerfile
+            context: ../..
+            dockerfile: docker/prod/Dockerfile.prod
+        env_file: ../../.env
         networks:
             - jubileu-network
-        command: npm run start

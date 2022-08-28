@@ -1,0 +1,14 @@
+node_modules
+.vscode
+dist
+docker
+.editorconfig
+.env.example
+.eslintignore
+.eslintrc.cjs
+.git
+.gitignore
+.nvmrc
+license
+package-lock.json
+README.md

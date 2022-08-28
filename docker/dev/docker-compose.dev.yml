@@ -1,0 +1,35 @@
+version: "3.7"
+
+networks:
+    jubileu-network:
+        name: jubileu-network
+
+services:
+    lavalink:
+        build:
+            context: ../..
+            dockerfile: docker/Dockerfile.lavalink
+        expose:
+            - 2333
+            - 2333/udp
+        ports:
+            - 2333:2333
+        env_file: ../../.env
+        networks:
+            - jubileu-network
+    dev:
+        depends_on:
+            - lavalink
+        build:
+            context: ../..
+            dockerfile: docker/dev/Dockerfile.dev
+        restart: always
+        env_file: ../../.env
+        networks:
+            - jubileu-network
+        volumes:
+            - ./../../:/app
+            - ignore:/app/node_modules/
+
+volumes:
+    ignore:

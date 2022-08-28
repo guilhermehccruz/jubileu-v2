@@ -14,8 +14,16 @@ Run `npm i`
 
 ### Initiate docker
 
-Run `docker-compose up`
+#### Production environment
+
+Run `npm run docker:prod`
+
+#### Development environment
+
+Run `npm run docker:dev`
 
 #### TODO
 
 Learn and implement ci/cd with github actions, railway or another service
+
+Study about lavalink plugins

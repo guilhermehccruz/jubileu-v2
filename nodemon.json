@@ -1,5 +1,4 @@
 {
-	"restartable": "r",
 	"ignore": [
 		".git",
 		"node_modules",
@@ -8,5 +7,5 @@
 	"execMap": {
 		"ts": "node --loader ts-node/esm"
 	},
-	"ext": "ts,js,json"
+	"ext": "ts,json"
 }

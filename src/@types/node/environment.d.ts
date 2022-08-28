@@ -9,6 +9,7 @@ declare global {
 
 			LAVA_HOST?: string;
 			LAVA_PORT?: number;
+			LAVA_PASSWORD?: string;
 		}
 	}
 }
