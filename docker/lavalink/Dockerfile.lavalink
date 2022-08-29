@@ -1,2 +1,2 @@
-FROM fredboat/lavalink
-ADD docker/application.yml application.yml
+FROM fredboat/lavalink:dev
+ADD docker/lavalink/application.yml application.yml

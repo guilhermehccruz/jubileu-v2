@@ -10,6 +10,9 @@ declare global {
 			LAVA_HOST?: string;
 			LAVA_PORT?: number;
 			LAVA_PASSWORD?: string;
+
+			SPOTIFY_CLIENT_ID?: string;
+			SPOTIFY_SECRET?: string;
 		}
 	}
 }
