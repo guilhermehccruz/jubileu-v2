@@ -16,13 +16,23 @@ export class Play {
 		private musicPlayer: MusicPlayer
 	) {}
 
-	@Slash({ description: 'Toca o audio do link enviado ou procura no youtube o que foi digitado' })
+	@Slash({ description: 'Toca o audio do link enviado ou procura o que foi digitado' })
 	async play(
 		@SlashChoice('LINK', 'PROCURAR')
 		@SlashOption({ name: 'tipo', type: ApplicationCommandOptionType.String })
 		type: 'LINK' | 'PROCURAR',
+
 		@SlashOption({ name: 'pesquisa', type: ApplicationCommandOptionType.String })
 		input: string,
+
+		@SlashChoice({ name: 'Youtube', value: 'ytsearch' })
+		@SlashChoice({ name: 'Youtube Music', value: 'ytmsearch' })
+		@SlashChoice({ name: 'Sound Cloud', value: 'scsearch' })
+		@SlashChoice({ name: 'Spotify', value: 'spsearch' })
+		@SlashChoice({ name: 'Apple Music', value: 'amsearch' })
+		@SlashOption({ name: 'onde-buscar', type: ApplicationCommandOptionType.String, required: false })
+		platform = 'ytsearch',
+
 		interaction: CommandInteraction,
 		client: Client
 	): Promise<void> {
@@ -43,7 +53,7 @@ export class Play {
 				return;
 			}
 		} else {
-			const searchResponse = await queue.search(input);
+			const searchResponse = await queue.search(`${platform}:${input}`);
 
 			if (!searchResponse.tracks[0]) {
 				await interaction.followUp('> Não encontramos nada com o que foi enviado');

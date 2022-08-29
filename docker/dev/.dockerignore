@@ -9,6 +9,6 @@ docker
 .git
 .gitignore
 .nvmrc
-license
+LICENSE
 package-lock.json
 README.md
