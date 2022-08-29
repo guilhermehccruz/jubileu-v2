@@ -37,8 +37,19 @@ export class Play {
 
 		if (type === 'LINK') {
 			response = await queue.enqueue(input);
+
+			if (!response.tracks[0]) {
+				await interaction.followUp('> Não encontramos nada com o que foi enviado');
+				return;
+			}
 		} else {
 			const searchResponse = await queue.search(input);
+
+			if (!searchResponse.tracks[0]) {
+				await interaction.followUp('> Não encontramos nada com o que foi enviado');
+				return;
+			}
+
 			const track = searchResponse.tracks[0];
 
 			queue.tracks.push(track);
