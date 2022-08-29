@@ -5,7 +5,7 @@ networks:
         name: jubileu-network
 
 services:
-    app:
+    dev:
         depends_on:
             - lavalink
         build:
