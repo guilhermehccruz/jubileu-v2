@@ -5,19 +5,7 @@ networks:
         name: jubileu-network
 
 services:
-    lavalink:
-        build:
-            context: ../..
-            dockerfile: docker/Dockerfile.lavalink
-        expose:
-            - 2333
-            - 2333/udp
-        ports:
-            - 2333:2333
-        env_file: ../../.env
-        networks:
-            - jubileu-network
-    dev:
+    app:
         depends_on:
             - lavalink
         build:
