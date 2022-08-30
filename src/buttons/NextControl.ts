@@ -26,6 +26,7 @@ export class NextControl {
 			await queue.leave();
 		}
 
+		// update controls
 		await queue.updateControlMessage();
 
 		// delete interaction
