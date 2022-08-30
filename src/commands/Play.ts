@@ -16,7 +16,14 @@ export class Play {
 		private musicPlayer: MusicPlayer
 	) {}
 
-	@Slash({ description: 'Toca o audio do link enviado ou procura o que foi digitado' })
+	/**
+	 *
+	 * Links podem ser de:
+	 *
+	 * Youtube, Soundcloud, Spotify, Apple Music, Bandcamp, Vimeo e Twitch
+	 *
+	 */
+	@Slash({ description: 'Toca o audio do link enviado ou procura o que foi digitado.' })
 	async play(
 		@SlashChoice('LINK', 'PROCURAR')
 		@SlashOption({ name: 'tipo', type: ApplicationCommandOptionType.String })
