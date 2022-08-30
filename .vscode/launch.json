@@ -3,17 +3,10 @@
 	"configurations": [
 		{
 			"type": "node",
-			"request": "launch",
-			"name": "Debug bot",
-			"args": [
-				"${workspaceRoot}/PATH_TO_YOUR_MAIN.ts"
-			],
-			"cwd": "${workspaceRoot}",
-			"runtimeArgs": [
-				"-r",
-				"ts-node/register"
-			],
-			"internalConsoleOptions": "neverOpen"
+			"request": "attach",
+			"name": "Node: Nodemon",
+			"processId": "${command:PickProcess}",
+			"restart": true,
 		}
 	]
 }

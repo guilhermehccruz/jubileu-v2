@@ -7,7 +7,7 @@
 	"scripts": {
 		"build": "tsc",
 		"start": "node dist/index.js",
-		"dev": "nodemon src/index.ts",
+		"dev": "nodemon --inspect src/index.ts",
 		"docker:prod": "docker-compose -f docker/lavalink/docker-compose.lavalink.yml -f docker/prod/docker-compose.prod.yml up",
 		"docker:dev": "docker-compose -f docker/lavalink/docker-compose.lavalink.yml -f docker/dev/docker-compose.dev.yml up"
 	},
