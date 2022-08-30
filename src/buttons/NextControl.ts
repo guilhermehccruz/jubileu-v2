@@ -21,7 +21,11 @@ export class NextControl {
 
 		const { queue } = cmd;
 
-		queue.playNext();
+		const next = queue.playNext();
+		if (!next) {
+			await queue.leave();
+		}
+
 		await queue.updateControlMessage();
 
 		// delete interaction

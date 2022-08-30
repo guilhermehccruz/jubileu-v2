@@ -21,8 +21,7 @@ export class LeaveControl {
 
 		const { queue } = cmd;
 
-		queue.stop();
-		await queue.lavaPlayer.leave();
+		await queue.leave();
 		await queue.updateControlMessage();
 
 		// delete interaction

@@ -239,4 +239,9 @@ export class MusicQueue extends Queue {
 			.send()
 			.catch((error) => console.error(error));
 	}
+
+	async leave(): Promise<void> {
+		this.stop();
+		await this.lavaPlayer.leave();
+	}
 }
