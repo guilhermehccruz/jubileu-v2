@@ -138,8 +138,17 @@ export class MusicQueue extends Queue {
 
 		const bar = (this.isPlaying ? '▶️' : '⏸️') + ' ' + progressString;
 		const currentTime = this.fromMS(timeNow);
-		const endTime = this.fromMS(timeTotal);
-		const spacing = bar.length - currentTime.length - endTime.length;
+
+		let endTime: string;
+		let spacing: number;
+		if (currentTrack.info.isStream) {
+			endTime = 'Livestream';
+			spacing = 8.5;
+		} else {
+			endTime = this.fromMS(timeTotal);
+			spacing = bar.length - currentTime.length - endTime.length;
+		}
+
 		const time = '`' + currentTime + ' '.repeat(spacing * 3 - 2) + endTime + '`';
 
 		embed.addFields({ name: bar, value: time });
@@ -211,11 +220,13 @@ export class MusicQueue extends Queue {
 
 			const queue = this.tracks
 				.slice(currentPage * 10, currentPage * 10 + 10)
-				.map(
-					(track, index1) =>
-						`${currentPage * 10 + index1 + 1}. [${track.info.title}](<${track.info.uri}>)` +
-						` (${this.fromMS(track.info.length)})`
-				)
+				.map((track, index1) => {
+					const endTime = track.info.isStream ? 'Livestream' : this.fromMS(track.info.length);
+
+					return (
+						`${currentPage * 10 + index1 + 1}. [${track.info.title}](<${track.info.uri}>)` + ` (${endTime})`
+					);
+				})
 				.join('\n\n');
 
 			return { content: `${current}\n\n${queue}` };
