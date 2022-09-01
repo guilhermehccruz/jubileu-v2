@@ -20,6 +20,10 @@ export class MusicQueue extends Queue {
 		return this.lavaPlayer.status === Status.PLAYING;
 	}
 
+	get isControlLastMessage(): boolean {
+		return this.lastControlMessage?.id === this.channel?.lastMessageId;
+	}
+
 	constructor(player: Player, guildId: string) {
 		super(player, guildId);
 		setInterval(() => {
@@ -164,7 +168,7 @@ export class MusicQueue extends Queue {
 			embeds: [embed],
 		};
 
-		if (!this.lastControlMessage || options?.force) {
+		if (!this.lastControlMessage || !this.isControlLastMessage || options?.force) {
 			if (this.lastControlMessage) {
 				await this.lastControlMessage.delete().catch((error) => console.error(error));
 				this.lastControlMessage = undefined;
