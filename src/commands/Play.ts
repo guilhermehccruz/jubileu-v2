@@ -26,10 +26,20 @@ export class Play {
 	@Slash({ description: 'Toca o audio do link enviado ou procura o que foi digitado.' })
 	async play(
 		@SlashChoice('LINK', 'PROCURAR')
-		@SlashOption({ name: 'tipo', type: ApplicationCommandOptionType.String })
+		@SlashOption({
+			name: 'tipo',
+			description: 'Se o input é um link ou uma frase pra pesquisar',
+			required: true,
+			type: ApplicationCommandOptionType.String,
+		})
 		type: 'LINK' | 'PROCURAR',
 
-		@SlashOption({ name: 'pesquisa', type: ApplicationCommandOptionType.String })
+		@SlashOption({
+			name: 'pesquisa',
+			description: 'O que o bot deve pesquisar',
+			required: true,
+			type: ApplicationCommandOptionType.String,
+		})
 		input: string,
 
 		@SlashChoice({ name: 'Youtube', value: 'ytsearch' })
@@ -37,7 +47,11 @@ export class Play {
 		@SlashChoice({ name: 'Sound Cloud', value: 'scsearch' })
 		@SlashChoice({ name: 'Spotify', value: 'spsearch' })
 		@SlashChoice({ name: 'Apple Music', value: 'amsearch' })
-		@SlashOption({ name: 'onde-buscar', type: ApplicationCommandOptionType.String, required: false })
+		@SlashOption({
+			name: 'onde-buscar',
+			description: 'Em que plataforma o bot deve pesquisar',
+			type: ApplicationCommandOptionType.String,
+		})
 		platform = 'ytsearch',
 
 		interaction: CommandInteraction,

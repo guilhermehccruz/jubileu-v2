@@ -1,4 +1,4 @@
-import {} from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
 import { Client } from 'discordx';
 import { Discord, Slash, SlashOption } from 'discordx';
@@ -16,7 +16,13 @@ export class Remove {
 
 	@Slash({ description: 'Remove a música da fila na posição digitada' })
 	async remove(
-		@SlashOption({ name: 'posição' }) position: number,
+		@SlashOption({
+			name: 'posição',
+			description: 'Posição que a música está na fila',
+			required: true,
+			type: ApplicationCommandOptionType.Integer,
+		})
+		position: number,
 		interaction: CommandInteraction,
 		client: Client
 	): Promise<void> {

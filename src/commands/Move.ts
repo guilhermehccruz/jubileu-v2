@@ -1,4 +1,4 @@
-import {} from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
 import { Client } from 'discordx';
 import { Discord, Slash, SlashOption } from 'discordx';
@@ -16,8 +16,20 @@ export class Move {
 
 	@Slash({ description: 'Troca a música de lugar, tirando de "posição-inicial" e colocando em "posição-final"' })
 	async move(
-		@SlashOption({ name: 'posição-inicial' }) initialPosition: number,
-		@SlashOption({ name: 'posição-final' }) finalPosition: number,
+		@SlashOption({
+			name: 'posição-inicial',
+			description: 'Posição que a música está na fila',
+			required: true,
+			type: ApplicationCommandOptionType.String,
+		})
+		initialPosition: number,
+		@SlashOption({
+			name: 'posição-final',
+			description: 'Posição que a música vai ficar na fila',
+			required: true,
+			type: ApplicationCommandOptionType.String,
+		})
+		finalPosition: number,
 		interaction: CommandInteraction,
 		client: Client
 	): Promise<void> {

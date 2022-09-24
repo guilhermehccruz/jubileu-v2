@@ -1,4 +1,4 @@
-import {} from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
 import { Client } from 'discordx';
 import { Discord, Slash, SlashOption } from 'discordx';
@@ -16,7 +16,13 @@ export class Seek {
 
 	@Slash({ description: 'Toca a música a partir do segundo digitado' })
 	async seek(
-		@SlashOption({ name: 'segundos' }) seconds: number,
+		@SlashOption({
+			name: 'segundos',
+			description: 'O segundo que a música deve começar',
+			required: true,
+			type: ApplicationCommandOptionType.Integer,
+		})
+		seconds: number,
 		interaction: CommandInteraction,
 		client: Client
 	): Promise<void> {
