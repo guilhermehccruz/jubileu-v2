@@ -1,0 +1,9 @@
+services:
+    app:
+        build:
+            target: development
+        command: pnpm dev
+        volumes:
+            - .:/usr/app
+        ports:
+            - '9229:9229'

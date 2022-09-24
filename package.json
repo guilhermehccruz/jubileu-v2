@@ -7,9 +7,9 @@
 	"scripts": {
 		"build": "tsc",
 		"start": "node dist/index.js",
-		"dev": "nodemon --inspect src/index.ts",
-		"docker:prod": "docker-compose -f docker/lavalink/docker-compose.lavalink.yml -f docker/prod/docker-compose.prod.yml up",
-		"docker:dev": "docker-compose -f docker/lavalink/docker-compose.lavalink.yml -f docker/dev/docker-compose.dev.yml up"
+		"dev": "nodemon -L --inspect src/index.ts",
+		"docker:prod": "docker-compose up --build",
+		"docker:dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build"
 	},
 	"repository": {
 		"type": "git",
@@ -53,6 +53,7 @@
 		"discordx": "^11.1.9",
 		"dotenv": "^16.0.1",
 		"reflect-metadata": "^0.1.13",
+		"tslib": "^2.4.0",
 		"tsyringe": "^4.7.0"
 	}
 }

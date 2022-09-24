@@ -1,10 +1,10 @@
+import 'dotenv/config';
+import 'reflect-metadata';
+
 import { dirname, importx } from '@discordx/importer';
 import { IntentsBitField } from 'discord.js';
 import { Client, DIService, tsyringeDependencyRegistryEngine } from 'discordx';
 import { container } from 'tsyringe';
-
-import 'dotenv/config';
-import 'reflect-metadata';
 
 const client = new Client({
 	// To only use global commands (use @Guild for specific guild command), comment this line
