@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+    lavalink:
+        image: fredboat/lavalink
+        container_name: lavalink
+        volumes:
+            - ./application.yml:/opt/Lavalink/application.yml
+        expose:
+            - 2333
+            - 2333/udp
+        env_file: .env
+    app:
+        container_name: app
+        build:
+            context: .
+            target: production
+        env_file: .env
+        restart: always
+        depends_on:
+            - lavalink

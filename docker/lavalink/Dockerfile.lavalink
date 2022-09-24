@@ -1,2 +1,0 @@
-FROM fredboat/lavalink:dev
-ADD docker/lavalink/application.yml application.yml
