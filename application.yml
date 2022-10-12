@@ -1,4 +1,4 @@
-server: # REST and WS server
+server:
     port: "${LAVA_PORT}"
     address: 0.0.0.0
 lavalink:
@@ -12,32 +12,36 @@ lavalink:
             vimeo: true
             http: true
             local: false
-        bufferDurationMs: 400 # The duration of the NAS buffer. Higher values fare better against longer GC pauses
-        frameBufferDurationMs: 5000 # How many milliseconds of audio to keep buffered
-        youtubePlaylistLoadLimit: 6 # Number of pages at 100 each
-        playerUpdateInterval: 5 # How frequently to send player updates to clients, in seconds
+        bufferDurationMs: 400
+        frameBufferDurationMs: 5000
+        youtubePlaylistLoadLimit: 6
+        playerUpdateInterval: 5
         youtubeSearchEnabled: true
         soundcloudSearchEnabled: true
         gc-warnings: true
     plugins:
-        - dependency: "com.github.Topis-Lavalink-Plugins:Topis-Source-Managers-Plugin:v2.0.7"
+        - dependency: "com.github.TopiSenpai.LavaSrc:lavasrc-plugin:3.0.5"
           repository: "https://jitpack.io"
 
 plugins:
-    topissourcemanagers:
+    lavasrc:
         providers: # Custom providers for track loading. This is the default
             - 'ytsearch:"%ISRC%"' # Will be ignored if track does not have an ISRC. See https://en.wikipedia.org/wiki/International_Standard_Recording_Code
             - "ytsearch:%QUERY%" # Will be used if track has no ISRC or no track could be found for the ISRC
+            # - "dzisrc:%ISRC%"
             # - "scsearch:%QUERY%" you can add multiple other fallback sources here
         sources:
             spotify: true # Enable Spotify source
             applemusic: true # Enable Apple Music source
+            deezer: false
         spotify:
             clientId: "${SPOTIFY_CLIENT_ID}"
             clientSecret: "${SPOTIFY_SECRET}"
-            countryCode: "US" # the country code you want to use for filtering the artists top tracks. See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+            countryCode: "US"
         applemusic:
-            countryCode: "US" # the country code you want to use for filtering the artists top tracks and language. See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+            countryCode: "US"
+        # deezer:
+        #     masterDecryptionKey: "..."
 
 metrics:
     prometheus:
