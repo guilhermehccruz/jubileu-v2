@@ -19,17 +19,10 @@ const client = new Client({
 		IntentsBitField.Flags.GuildMessages,
 		IntentsBitField.Flags.GuildMessageReactions,
 		IntentsBitField.Flags.GuildVoiceStates,
-		IntentsBitField.Flags.DirectMessages,
-		IntentsBitField.Flags.MessageContent,
 	],
 
 	// Debug logs are disabled in silent mode
 	silent: false,
-
-	// Configuration for @SimpleCommand
-	simpleCommand: {
-		prefix: '.',
-	},
 });
 
 async function run() {
