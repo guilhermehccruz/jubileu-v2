@@ -4,12 +4,12 @@ import type { Client } from 'discordx';
 
 export function getLavaNode(client: Client): Node {
 	const lavaNode = new Node({
-		password: process.env.LAVA_PASSWORD ?? '',
+		password: process.env.LAVA_PASSWORD,
 		userId: client.user?.id ?? '',
 		host: {
-			address: process.env.LAVA_HOST ?? 'lavalink',
+			address: process.env.LAVA_HOST,
 			connectionOptions: { resumeKey: client.botId, resumeTimeout: 15 },
-			port: process.env.LAVA_PORT ?? 2333,
+			port: process.env.LAVA_PORT,
 		},
 		send(guildId, packet) {
 			const guild = client.guilds.cache.get(guildId);
