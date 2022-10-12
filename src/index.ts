@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import 'reflect-metadata';
 
-import './config/ValidateEnv.js';
+import './config/validateEnv.js';
 
 import { dirname, importx } from '@discordx/importer';
 import { IntentsBitField } from 'discord.js';
