@@ -28,7 +28,7 @@ const client = new Client({
 async function run() {
 	DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
 
-	await importx(`${dirname(import.meta.url)}/{events,commands,buttons}/**/*.{ts,js}`);
+	await importx(dirname(import.meta.url) + '/{events,commands,buttons}/**/*.{ts,js}');
 
 	await client.login(process.env.BOT_TOKEN);
 }
