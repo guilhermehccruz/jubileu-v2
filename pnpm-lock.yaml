@@ -3,9 +3,9 @@ lockfileVersion: 5.4
 specifiers:
   '@discordx/importer': ^1.1.10
   '@discordx/lava-player': ^1.0.11
-  '@discordx/lava-queue': ^1.1.0
+  '@discordx/lava-queue': ^1.1.1
   '@discordx/pagination': ^3.3.1
-  '@types/node': ^18.8.5
+  '@types/node': ^18.11.0
   '@typescript-eslint/eslint-plugin': ^5.40.0
   '@typescript-eslint/parser': ^5.40.0
   discord.js: ^14.6.0
@@ -15,7 +15,7 @@ specifiers:
   eslint-config-prettier: ^8.5.0
   eslint-import-resolver-typescript: ^3.5.1
   eslint-plugin-import: ^2.26.0
-  eslint-plugin-import-helpers: ^1.2.1
+  eslint-plugin-import-helpers: ^1.3.0
   eslint-plugin-prettier: ^4.2.1
   joi: ^17.6.3
   nodemon: ^2.0.20
@@ -30,7 +30,7 @@ specifiers:
 dependencies:
   '@discordx/importer': 1.1.10
   '@discordx/lava-player': 1.0.11
-  '@discordx/lava-queue': 1.1.0_ldd4w3af3cggmokdulmw7jnrdm
+  '@discordx/lava-queue': 1.1.1_ldd4w3af3cggmokdulmw7jnrdm
   '@discordx/pagination': 3.3.1_discord.js@14.6.0
   discord.js: 14.6.0
   discordx: 11.4.0_discord.js@14.6.0
@@ -42,18 +42,18 @@ dependencies:
   tsyringe: 4.7.0
 
 devDependencies:
-  '@types/node': 18.8.5
+  '@types/node': 18.11.0
   '@typescript-eslint/eslint-plugin': 5.40.0_25sstg4uu2sk4pm7xcyzuov7xq
   '@typescript-eslint/parser': 5.40.0_z4bbprzjrhnsfa24uvmcbu7f5q
   eslint: 8.25.0
   eslint-config-prettier: 8.5.0_eslint@8.25.0
   eslint-import-resolver-typescript: 3.5.1_fyln4uq2tv75svthy6prqvt6lm
   eslint-plugin-import: 2.26.0_gidjymaeg63pis2633rh62obay
-  eslint-plugin-import-helpers: 1.2.1_eslint@8.25.0
+  eslint-plugin-import-helpers: 1.3.0_eslint@8.25.0
   eslint-plugin-prettier: 4.2.1_hvbqyfstm4urdpm6ffpwfka4e4
   nodemon: 2.0.20
   prettier: 2.7.1
-  ts-node: 10.9.1_ptpocrdt7oaz4ni5mlvucph5pa
+  ts-node: 10.9.1_o6ib7qqltxpe7qrskddglns2ga
   typescript: 4.8.4
 
 packages:
@@ -71,7 +71,7 @@ packages:
     dependencies:
       '@discordjs/util': 0.1.0
       '@sapphire/shapeshift': 3.7.0
-      discord-api-types: 0.37.12
+      discord-api-types: 0.37.14
       fast-deep-equal: 3.1.3
       ts-mixer: 6.0.1
       tslib: 2.4.0
@@ -90,7 +90,7 @@ packages:
       '@discordjs/util': 0.1.0
       '@sapphire/async-queue': 1.5.0
       '@sapphire/snowflake': 3.2.2
-      discord-api-types: 0.37.12
+      discord-api-types: 0.37.14
       file-type: 18.0.0
       tslib: 2.4.0
       undici: 5.11.0
@@ -132,8 +132,8 @@ packages:
       tslib: 2.4.0
     dev: false
 
-  /@discordx/lava-queue/1.1.0_ldd4w3af3cggmokdulmw7jnrdm:
-    resolution: {integrity: sha512-G/+PtiFh19qLQTOVOF2E0afx/VqenCD0uUXln/Hhc9oWCRaO/Hbl2gt/n1Yy2x1HDal9oLQ7DjcC6dRHZemJFA==}
+  /@discordx/lava-queue/1.1.1_ldd4w3af3cggmokdulmw7jnrdm:
+    resolution: {integrity: sha512-ef5lDT6dPTTL7OyEg7RJsmobaXPWVIdkej1eNY+o05nHl8xM+Lyl0uhyvAIkp3zYcfBFQ81T3H0tZKMj3ehZ/w==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     peerDependencies:
       '@discordx/lava-player': '>=1'
@@ -307,7 +307,7 @@ packages:
   /@types/backoff/2.5.2:
     resolution: {integrity: sha512-oa1YvggujhVppgeIct3LBkbCVXKh97fvOFIR6VlFLxRCeswk/KBRQKg7zoX832vlCP5bGLOFqC9hY7vsDeL9AA==}
     dependencies:
-      '@types/node': 18.8.5
+      '@types/node': 18.11.0
     dev: false
 
   /@types/json-schema/7.0.11:
@@ -318,13 +318,13 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
 
-  /@types/node/18.8.5:
-    resolution: {integrity: sha512-Bq7G3AErwe5A/Zki5fdD3O6+0zDChhg671NfPjtIcbtzDNZTv4NPKMRFr7gtYPG7y+B8uTiNK4Ngd9T0FTar6Q==}
+  /@types/node/18.11.0:
+    resolution: {integrity: sha512-IOXCvVRToe7e0ny7HpT/X9Rb2RYtElG1a+VshjwT00HxrM2dWBApHQoqsI6WiY7Q03vdf2bCrIGzVrkF/5t10w==}
 
   /@types/ws/8.5.3:
     resolution: {integrity: sha512-6YOoWjruKj1uLf3INHH7D3qTXwFfEsg1kf3c0uDdSBJwfa/llkwIjrAGV7j7mVgGNbzTQ3HiHKKDXl6bJPD97w==}
     dependencies:
-      '@types/node': 18.8.5
+      '@types/node': 18.11.0
     dev: false
 
   /@typescript-eslint/eslint-plugin/5.40.0_25sstg4uu2sk4pm7xcyzuov7xq:
@@ -780,8 +780,8 @@ packages:
       path-type: 4.0.0
     dev: true
 
-  /discord-api-types/0.37.12:
-    resolution: {integrity: sha512-SMBP4V6/A9mE7shBQAiTxNWnQlYTdiKMGvc7G23neayxaTJeFYh5FviJSWUa0BTdXcph1h/jT03Nbyv5XgZkzw==}
+  /discord-api-types/0.37.14:
+    resolution: {integrity: sha512-byBH7SfDCMJwxdqeS8k5sihltH88/YPhuwx+vF2cftSxFLdxyHyU/ZxDL3bq+LB2c4ls/TymE76/ISlLfniUXg==}
     dev: false
 
   /discord.js/14.6.0:
@@ -794,7 +794,7 @@ packages:
       '@discordjs/util': 0.1.0
       '@sapphire/snowflake': 3.2.2
       '@types/ws': 8.5.3
-      discord-api-types: 0.37.12
+      discord-api-types: 0.37.14
       fast-deep-equal: 3.1.3
       lodash.snakecase: 4.1.1
       tslib: 2.4.0
@@ -1023,8 +1023,9 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-import-helpers/1.2.1_eslint@8.25.0:
-    resolution: {integrity: sha512-BSqLlCnyX4tWGlvPUTpBgUoaFiWxXSztpk9SozZVW4TZU1ygZuF0Lrfn9CO5xx1XT+PVAR9yroP9JPRyB4rAjQ==}
+  /eslint-plugin-import-helpers/1.3.0_eslint@8.25.0:
+    resolution: {integrity: sha512-rOWH24tNMeb47NjwiQ2SPb7GFy0rgXT6LRsED9B58LcdOaU/jr/8zlpGh3LvrjhWxn8fJuRN4w8bka8Fgs8w2w==}
+    engines: {node: '> 14'}
     peerDependencies:
       eslint: 5.x - 8.x
     dependencies:
@@ -2240,7 +2241,7 @@ packages:
     resolution: {integrity: sha512-hvE+ZYXuINrx6Ei6D6hz+PTim0Uf++dYbK9FFifLNwQj+RwKquhQpn868yZsCtJYiclZF1u8l6WZxxKi+vv7Rg==}
     dev: false
 
-  /ts-node/10.9.1_ptpocrdt7oaz4ni5mlvucph5pa:
+  /ts-node/10.9.1_o6ib7qqltxpe7qrskddglns2ga:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -2259,7 +2260,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 18.8.5
+      '@types/node': 18.11.0
       acorn: 8.8.0
       acorn-walk: 8.2.0
       arg: 4.1.3
