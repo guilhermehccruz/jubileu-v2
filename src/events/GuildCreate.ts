@@ -6,6 +6,9 @@ import type { ArgsOf, Client } from 'discordx';
 export class GuildCreate {
 	@On({ event: 'guildCreate' })
 	async guildCreate([guild]: ArgsOf<'guildCreate'>, client: Client): Promise<void> {
+		// Synchronize applications commands with Discord
+		await client.initApplicationCommands();
+
 		if (process.env.SERVERS_CHANNEL_ID) {
 			const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID);
 
