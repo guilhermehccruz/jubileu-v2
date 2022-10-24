@@ -22,6 +22,7 @@ specifiers:
   prettier: ^2.7.1
   rastreio-correios: ^1.1.7
   reflect-metadata: ^0.1.13
+  set-interval-async: ^3.0.2
   ts-node: ^10.9.1
   tslib: ^2.4.0
   tsyringe: ^4.7.0
@@ -38,6 +39,7 @@ dependencies:
   joi: 17.6.4
   rastreio-correios: 1.1.7
   reflect-metadata: 0.1.13
+  set-interval-async: 3.0.2
   tslib: 2.4.0
   tsyringe: 4.7.0
 
@@ -2096,6 +2098,11 @@ packages:
     dependencies:
       lru-cache: 6.0.0
     dev: true
+
+  /set-interval-async/3.0.2:
+    resolution: {integrity: sha512-s8Jl35TVylbhgeYbTJ3y3h/KnBCGvDPHyuG02My82YNwgKRErpmvNsWWec5zpt4jqTKPZyRmgCEkeFb07+j7EA==}
+    engines: {node: '>= 14.0.0'}
+    dev: false
 
   /shebang-command/2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
