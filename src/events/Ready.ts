@@ -60,7 +60,7 @@ export class Ready {
 					const servers: string[] = [];
 
 					for await (const guild of client.guilds.cache) {
-						if (guild[1].members.me?.voice.sessionId) {
+						if (guild[1].members.me?.voice.channelId) {
 							servers.push(`${guild[1].name}\n`);
 						}
 					}
