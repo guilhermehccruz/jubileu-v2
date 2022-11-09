@@ -68,11 +68,15 @@ export class Ready {
 					if (connectedToChannel.lastMessageId) {
 						const message = await connectedToChannel.messages
 							.fetch(connectedToChannel.lastMessageId)
-							.catch(() => console.log('Não deu pra achar a mensagem'));
+							.catch(() => {
+								return;
+							});
 
 						// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
 						if (message && message.deletable) {
-							await message.delete().catch(() => console.log('Não deu pra apagar a mensagem'));
+							await message.delete().catch(() => {
+								return;
+							});
 						}
 					}
 					const serversEmbed = new EmbedBuilder().setTitle(
