@@ -32,5 +32,8 @@ async function run() {
 
 	await client.login(process.env.BOT_TOKEN);
 }
-
-await run();
+try {
+	await run();
+} catch (error) {
+	console.log(error);
+}

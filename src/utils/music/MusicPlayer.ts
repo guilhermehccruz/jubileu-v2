@@ -33,12 +33,7 @@ export class MusicPlayer {
 	> {
 		await interaction.deferReply();
 
-		if (
-			!interaction.channel ||
-			!(interaction.member instanceof GuildMember) ||
-			!interaction.guild ||
-			!interaction.client.user
-		) {
+		if (!interaction.channel || !(interaction.member instanceof GuildMember) || !interaction.guild) {
 			await interaction.followUp('Não foi possível processar o comando. Tente novamente');
 			return;
 		}
