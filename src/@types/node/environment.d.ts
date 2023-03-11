@@ -4,9 +4,10 @@ declare global {
 		interface ProcessEnv {
 			BOT_TOKEN: string;
 
-			READY_CHANNEL_ID?: string;
-			SERVERS_CHANNEL_ID?: string;
-			SERVERS_CONNECTED_MESSAGE_ID?: string;
+			JUBILEU_SERVER: string;
+			READY_CHANNEL_ID: string;
+			SERVERS_CHANNEL_ID: string;
+			SERVERS_CONNECTED_CHANNEL_ID: string;
 
 			LAVA_HOST: string;
 			LAVA_PORT: number;

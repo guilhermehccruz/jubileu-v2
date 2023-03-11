@@ -19,83 +19,90 @@ export class Ready {
 		// Synchronize applications commands with Discord
 		await client.initApplicationCommands();
 
-		// Send ready message
-		if (process.env.READY_CHANNEL_ID) {
-			const readyChannel = client.channels.cache.get(process.env.READY_CHANNEL_ID);
+		await this.sendReadyMessage(client);
 
-			const readyAtDate =
-				client.readyAt?.toLocaleString('pt-BR').split(' ').reverse().join(' - ') ??
-				new Date().toLocaleString('pt-BR').split(' ').reverse().join(' - ');
+		await this.sendServersMessage(client);
 
-			const readyEmbed = new EmbedBuilder().setTitle('Pai ta on').setDescription(readyAtDate);
-
-			if (readyChannel?.isTextBased()) {
-				await readyChannel.send({ embeds: [readyEmbed] });
-			}
-		}
-
-		// Send servers message
-		if (process.env.SERVERS_CHANNEL_ID) {
-			const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID);
-
-			const serversEmbed = new EmbedBuilder()
-				.setTitle('Lista de servidores na hora que ligou')
-				.setDescription(client.guilds.cache.map((server) => server.name).join('\n'));
-
-			if (serversChannel?.isTextBased()) {
-				await serversChannel.send({ embeds: [serversEmbed] });
-			}
-		}
+		this.sendConnectedToMessage(client);
 
 		// Instantiate music player
 		const musicPlayer = container.resolve(MusicPlayer);
 		musicPlayer.player[client.botId] = new Player(getLavaNode(client));
 
-		// Servers the bot is connected to a voice channel
-		if (process.env.SERVERS_CONNECTED_CHANNEL_ID) {
-			const connectedToChannel = client.channels.cache.get(process.env.SERVERS_CONNECTED_CHANNEL_ID);
-
-			if (connectedToChannel?.isTextBased()) {
-				setIntervalAsync(async () => {
-					const servers: string[] = [];
-
-					for await (const guild of client.guilds.cache) {
-						if (guild[1].members.me?.voice.channelId) {
-							servers.push(`${guild[1].name}\n`);
-						}
-					}
-
-					if (connectedToChannel.lastMessageId) {
-						const message = await connectedToChannel.messages
-							.fetch(connectedToChannel.lastMessageId)
-							.catch(() => {
-								return;
-							});
-
-						// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-						if (message && message.deletable) {
-							await message.delete().catch(() => {
-								return;
-							});
-						}
-					}
-					const serversEmbed = new EmbedBuilder().setTitle(
-						'Servidores que estou atualmente conectado a um canal de voz'
-					);
-
-					if (servers.length) {
-						serversEmbed.setDescription(servers.join('\n'));
-
-						await connectedToChannel.send({ embeds: [serversEmbed] });
-					} else {
-						serversEmbed.setDescription('Nenhum');
-
-						await connectedToChannel.send({ embeds: [serversEmbed] });
-					}
-				}, 30000);
-			}
-		}
-
 		console.log('>> Bot started');
+	}
+
+	private async sendReadyMessage(client: Client) {
+		// Send ready message
+		const readyChannel = client.channels.cache.get(process.env.READY_CHANNEL_ID);
+
+		const readyAtDate = new Date().toLocaleString('pt-br').split(' ').reverse().join(' - ').replace(',', '');
+
+		const readyEmbed = new EmbedBuilder().setTitle('Pai ta on').setDescription(readyAtDate);
+
+		if (readyChannel?.isTextBased()) {
+			await readyChannel.send({ embeds: [readyEmbed] });
+		}
+	}
+
+	private async sendServersMessage(client: Client) {
+		// Send servers message
+		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID);
+
+		const serversEmbed = new EmbedBuilder()
+			.setTitle('Lista de servidores na hora que ligou')
+			.setDescription(client.guilds.cache.map((server) => server.name).join('\n'));
+
+		if (serversChannel?.isTextBased()) {
+			await serversChannel.send({ embeds: [serversEmbed] });
+		}
+	}
+
+	private sendConnectedToMessage(client: Client) {
+		setIntervalAsync(async () => {
+			// Servers the bot is connected to a voice channel
+			const connectedToChannel = await client.channels.fetch(process.env.SERVERS_CONNECTED_CHANNEL_ID);
+			if (connectedToChannel?.isTextBased()) {
+				const servers: string[] = [];
+
+				for await (const guild of client.guilds.cache) {
+					if (guild[1].members.me?.voice.channelId) {
+						servers.push(`${guild[1].name}\n`);
+					}
+				}
+
+				if (connectedToChannel.lastMessageId) {
+					const message = await connectedToChannel.messages
+						.fetch(connectedToChannel.lastMessageId)
+						.catch(() => {
+							console.log('not found');
+
+							return;
+						});
+
+					// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+					if (message && message.deletable) {
+						await message.delete().catch(() => {
+							console.log('not deletable');
+							return;
+						});
+					}
+				}
+
+				const serversEmbed = new EmbedBuilder().setTitle(
+					'Servidores que estou atualmente conectado a um canal de voz'
+				);
+
+				if (servers.length) {
+					serversEmbed.setDescription(servers.join('\n'));
+
+					await connectedToChannel.send({ embeds: [serversEmbed] });
+				} else {
+					serversEmbed.setDescription('Nenhum');
+
+					await connectedToChannel.send({ embeds: [serversEmbed] });
+				}
+			}
+		}, 30000);
 	}
 }

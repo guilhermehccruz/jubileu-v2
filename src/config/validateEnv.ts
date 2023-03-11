@@ -3,8 +3,10 @@ import Joi from 'joi';
 const schema = Joi.object({
 	BOT_TOKEN: Joi.string().required(),
 
+	JUBILEU_SERVER: Joi.number().unsafe().optional(),
 	READY_CHANNEL_ID: Joi.number().unsafe().optional(),
 	SERVERS_CHANNEL_ID: Joi.number().unsafe().optional(),
+	SERVERS_CONNECTED_CHANNEL_ID: Joi.number().unsafe().optional(),
 
 	LAVA_HOST: Joi.string().required(),
 	LAVA_PORT: Joi.number().required(),
