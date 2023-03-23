@@ -2,17 +2,14 @@ import { ApplicationCommandOptionType } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
 import { Client } from 'discordx';
 import { Discord, Slash, SlashOption } from 'discordx';
-import { inject, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
 export class Remove {
-	constructor(
-		@inject(MusicPlayer)
-		private musicPlayer: MusicPlayer
-	) {}
+	constructor(private musicPlayer: MusicPlayer) {}
 
 	@Slash({ description: 'Remove a música da fila na posição digitada' })
 	async remove(
