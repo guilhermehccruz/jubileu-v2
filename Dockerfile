@@ -1,6 +1,6 @@
 # Development
 
-FROM node:alpine3.15 AS development
+FROM node:18-alpine AS development
 
 WORKDIR /usr/app
 
@@ -14,7 +14,7 @@ COPY tsconfig.json src .env ./
 
 # Build
 
-FROM node:alpine3.15 AS build
+FROM node:18-alpine AS build
 
 WORKDIR /usr/app
 
@@ -36,7 +36,7 @@ USER node
 
 # Production
 
-FROM node:alpine3.15 AS production
+FROM node:18-alpine AS production
 
 WORKDIR /
 
