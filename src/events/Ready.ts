@@ -75,15 +75,12 @@ export class Ready {
 					const message = await connectedToChannel.messages
 						.fetch(connectedToChannel.lastMessageId)
 						.catch(() => {
-							console.log('not found');
-
 							return;
 						});
 
 					// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
 					if (message && message.deletable) {
 						await message.delete().catch(() => {
-							console.log('not deletable');
 							return;
 						});
 					}
