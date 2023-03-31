@@ -10,7 +10,7 @@ COPY package.json pnpm-lock.yaml ./
 
 RUN pnpm install
 
-COPY tsconfig.json src .env ./
+COPY tsconfig.json src ./
 
 # Build
 
@@ -24,7 +24,7 @@ COPY --chown=node:node package.json pnpm-lock.yaml ./
 
 COPY --chown=node:node --from=development /usr/app/node_modules ./node_modules
 
-COPY --chown=node:node tsconfig.json src .env ./
+COPY --chown=node:node tsconfig.json src ./
 
 RUN pnpm build
 
