@@ -1,4 +1,8 @@
-import { Node, NodeOptions, VoiceServerUpdate, VoiceStateUpdate } from '@discordx/lava-player';
+import type {
+	VoiceServerUpdate,
+	VoiceStateUpdate,
+  } from "@discordx/lava-player";
+import { Node } from '@discordx/lava-player';
 import { GatewayDispatchEvents } from 'discord.js';
 import type { Client } from 'discordx';
 
@@ -8,7 +12,7 @@ export function getLavaNode(client: Client): Node {
 		userId: client.user?.id ?? '',
 		host: {
 			address: process.env.LAVALINK_HOST,
-			connectionOptions: { resumeKey: client.botId, resumeTimeout: 15 },
+			connectionOptions: { sessionId: client.botId },
 			port: process.env.LAVALINK_PORT,
 		},
 		send(guildId, packet) {
@@ -18,7 +22,7 @@ export function getLavaNode(client: Client): Node {
 				guild.shard.send(packet);
 			}
 		},
-	} as NodeOptions);
+	});
 
 	client.ws.on(GatewayDispatchEvents.VoiceStateUpdate, (data: VoiceStateUpdate) => {
 		lavaNode.voiceStateUpdate(data).catch((error) => console.error(error, client));
