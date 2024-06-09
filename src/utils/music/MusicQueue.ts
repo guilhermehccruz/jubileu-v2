@@ -1,8 +1,9 @@
-import { Status } from '@discordx/lava-player';
+import { PlayerStatus } from '@discordx/lava-player';
 import type { Player } from '@discordx/lava-queue';
 import { Queue } from '@discordx/lava-queue';
 import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagination';
 import type {
+	ButtonInteraction,
 	CommandInteraction,
 	ContextMenuCommandInteraction,
 	MessageActionRowComponentBuilder,
@@ -12,12 +13,16 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Message } f
 
 export class MusicQueue extends Queue {
 	lastControlMessage?: Message;
-	timeoutTimer?: NodeJS.Timeout;
 	lockUpdate = false;
+
+	timeoutTimer?: NodeJS.Timeout;
 	channel?: TextBasedChannel;
 
 	get isPlaying(): boolean {
-		return this.lavaPlayer.status === Status.PLAYING;
+		return (
+			this.currentTrack !== null &&
+			this.lavaPlayer.status === PlayerStatus.PLAYING
+		);
 	}
 
 	get isControlLastMessage(): boolean {
@@ -186,7 +191,7 @@ export class MusicQueue extends Queue {
 		this.lockUpdate = false;
 	}
 
-	public async view(interaction: CommandInteraction | ContextMenuCommandInteraction): Promise<void> {
+	public async view(interaction: ButtonInteraction | CommandInteraction): Promise<void> {
 		if (!this.currentTrack) {
 			const pMsg = await interaction.followUp({
 				content: '> Não foi possível processar a fila, tente novamente mais tarde',
@@ -202,7 +207,10 @@ export class MusicQueue extends Queue {
 		}
 
 		if (!this.size) {
-			const pMsg = await interaction.followUp(`> Tocando **${this.currentTrack.info.title}**`);
+			const pMsg = await interaction.followUp({
+				content: `> Tocando **${this.currentTrack.info.title}**`,
+				ephemeral: true,
+			});
 			if (pMsg instanceof Message) {
 				setTimeout(() => {
 					pMsg.delete().catch((error) => console.error(error));
@@ -259,5 +267,6 @@ export class MusicQueue extends Queue {
 	async leave(): Promise<void> {
 		this.stop();
 		await this.lavaPlayer.leave();
+		await this.lavaPlayer.destroy();
 	}
 }
