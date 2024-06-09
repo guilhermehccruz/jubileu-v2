@@ -9,9 +9,8 @@ declare global {
 			SERVERS_CHANNEL_ID: string;
 			SERVERS_CONNECTED_CHANNEL_ID: string;
 
-			LAVA_HOST: string;
-			LAVA_PORT: number;
-			LAVA_PASSWORD: string;
+			LAVALINK_HOST: string;
+			LAVALINK_PORT: number;
 
 			SPOTIFY_CLIENT_ID: string;
 			SPOTIFY_SECRET: string;

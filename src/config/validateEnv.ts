@@ -8,9 +8,8 @@ const schema = Joi.object({
 	SERVERS_CHANNEL_ID: Joi.number().unsafe().optional(),
 	SERVERS_CONNECTED_CHANNEL_ID: Joi.number().unsafe().optional(),
 
-	LAVA_HOST: Joi.string().required(),
-	LAVA_PORT: Joi.number().required(),
-	LAVA_PASSWORD: Joi.string().allow('').required(),
+	LAVALINK_HOST: Joi.string().required(),
+	LAVALINK_PORT: Joi.number().required(),
 
 	SPOTIFY_CLIENT_ID: Joi.string().required(),
 	SPOTIFY_SECRET: Joi.string().required(),
