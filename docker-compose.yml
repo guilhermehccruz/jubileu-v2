@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
     lavalink:
-        image: docker pull fredboat/lavalink:4.0.6-alpine
+        image: fredboat/lavalink:4.0.6-alpine
         container_name: lavalink
         restart: unless-stopped
         volumes:
@@ -13,5 +13,7 @@ services:
             - 2333:2333
     app:
         container_name: app
+        build:
+            context: .
         env_file: .env
         restart: always
