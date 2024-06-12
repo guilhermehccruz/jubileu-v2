@@ -9,7 +9,7 @@ import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 @Discord()
 @injectable()
 export class Seek {
-	constructor(private musicPlayer: MusicPlayer) {}
+	constructor(private readonly musicPlayer: MusicPlayer) { }
 
 	@Slash({ description: 'Toca a música a partir do segundo digitado' })
 	async seek(
@@ -45,7 +45,7 @@ export class Seek {
 			return;
 		}
 
-		await queue.lavaPlayer.play(queue.currentTrack, { start: seconds * 1000 });
+		await queue.lavaPlayer.update({ position: seconds * 1000 });
 
 		await interaction.followUp('> Pulado até o segundo requisitado');
 		return;

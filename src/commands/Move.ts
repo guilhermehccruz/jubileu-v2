@@ -9,7 +9,7 @@ import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 @Discord()
 @injectable()
 export class Move {
-	constructor(private musicPlayer: MusicPlayer) {}
+	constructor(private readonly musicPlayer: MusicPlayer) { }
 
 	@Slash({ description: 'Troca a música de lugar, tirando de "posição-inicial" e colocando em "posição-final"' })
 	async move(

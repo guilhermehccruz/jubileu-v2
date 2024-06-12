@@ -3,6 +3,7 @@ import type { ButtonInteraction, CommandInteraction, Guild, TextBasedChannel } f
 import { GuildMember } from 'discord.js';
 import type { Client } from 'discordx';
 import { Discord } from 'discordx';
+import { setTimeout } from "node:timers/promises";
 
 import { MusicQueue } from './MusicQueue.js';
 
@@ -21,19 +22,23 @@ export class MusicPlayer {
 	async ParseCommand(
 		client: Client,
 		interaction: CommandInteraction | ButtonInteraction,
-		skipBotChannel = false
 	): Promise<
 		| {
-				channel: TextBasedChannel;
-				guild: Guild;
-				member: GuildMember;
-				queue: MusicQueue;
-		  }
+			channel: TextBasedChannel;
+			guild: Guild;
+			member: GuildMember;
+			queue: MusicQueue;
+		}
 		| undefined
 	> {
 		await interaction.deferReply();
 
-		if (!interaction.channel || !(interaction.member instanceof GuildMember) || !interaction.guild) {
+		if (
+			!interaction.channel ||
+			!(interaction.member instanceof GuildMember) ||
+			!interaction.guild ||
+			!interaction.client.user
+		) {
 			await interaction.followUp('Não foi possível processar o comando. Tente novamente');
 			return;
 		}
@@ -43,10 +48,14 @@ export class MusicPlayer {
 			return;
 		}
 
-		const bot = interaction.guild.members.cache.get(interaction.client.user.id);
+		const bot = interaction.guild?.members.cache.get(
+			interaction.client.user?.id,
+		);
 
-		if (!skipBotChannel && interaction.member.voice.channelId !== bot?.voice.channelId) {
-			await interaction.followUp('Entre no mesmo canal de voz que eu primeiro');
+		if (!bot) {
+			await interaction.followUp({
+				content: "Onde é que eu to? Será que estou em Alagoinha?",
+			});
 			return;
 		}
 
@@ -54,6 +63,20 @@ export class MusicPlayer {
 
 		if (!queue) {
 			await interaction.followUp('O reprodutor de música ainda não está pronto. Tente novamente mais tarde');
+			return;
+		}
+
+		if (bot.voice.channelId === null) {
+			queue.channel = interaction.channel;
+
+			await queue.lavaPlayer.join({
+				channel: interaction.member.voice.channelId,
+				deaf: true,
+			});
+		} else if (interaction.member.voice.channelId !== bot.voice.channelId) {
+			await interaction.followUp({
+				content: "Entre no mesmo canal de voz que eu primeiro",
+			});
 			return;
 		}
 

@@ -8,7 +8,7 @@ import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 @Discord()
 @injectable()
 export class PauseControl {
-	constructor(private musicPlayer: MusicPlayer) {}
+	constructor(private readonly musicPlayer: MusicPlayer) { }
 
 	@ButtonComponent({ id: 'btn-pause' })
 	async pauseControl(interaction: ButtonInteraction, client: Client): Promise<void> {
@@ -17,10 +17,8 @@ export class PauseControl {
 			return;
 		}
 
-		const { queue } = cmd;
-
-		queue.isPlaying ? queue.pause() : queue.resume();
-		await queue.updateControlMessage();
+		cmd.queue.isPlaying ? await cmd.queue.pause() : await cmd.queue.resume();
+		await cmd.queue.updateControlMessage();
 
 		// delete interaction
 		await interaction.deleteReply();

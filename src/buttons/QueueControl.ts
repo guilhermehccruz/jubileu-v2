@@ -1,4 +1,4 @@
-import { ButtonInteraction, CommandInteraction } from 'discord.js';
+import { ButtonInteraction } from 'discord.js';
 import { ButtonComponent, Client, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
@@ -7,7 +7,7 @@ import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 @Discord()
 @injectable()
 export class QueueControl {
-	constructor(private musicPlayer: MusicPlayer) {}
+	constructor(private readonly musicPlayer: MusicPlayer) { }
 
 	@ButtonComponent({ id: 'btn-queue' })
 	async queueControl(interaction: ButtonInteraction, client: Client): Promise<void> {
@@ -18,6 +18,6 @@ export class QueueControl {
 
 		const { queue } = cmd;
 
-		await queue.view(interaction as unknown as CommandInteraction);
+		await queue.view(interaction);
 	}
 }

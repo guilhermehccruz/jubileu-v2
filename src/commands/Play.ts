@@ -1,5 +1,4 @@
-import type { TrackResponse } from '@discordx/lava-player';
-import { LoadType, Status } from '@discordx/lava-player';
+import { LoadType } from '@discordx/lava-player';
 import type { CommandInteraction } from 'discord.js';
 import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
 import { Client } from 'discordx';
@@ -11,7 +10,7 @@ import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 @Discord()
 @injectable()
 export class Play {
-	constructor(private musicPlayer: MusicPlayer) {}
+	constructor(private readonly musicPlayer: MusicPlayer) { }
 
 	/**
 	 *
@@ -22,15 +21,6 @@ export class Play {
 	 */
 	@Slash({ description: 'Toca o audio do link enviado ou procura o que foi digitado.' })
 	async play(
-		@SlashChoice('LINK', 'PROCURAR')
-		@SlashOption({
-			name: 'tipo',
-			description: 'Se o input é um link ou uma frase pra pesquisar',
-			required: true,
-			type: ApplicationCommandOptionType.String,
-		})
-		type: 'LINK' | 'PROCURAR',
-
 		@SlashOption({
 			name: 'pesquisa',
 			description: 'O que o bot deve pesquisar',
@@ -49,70 +39,69 @@ export class Play {
 			description: 'Em que plataforma o bot deve pesquisar',
 			type: ApplicationCommandOptionType.String,
 		})
-		platform = 'ytsearch',
+		platform: 'ytsearch' | 'ytmsearch' | 'scsearch' | 'spsearch' | 'amsearch' = 'ytsearch',
 
 		interaction: CommandInteraction,
-		client: Client
+		client: Client,
 	): Promise<void> {
-		const cmd = await this.musicPlayer.ParseCommand(client, interaction, true);
+		const cmd = await this.musicPlayer.ParseCommand(client, interaction);
 		if (!cmd) {
 			return;
 		}
 
-		const { queue, member, channel } = cmd;
+		const { queue } = cmd;
 
-		let response: TrackResponse;
-
-		if (type === 'LINK') {
-			response = await queue.enqueue(input);
-
-			if (!response.tracks[0]) {
-				await interaction.followUp('> Não encontramos nada com o que foi enviado');
-				return;
-			}
-		} else {
-			const searchResponse = await queue.search(`${platform}:${input}`);
-
-			if (!searchResponse.tracks[0]) {
-				await interaction.followUp('> Não encontramos nada com o que foi enviado');
-				return;
-			}
-
-			const track = searchResponse.tracks[0];
-
-			queue.tracks.push(track);
-			response = {
-				loadType: LoadType.TRACK_LOADED,
-				playlistInfo: {},
-				tracks: [track],
-			};
+		if (!input.startsWith("http://") && !input.startsWith("https://")) {
+			input = `${platform}:${input}`
 		}
 
-		await queue.lavaPlayer.join(member.voice.channelId, {
-			deaf: true,
-		});
+		const { loadType, data } = await queue.search(input);
 
-		queue.channel = channel;
+		if (loadType === LoadType.ERROR) {
+			await interaction.followUp({
+				content: `> Ocorreu um erro: ${data.cause}`,
+			});
+			return;
+		}
 
-		if (
-			queue.lavaPlayer.status === Status.INSTANTIATED ||
-			queue.lavaPlayer.status === Status.UNKNOWN ||
-			queue.lavaPlayer.status === Status.ENDED
-		) {
-			queue.playNext();
+		if (loadType === LoadType.EMPTY) {
+			await interaction.followUp({
+				content: "> Não encontramos nada com o identificador utilizado",
+			});
+			return;
 		}
 
 		const embed = new EmbedBuilder();
-		embed.setTitle('Adicionado a fila');
-		if (response.playlistInfo.name) {
-			embed.setDescription(`${response.tracks.length} de ${response.playlistInfo.name}`);
-		} else if (response.tracks.length === 1) {
-			embed.setDescription(`[${response.tracks[0]?.info.title}](<${response.tracks[0]?.info.uri}>)`);
+		embed.setTitle("Adicionado a fila");
+
+		if (loadType === LoadType.TRACK || loadType === LoadType.SEARCH) {
+			const track = loadType === LoadType.SEARCH ? data[0] : data;
+			if (!track) {
+				await interaction.followUp({
+					content: "> Não encontramos nada com o que foi enviado",
+				});
+				return;
+			}
+
+			queue.addTrack(track);
+
+			embed.setDescription(`[${track.info.title}](<${track.info.uri}>)`);
+
+			if (track.info.artworkUrl) {
+				embed.setThumbnail(track.info.artworkUrl);
+			}
 		} else {
-			embed.setDescription(`${response.tracks.length}`);
+			queue.addTrack(...data.tracks);
+
+			embed.setDescription(
+				`${data.tracks.length} da playlist ${data.info.name}`,
+			);
 		}
 
 		await interaction.followUp({ embeds: [embed] });
-		return;
+
+		if (!queue.isPlaying) {
+			await queue.playNext();
+		}
 	}
 }

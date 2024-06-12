@@ -4,8 +4,9 @@ import { Discord, Once } from 'discordx';
 import type { Client } from 'discordx';
 import { setIntervalAsync } from 'set-interval-async';
 import { container, injectable } from 'tsyringe';
+import { setTimeout } from "node:timers/promises";
 
-import { getLavaNode } from '../utils/music/getLavaNode.js';
+import { getLavaNode } from '../utils/music/node.js';
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
@@ -26,6 +27,7 @@ export class Ready {
 		this.sendConnectedToMessage(client);
 
 		// Instantiate music player
+		await setTimeout(5e3);
 		const musicPlayer = container.resolve(MusicPlayer);
 		musicPlayer.player[client.botId] = new Player(getLavaNode(client));
 

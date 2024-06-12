@@ -11,7 +11,7 @@ import { container } from 'tsyringe';
 async function run() {
 	DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
 
-	await importx(dirname(import.meta.url) + '/{events,commands,buttons}/**/*.{ts,js}');
+	await importx(`${dirname(import.meta.url)}/{events,commands,buttons}/**/*.{ts,js}`);
 
 	const client = new Client({
 		// To only use global commands (use @Guild for specific guild command), comment this line
@@ -32,8 +32,5 @@ async function run() {
 
 	await client.login(process.env.BOT_TOKEN);
 }
-try {
-	await run();
-} catch (error) {
-	console.log(error);
-}
+
+void run();

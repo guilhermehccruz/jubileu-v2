@@ -9,7 +9,7 @@ import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 @Discord()
 @injectable()
 export class Remove {
-	constructor(private musicPlayer: MusicPlayer) {}
+	constructor(private readonly musicPlayer: MusicPlayer) { }
 
 	@Slash({ description: 'Remove a música da fila na posição digitada' })
 	async remove(

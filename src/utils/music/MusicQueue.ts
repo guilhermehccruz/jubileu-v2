@@ -1,11 +1,10 @@
-import { PlayerStatus } from '@discordx/lava-player';
+import { PlayerStatus, Track } from '@discordx/lava-player';
 import type { Player } from '@discordx/lava-queue';
 import { Queue } from '@discordx/lava-queue';
 import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagination';
 import type {
 	ButtonInteraction,
 	CommandInteraction,
-	ContextMenuCommandInteraction,
 	MessageActionRowComponentBuilder,
 	TextBasedChannel,
 } from 'discord.js';
@@ -15,7 +14,6 @@ export class MusicQueue extends Queue {
 	lastControlMessage?: Message;
 	lockUpdate = false;
 
-	timeoutTimer?: NodeJS.Timeout;
 	channel?: TextBasedChannel;
 
 	get isPlaying(): boolean {
@@ -27,6 +25,11 @@ export class MusicQueue extends Queue {
 
 	get isControlLastMessage(): boolean {
 		return this.lastControlMessage?.id === this.channel?.lastMessageId;
+	}
+
+	override get tracks(): Track[] {
+		// @ts-expect-error override to be able to change the queue
+		return this._tracks;
 	}
 
 	constructor(player: Player, guildId: string) {
@@ -105,7 +108,7 @@ export class MusicQueue extends Queue {
 	}
 
 	public async updateControlMessage(options?: { force?: boolean; text?: string }): Promise<void> {
-		if (this.lockUpdate) {
+		if (this.lockUpdate || this.channel === null) {
 			return;
 		}
 
@@ -138,7 +141,7 @@ export class MusicQueue extends Queue {
 
 		const { size, arrow, block } = progressBarOptions;
 		const timeNow = this.position;
-		const timeTotal = this.currentTrack?.info.length ?? 0;
+		const timeTotal = this.currentTrack?.info?.length ?? 0;
 
 		const tempProgess = Math.round((size * timeNow) / timeTotal);
 		const progress = tempProgess <= 15 ? tempProgess : 15;
@@ -219,9 +222,8 @@ export class MusicQueue extends Queue {
 			return;
 		}
 
-		const current = `> Tocando **[${this.currentTrack.info.title}](<${this.currentTrack.info.uri}>)** de ${
-			this.size + 1
-		} músicas`;
+		const current = `> Tocando **[${this.currentTrack.info.title}](<${this.currentTrack.info.uri}>)** de ${this.size + 1
+			} músicas`;
 
 		const pageOptions = new PaginationResolver((index, paginator) => {
 			paginator.maxLength = this.size / 10;
@@ -233,11 +235,11 @@ export class MusicQueue extends Queue {
 
 			const queue = this.tracks
 				.slice(currentPage * 10, currentPage * 10 + 10)
-				.map((track, index1) => {
+				.map((track, index) => {
 					const endTime = track.info.isStream ? 'Livestream' : this.fromMS(track.info.length);
 
 					return (
-						`${currentPage * 10 + index1 + 1}. [${track.info.title}](<${track.info.uri}>)` + ` (${endTime})`
+						`${currentPage * 10 + index + 1}. [${track.info.title}](<${track.info.uri}>)` + ` (${endTime})`
 					);
 				})
 				.join('\n\n');
@@ -245,11 +247,11 @@ export class MusicQueue extends Queue {
 			return { content: `${current}\n\n${queue}` };
 		}, Math.round(this.size / 10));
 
-		await new Pagination(interaction, pageOptions, {
+		const pagination = new Pagination(interaction, pageOptions, {
 			enableExit: true,
-			onTimeout: (index, message) => {
+			onTimeout: async (_, message) => {
 				if (message.deletable) {
-					message.delete().catch((error) => console.error(error));
+					await message.delete().catch((error) => console.error(error));
 				}
 			},
 			time: 6e4,
@@ -260,8 +262,8 @@ export class MusicQueue extends Queue {
 			end: { label: 'Fim' },
 			exit: { label: 'Fechar' },
 		})
-			.send()
-			.catch((error) => console.error(error));
+
+		await pagination.send();
 	}
 
 	async leave(): Promise<void> {
