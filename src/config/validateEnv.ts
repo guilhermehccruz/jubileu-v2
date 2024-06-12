@@ -13,6 +13,7 @@ const schema = Joi.object({
 
 	SPOTIFY_CLIENT_ID: Joi.string().required(),
 	SPOTIFY_SECRET: Joi.string().required(),
+	SPOTIFY_DC_COOKIE: Joi.string().required(),
 }).options({
 	abortEarly: true,
 	messages: { 'any.required': 'The { #label } environment variable is not defined!' },

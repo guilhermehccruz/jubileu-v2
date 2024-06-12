@@ -14,8 +14,9 @@ declare global {
 
 			SPOTIFY_CLIENT_ID: string;
 			SPOTIFY_SECRET: string;
+			SPOTIFY_DC_COOKIE: string;
 		}
 	}
 }
 
-export {};
+export { };

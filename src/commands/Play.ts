@@ -33,13 +33,13 @@ export class Play {
 		@SlashChoice({ name: 'Youtube Music', value: 'ytmsearch' })
 		@SlashChoice({ name: 'Sound Cloud', value: 'scsearch' })
 		@SlashChoice({ name: 'Spotify', value: 'spsearch' })
-		@SlashChoice({ name: 'Apple Music', value: 'amsearch' })
+		@SlashChoice({ name: 'Flowery TTS', value: 'ftts' })
 		@SlashOption({
 			name: 'onde-buscar',
 			description: 'Em que plataforma o bot deve pesquisar',
 			type: ApplicationCommandOptionType.String,
 		})
-		platform: 'ytsearch' | 'ytmsearch' | 'scsearch' | 'spsearch' | 'amsearch' = 'ytsearch',
+		platform: 'ytsearch' | 'ytmsearch' | 'scsearch' | 'spsearch' | 'ftts' = 'ytsearch',
 
 		interaction: CommandInteraction,
 		client: Client,
@@ -52,7 +52,11 @@ export class Play {
 		const { queue } = cmd;
 
 		if (!input.startsWith("http://") && !input.startsWith("https://")) {
-			input = `${platform}:${input}`
+			if (platform === 'ftts') {
+				input = `ftts://${encodeURIComponent(input)}`
+			} else {
+				input = `${platform}:${input}`
+			}
 		}
 
 		const { loadType, data } = await queue.search(input);
@@ -85,7 +89,11 @@ export class Play {
 
 			queue.addTrack(track);
 
-			embed.setDescription(`[${track.info.title}](<${track.info.uri}>)`);
+			if (platform === 'ftts') {
+				embed.setDescription(`Flowery TTS: ${decodeURIComponent(input.slice(7))}`);
+			} else {
+				embed.setDescription(`[${track.info.title}](<${track.info.uri}>)`);
+			}
 
 			if (track.info.artworkUrl) {
 				embed.setThumbnail(track.info.artworkUrl);

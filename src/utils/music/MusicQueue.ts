@@ -133,6 +133,10 @@ export class MusicQueue extends Queue {
 			value: `[${currentTrack.info.title}](${currentTrack.info.uri})`,
 		});
 
+		if (currentTrack.info.artworkUrl) {
+			embed.setThumbnail(currentTrack.info.artworkUrl);
+		}
+
 		const progressBarOptions = {
 			arrow: '🔘',
 			block: '━',

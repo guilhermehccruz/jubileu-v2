@@ -10,6 +10,7 @@ services:
             - 2333
         ports:
             - 2333:2333
+        env_file: .env
     app:
         container_name: app
         build:
