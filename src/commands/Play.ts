@@ -89,11 +89,7 @@ export class Play {
 
 			queue.addTrack(track);
 
-			if (platform === 'ftts') {
-				embed.setDescription(`Flowery TTS: ${decodeURIComponent(input.slice(7))}`);
-			} else {
-				embed.setDescription(`[${track.info.title}](<${track.info.uri}>)`);
-			}
+			embed.setDescription(queue.getTrackTitle(track))
 
 			if (track.info.artworkUrl) {
 				embed.setThumbnail(track.info.artworkUrl);
@@ -111,5 +107,7 @@ export class Play {
 		if (!queue.isPlaying) {
 			await queue.playNext();
 		}
+
+		await queue.updateControlMessage()
 	}
 }

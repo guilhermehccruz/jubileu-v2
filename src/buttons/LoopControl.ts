@@ -3,11 +3,12 @@ import { ButtonComponent, Client, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { RepeatMode } from '@discordx/lava-queue';
 
 @Discord()
 @injectable()
 export class LoopControl {
-	constructor(private musicPlayer: MusicPlayer) {}
+	constructor(private readonly musicPlayer: MusicPlayer) { }
 
 	@ButtonComponent({ id: 'btn-loop' })
 	async loopControl(interaction: ButtonInteraction, client: Client): Promise<void> {
@@ -18,7 +19,7 @@ export class LoopControl {
 
 		const { queue } = cmd;
 
-		queue.setLoop(!queue.loop);
+		queue.setRepeatMode(queue.repeatMode === RepeatMode.REPEAT_ALL ? RepeatMode.OFF : RepeatMode.REPEAT_ALL);
 		await queue.updateControlMessage();
 
 		// delete interaction

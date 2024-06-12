@@ -18,7 +18,7 @@ export class LeaveControl {
 
 		const { queue } = cmd;
 
-		await queue.leave();
+		await queue.exit();
 		await queue.updateControlMessage();
 
 		// delete interaction

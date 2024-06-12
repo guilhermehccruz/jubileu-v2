@@ -7,7 +7,7 @@ import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 @Discord()
 @injectable()
 export class MixControl {
-	constructor(private musicPlayer: MusicPlayer) {}
+	constructor(private readonly musicPlayer: MusicPlayer) { }
 
 	@ButtonComponent({ id: 'btn-mix' })
 	async mixControl(interaction: ButtonInteraction, client: Client): Promise<void> {
@@ -18,7 +18,7 @@ export class MixControl {
 
 		const { queue } = cmd;
 
-		queue.shuffle();
+		queue.shuffleTracks();
 		await queue.updateControlMessage();
 
 		// delete interaction

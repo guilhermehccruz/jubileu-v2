@@ -2,7 +2,7 @@ import { ButtonInteraction } from 'discord.js';
 import { ButtonComponent, Client, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { MusicPlayer } from 'src/utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
@@ -16,15 +16,13 @@ export class NextControl {
 			return;
 		}
 
-		const { queue } = cmd;
-
-		const next = queue.playNext();
+		const next = await cmd.queue.playNext();
 		if (!next) {
-			await queue.leave();
+			await cmd.queue.exit();
 		}
 
 		// update controls
-		await queue.updateControlMessage();
+		await cmd.queue.updateControlMessage();
 
 		// delete interaction
 		await interaction.deleteReply();

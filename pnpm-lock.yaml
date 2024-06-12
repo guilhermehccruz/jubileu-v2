@@ -15,8 +15,8 @@ importers:
         specifier: ^2.0.3
         version: 2.0.3
       '@discordx/lava-queue':
-        specifier: ^3.0.3
-        version: 3.0.3(@discordx/lava-player@2.0.3)(discord.js@14.15.3)
+        specifier: ^3.1.0
+        version: 3.1.0(@discordx/lava-player@2.0.3)(discord.js@14.15.3)
       '@discordx/pagination':
         specifier: ^3.5.2
         version: 3.5.2(discord.js@14.15.3)
@@ -134,8 +134,8 @@ packages:
     resolution: {integrity: sha512-0DzGiuz4uMj5fU2aKF23TVNv/iUMgV85cV2GY8Xca0inrxbxo5lonlDCV+65rcLxJAI5fQj8Pi6AihNLJPXajQ==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
 
-  '@discordx/lava-queue@3.0.3':
-    resolution: {integrity: sha512-qEfYsUOxiyhVSYuL29jnKwgTHEJ7vQXHBOm6cl2FT+rhfNO3iCm8D9QMK++DdnxhJuaLSPHY9jTppn5du9D5/g==}
+  '@discordx/lava-queue@3.1.0':
+    resolution: {integrity: sha512-YLIz9dxk6YEv/TvgcmGae6p5Vt26pLMTa69LpoiFBFidRX4VSINzVzDPOxpJVxMRZbE7xMKfXNVQ+iC0ew3gBw==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     peerDependencies:
       '@discordx/lava-player': '>=2.0.3'
@@ -169,8 +169,8 @@ packages:
     resolution: {integrity: sha512-fdI7VJjP3Rvc70lC4xkFXHB0fiPeojiL1PxVG6t1ZvXQrarj893PweuBTujxDUFk0Fxj4R7PIIAZ/aiiyZPZcg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@eslint/object-schema@2.1.3':
-    resolution: {integrity: sha512-HAbhAYKfsAC2EkTqve00ibWIZlaU74Z1EHwAjYr4PXF0YU2VEA1zSIKSSpKszRLRWwHzzRZXvK632u+uXzvsvw==}
+  '@eslint/object-schema@2.1.4':
+    resolution: {integrity: sha512-BsWiH1yFGjXXS2yvrf5LyuoSIIbPrGUWob917o+BTKuZ7qJdxX8aJLRxs1fS9n6r7vESrq1OUqb68dANcFXuQQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@hapi/hoek@9.3.0':
@@ -762,8 +762,8 @@ packages:
   for-each@0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
 
-  foreground-child@3.1.1:
-    resolution: {integrity: sha512-TMKDUnIte6bfb5nWv7V/caI169OHgvwjb7V4WkeUvbQQdjr5rWKqHFiKWb/fcOwB+CzBT+qbWjvj+DVwRskpIg==}
+  foreground-child@3.2.0:
+    resolution: {integrity: sha512-CrWQNaEl1/6WeZoarcM9LHupTo3RpZO2Pdk1vktwzPiQTsJnAKJmm3TACKeG5UZbWDfaH2AbvYxzP96y0MT7fA==}
     engines: {node: '>=14'}
 
   function-bind@1.1.2:
@@ -1498,7 +1498,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@discordx/lava-queue@3.0.3(@discordx/lava-player@2.0.3)(discord.js@14.15.3)':
+  '@discordx/lava-queue@3.1.0(@discordx/lava-player@2.0.3)(discord.js@14.15.3)':
     dependencies:
       '@discordx/lava-player': 2.0.3
       discord.js: 14.15.3
@@ -1520,7 +1520,7 @@ snapshots:
 
   '@eslint/config-array@0.15.1':
     dependencies:
-      '@eslint/object-schema': 2.1.3
+      '@eslint/object-schema': 2.1.4
       debug: 4.3.5
       minimatch: 3.1.2
     transitivePeerDependencies:
@@ -1542,7 +1542,7 @@ snapshots:
 
   '@eslint/js@9.4.0': {}
 
-  '@eslint/object-schema@2.1.3': {}
+  '@eslint/object-schema@2.1.4': {}
 
   '@hapi/hoek@9.3.0': {}
 
@@ -2295,7 +2295,7 @@ snapshots:
     dependencies:
       is-callable: 1.2.7
 
-  foreground-child@3.1.1:
+  foreground-child@3.2.0:
     dependencies:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
@@ -2339,7 +2339,7 @@ snapshots:
 
   glob@10.4.1:
     dependencies:
-      foreground-child: 3.1.1
+      foreground-child: 3.2.0
       jackspeak: 3.4.0
       minimatch: 9.0.4
       minipass: 7.1.2
