@@ -1,18 +1,17 @@
 module.exports = {
 	'env': {
 		'es2022': true,
-		'node': true
+		'node': true,
+		'jest': true,
 	},
 	'extends': [
 		'eslint:recommended',
-		"plugin:@typescript-eslint/eslint-recommended",
-		'plugin:@typescript-eslint/recommended',
-		'plugin:@typescript-eslint/recommended-requiring-type-checking',
-		"plugin:@typescript-eslint/strict",
+		'plugin:@typescript-eslint/strict-type-checked',
+		'plugin:@typescript-eslint/stylistic-type-checked',
 		'prettier',
 		'plugin:prettier/recommended',
-	],
-	'overrides': [
+		'plugin:import/recommended',
+		'plugin:import/typescript'
 	],
 	'parser': '@typescript-eslint/parser',
 	'parserOptions': {
@@ -25,24 +24,11 @@ module.exports = {
 		'@typescript-eslint',
 		'import',
 		'eslint-plugin-import-helpers',
-		'prettier'
+		'prettier',
+		'no-relative-import-paths',
+		'deprecation'
 	],
 	'rules': {
-		'indent': 'off',
-		'linebreak-style': [
-			'error',
-			'unix'
-		],
-		'quotes': [
-			'error',
-			'single'
-		],
-		'semi': [
-			'error',
-			'always'
-		],
-		'camelcase': 'off',
-		'import/no-unresolved': 'error',
 		'@typescript-eslint/naming-convention': [
 			'error',
 			{
@@ -54,31 +40,18 @@ module.exports = {
 				}
 			}
 		],
-		'class-methods-use-this': 'off',
-		'import/prefer-default-export': 'off',
-		'no-shadow': 'off',
-		'no-console': 'off',
-		'no-useless-constructor': 'off',
-		'no-empty-function': 'off',
-		'lines-between-class-members': 'off',
-		'import/extensions': [
-			'error',
-			'ignorePackages',
-			{
-				'ts': 'never'
-			}
-		],
 		'import-helpers/order-imports': [
-			'warn',
+			'error',
 			{
 				'newlinesBetween': 'always',
-				'groups': ['module', '/^@shared/', ['parent', 'sibling', 'index']],
+				'groups': ['module', '/^@\//', ['sibling', 'index']],
 				'alphabetize': { 'order': 'asc', 'ignoreCase': true }
 			}
 		],
+		"no-relative-import-paths/no-relative-import-paths": ["warn", { "allowSameFolder": false }],
 		'import/no-extraneous-dependencies': [
 			'error',
-			{ 'devDependencies': ['**/*.spec.js'] }
+			{ 'devDependencies': true }
 		],
 		'prettier/prettier': [
 			'error',
@@ -89,10 +62,18 @@ module.exports = {
 				'tabWidth': 4,
 			}
 		],
+		'@typescript-eslint/no-explicit-any': 'off',
+		'@typescript-eslint/no-extraneous-class': ['error', { 'allowWithDecorator': true }],
+		'@typescript-eslint/no-non-null-assertion': 'off',
+		'@typescript-eslint/no-unused-vars': ["warn", { "ignoreRestSiblings": true }],
+		'deprecation/deprecation': 'error',
+		'@typescript-eslint/prefer-nullish-coalescing': ['error', { ignoreConditionalTests: true }],
+		'@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
 	},
 	'settings': {
 		'import/resolver': {
-			'typescript': {}
+			typescript: true,
+			node: true,
 		}
 	},
 	'root': true,

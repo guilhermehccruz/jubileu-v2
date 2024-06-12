@@ -23,7 +23,12 @@
 		"importHelpers": true,
 		"types": [
 			"node"
-		]
+		],
+		"paths": {
+			"@/*": [
+			 	"*"
+			]
+		},
 	},
 	"ts-node": {
 		"transpileOnly": true,

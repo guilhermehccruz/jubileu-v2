@@ -1,15 +1,14 @@
 import { ApplicationCommandOptionType } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
-import { Client } from 'discordx';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { Client, Discord, Slash, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { MusicPlayer } from '@/utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
 export class Seek {
-	constructor(private readonly musicPlayer: MusicPlayer) { }
+	constructor(private readonly musicPlayer: MusicPlayer) {}
 
 	@Slash({ description: 'Toca a música a partir do segundo digitado' })
 	async seek(
@@ -21,7 +20,7 @@ export class Seek {
 		})
 		seconds: number,
 		interaction: CommandInteraction,
-		client: Client
+		client: Client,
 	): Promise<void> {
 		const cmd = await this.musicPlayer.ParseCommand(client, interaction);
 		if (!cmd) {

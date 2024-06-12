@@ -2,12 +2,12 @@ import { Player } from '@discordx/lava-queue';
 import { EmbedBuilder } from 'discord.js';
 import { Discord, Once } from 'discordx';
 import type { Client } from 'discordx';
+import { setTimeout } from 'node:timers/promises';
 import { setIntervalAsync } from 'set-interval-async';
 import { container, injectable } from 'tsyringe';
-import { setTimeout } from "node:timers/promises";
 
-import { getLavaNode } from '../utils/music/node.js';
-import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { MusicPlayer } from '@/utils/music/MusicPlayer.js';
+import { getLavaNode } from '@/utils/music/node.js';
 
 @Discord()
 @injectable()
@@ -89,7 +89,7 @@ export class Ready {
 				}
 
 				const serversEmbed = new EmbedBuilder().setTitle(
-					'Servidores que estou atualmente conectado a um canal de voz'
+					'Servidores que estou atualmente conectado a um canal de voz',
 				);
 
 				if (servers.length) {

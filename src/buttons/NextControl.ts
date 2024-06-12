@@ -2,12 +2,12 @@ import { ButtonInteraction } from 'discord.js';
 import { ButtonComponent, Client, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { MusicPlayer } from 'src/utils/music/MusicPlayer.js';
+import { MusicPlayer } from '@/utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
 export class NextControl {
-	constructor(private musicPlayer: MusicPlayer) {}
+	constructor(private readonly musicPlayer: MusicPlayer) {}
 
 	@ButtonComponent({ id: 'btn-next' })
 	async nextControl(interaction: ButtonInteraction, client: Client): Promise<void> {

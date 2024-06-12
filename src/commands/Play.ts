@@ -1,16 +1,15 @@
 import { LoadType } from '@discordx/lava-player';
 import type { CommandInteraction } from 'discord.js';
 import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
-import { Client } from 'discordx';
-import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
+import { Client, Discord, Slash, SlashChoice, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { MusicPlayer } from '@/utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
 export class Play {
-	constructor(private readonly musicPlayer: MusicPlayer) { }
+	constructor(private readonly musicPlayer: MusicPlayer) {}
 
 	/**
 	 *
@@ -51,11 +50,11 @@ export class Play {
 
 		const { queue } = cmd;
 
-		if (!input.startsWith("http://") && !input.startsWith("https://")) {
+		if (!input.startsWith('http://') && !input.startsWith('https://')) {
 			if (platform === 'ftts') {
-				input = `ftts://${encodeURIComponent(input)}`
+				input = `ftts://${encodeURIComponent(input)}`;
 			} else {
-				input = `${platform}:${input}`
+				input = `${platform}:${input}`;
 			}
 		}
 
@@ -70,26 +69,20 @@ export class Play {
 
 		if (loadType === LoadType.EMPTY) {
 			await interaction.followUp({
-				content: "> Não encontramos nada com o identificador utilizado",
+				content: '> Não encontramos nada com o identificador utilizado',
 			});
 			return;
 		}
 
 		const embed = new EmbedBuilder();
-		embed.setTitle("Adicionado a fila");
+		embed.setTitle('Adicionado a fila');
 
 		if (loadType === LoadType.TRACK || loadType === LoadType.SEARCH) {
 			const track = loadType === LoadType.SEARCH ? data[0] : data;
-			if (!track) {
-				await interaction.followUp({
-					content: "> Não encontramos nada com o que foi enviado",
-				});
-				return;
-			}
 
 			queue.addTrack(track);
 
-			embed.setDescription(queue.getTrackTitle(track))
+			embed.setDescription(queue.getTrackTitle(track));
 
 			if (track.info.artworkUrl) {
 				embed.setThumbnail(track.info.artworkUrl);
@@ -97,9 +90,7 @@ export class Play {
 		} else {
 			queue.addTrack(...data.tracks);
 
-			embed.setDescription(
-				`${data.tracks.length} da playlist ${data.info.name}`,
-			);
+			embed.setDescription(`${data.tracks.length} da playlist ${data.info.name}`);
 		}
 
 		await interaction.followUp({ embeds: [embed] });
@@ -108,6 +99,6 @@ export class Play {
 			await queue.playNext();
 		}
 
-		await queue.updateControlMessage()
+		await queue.updateControlMessage();
 	}
 }

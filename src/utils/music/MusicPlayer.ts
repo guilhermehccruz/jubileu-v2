@@ -3,9 +3,8 @@ import type { ButtonInteraction, CommandInteraction, Guild, TextBasedChannel } f
 import { GuildMember } from 'discord.js';
 import type { Client } from 'discordx';
 import { Discord } from 'discordx';
-import { setTimeout } from "node:timers/promises";
 
-import { MusicQueue } from './MusicQueue.js';
+import { MusicQueue } from '@/utils/music/MusicQueue.js';
 
 @Discord()
 export class MusicPlayer {
@@ -24,21 +23,16 @@ export class MusicPlayer {
 		interaction: CommandInteraction | ButtonInteraction,
 	): Promise<
 		| {
-			channel: TextBasedChannel;
-			guild: Guild;
-			member: GuildMember;
-			queue: MusicQueue;
-		}
+				channel: TextBasedChannel;
+				guild: Guild;
+				member: GuildMember;
+				queue: MusicQueue;
+		  }
 		| undefined
 	> {
 		await interaction.deferReply();
 
-		if (
-			!interaction.channel ||
-			!(interaction.member instanceof GuildMember) ||
-			!interaction.guild ||
-			!interaction.client.user
-		) {
+		if (!interaction.channel || !(interaction.member instanceof GuildMember) || !interaction.guild) {
 			await interaction.followUp('Não foi possível processar o comando. Tente novamente');
 			return;
 		}
@@ -48,13 +42,11 @@ export class MusicPlayer {
 			return;
 		}
 
-		const bot = interaction.guild?.members.cache.get(
-			interaction.client.user?.id,
-		);
+		const bot = interaction.guild.members.cache.get(interaction.client.user.id);
 
 		if (!bot) {
 			await interaction.followUp({
-				content: "Onde é que eu to? Será que estou em Alagoinha?",
+				content: 'Onde é que eu to? Será que estou em Alagoinha?',
 			});
 			return;
 		}
@@ -75,7 +67,7 @@ export class MusicPlayer {
 			});
 		} else if (interaction.member.voice.channelId !== bot.voice.channelId) {
 			await interaction.followUp({
-				content: "Entre no mesmo canal de voz que eu primeiro",
+				content: 'Entre no mesmo canal de voz que eu primeiro',
 			});
 			return;
 		}

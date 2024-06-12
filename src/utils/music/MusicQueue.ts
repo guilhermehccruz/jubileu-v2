@@ -17,10 +17,7 @@ export class MusicQueue extends Queue {
 	channel?: TextBasedChannel;
 
 	get isPlaying(): boolean {
-		return (
-			this.currentPlaybackTrack !== null &&
-			this.lavaPlayer.status === PlayerStatus.PLAYING
-		);
+		return this.currentPlaybackTrack !== null && this.lavaPlayer.status === PlayerStatus.PLAYING;
 	}
 
 	get isControlLastMessage(): boolean {
@@ -29,13 +26,15 @@ export class MusicQueue extends Queue {
 
 	override get tracks(): Track[] {
 		// @ts-expect-error override to be able to change the queue
-		return this._tracks;
+		return this._tracks as Track[];
 	}
 
 	constructor(player: Player, guildId: string) {
 		super(player, guildId);
 		setInterval(() => {
-			this.updateControlMessage().catch((error) => console.log(error));
+			this.updateControlMessage().catch((error: unknown) => {
+				console.log(error);
+			});
 		}, 1e4);
 	}
 
@@ -76,7 +75,7 @@ export class MusicQueue extends Queue {
 			stopButton,
 			pauseButton,
 			nextButton,
-			repeatButton
+			repeatButton,
 		);
 
 		const queueButton = new ButtonBuilder()
@@ -102,13 +101,13 @@ export class MusicQueue extends Queue {
 			loopButton,
 			queueButton,
 			mixButton,
-			controlsButton
+			controlsButton,
 		);
 		return [row1, row2];
 	}
 
 	public async updateControlMessage(options?: { force?: boolean; text?: string }): Promise<void> {
-		if (this.lockUpdate || this.channel === null) {
+		if (this.lockUpdate || !this.channel) {
 			return;
 		}
 
@@ -118,7 +117,9 @@ export class MusicQueue extends Queue {
 
 		if (!this.currentPlaybackTrack) {
 			if (this.lastControlMessage) {
-				await this.lastControlMessage.delete().catch((error) => console.error(error));
+				await this.lastControlMessage.delete().catch((error: unknown) => {
+					console.error(error);
+				});
 				this.lastControlMessage = undefined;
 			}
 
@@ -150,16 +151,22 @@ export class MusicQueue extends Queue {
 
 		if (!this.lastControlMessage || !this.isControlLastMessage || options?.force) {
 			if (this.lastControlMessage) {
-				await this.lastControlMessage.delete().catch((error) => console.error(error));
+				await this.lastControlMessage.delete().catch((error: unknown) => {
+					console.error(error);
+				});
 				this.lastControlMessage = undefined;
 			}
 
-			const msg = await this.channel?.send(pMsg).catch((error) => console.error(error));
+			const msg = await this.channel.send(pMsg).catch((error: unknown) => {
+				console.error(error);
+			});
 			if (msg) {
 				this.lastControlMessage = msg;
 			}
 		} else {
-			await this.lastControlMessage.edit(pMsg).catch((error) => console.error(error));
+			await this.lastControlMessage.edit(pMsg).catch((error: unknown) => {
+				console.error(error);
+			});
 		}
 
 		this.lockUpdate = false;
@@ -174,7 +181,9 @@ export class MusicQueue extends Queue {
 
 			if (pMsg instanceof Message) {
 				setTimeout(() => {
-					pMsg.delete().catch((error) => console.error(error));
+					pMsg.delete().catch((error: unknown) => {
+						console.error(error);
+					});
 				}, 3000);
 			}
 			return;
@@ -187,41 +196,48 @@ export class MusicQueue extends Queue {
 			});
 			if (pMsg instanceof Message) {
 				setTimeout(() => {
-					pMsg.delete().catch((error) => console.error(error));
+					pMsg.delete().catch((error: unknown) => {
+						console.error(error);
+					});
 				}, 1e4);
 			}
 			return;
 		}
 
-		const pageOptions = new PaginationResolver((index, paginator) => {
-			paginator.maxLength = this.size / 10;
-			if (index > paginator.maxLength) {
-				paginator.currentPage = 0;
-			}
+		const pageOptions = new PaginationResolver(
+			(index, paginator) => {
+				paginator.maxLength = this.size / 10;
+				if (index > paginator.maxLength) {
+					paginator.currentPage = 0;
+				}
 
-			const currentPage = paginator.currentPage;
+				const currentPage = paginator.currentPage;
 
-			const queue = this.tracks
-				.slice(currentPage * 10, currentPage * 10 + 10)
-				.map((track, index) => {
-					const endTime = this.getEndTime(track);
+				const queue = this.tracks
+					.slice(currentPage * 10, currentPage * 10 + 10)
+					.map((track, index) => {
+						const endTime = this.getEndTime(track);
 
-					return `${currentPage * 10 + index + 1}. ${this.getTrackTitle(track)} ${endTime ? `(${endTime})` : ''}`
+						return `${currentPage * 10 + index + 1}. ${this.getTrackTitle(track)} ${endTime ? `(${endTime})` : ''}`;
+					})
+					.join('\n\n');
 
-				})
-				.join('\n\n');
-
-			return {
-				content: `> Tocando **${this.getTrackTitle(this.currentPlaybackTrack!)}** de ${this.size + 1
-					} músicas\n\n${queue}`
-			};
-		}, Math.round(this.size / 10));
+				return {
+					content: `> Tocando **${this.getTrackTitle(this.currentPlaybackTrack!)}** de ${
+						this.size + 1
+					} músicas\n\n${queue}`,
+				};
+			},
+			Math.round(this.size / 10),
+		);
 
 		const pagination = new Pagination(interaction, pageOptions, {
 			enableExit: true,
-			onTimeout: async (_, message) => {
+			onTimeout: (_, message) => {
 				if (message.deletable) {
-					await message.delete().catch((error) => console.error(error));
+					message.delete().catch((error: unknown) => {
+						console.error(error);
+					});
 				}
 			},
 			time: 6e4,
@@ -231,7 +247,7 @@ export class MusicQueue extends Queue {
 			next: { label: 'Próximo' },
 			end: { label: 'Fim' },
 			exit: { label: 'Fechar' },
-		})
+		});
 
 		await pagination.send();
 	}
@@ -241,30 +257,31 @@ export class MusicQueue extends Queue {
 	}
 
 	getTrackTitle(track: Track): string {
-		const title = track.info.title.length < 50 ? track.info.title : `${track.info.title.slice(0, 47)}...`
+		const title = track.info.title.length < 50 ? track.info.title : `${track.info.title.slice(0, 47)}...`;
 
 		if (track.info.sourceName === 'flowery-tts') {
 			return `Flowery TTS: ${title}`;
 		}
 
-		return `${track.info.author} - [${title}](<${track.info.uri}>)`
+		return `${track.info.author} - [${title}](<${track.info.uri}>)`;
 	}
 
 	private getEndTime(track: Track) {
 		if (track.info.isStream) {
-			return 'Livestream'
+			return 'Livestream';
 		}
 
 		if (track.info.sourceName === 'flowery-tts') {
 			return 'TTS';
 		}
 
-		return fromMS(track.info.length)
+		return fromMS(track.info.length);
 	}
 
 	private getProgressBar(embed: EmbedBuilder): void {
-		if (!this.currentPlaybackTrack ||
-			this.currentPlaybackTrack?.info.sourceName === 'flowery-tts' ||
+		if (
+			!this.currentPlaybackTrack ||
+			this.currentPlaybackTrack.info.sourceName === 'flowery-tts' ||
 			this.currentPlaybackTrack.info.isStream
 		) {
 			return;
@@ -275,7 +292,7 @@ export class MusicQueue extends Queue {
 		const size = 15;
 
 		const timeNow = this.currentPlaybackPosition;
-		const timeTotal = this.currentPlaybackTrack!.info?.length;
+		const timeTotal = this.currentPlaybackTrack.info.length;
 
 		const tempProgress = Math.round((size * timeNow) / timeTotal);
 		const progress = tempProgress <= 15 ? tempProgress : 15;
@@ -286,14 +303,10 @@ export class MusicQueue extends Queue {
 		const bar = (this.isPlaying ? '▶️' : '⏸️') + ' ' + progressString;
 		const currentTime = fromMS(timeNow);
 
-		let endTime: string;
-		let spacing: number;
+		const endTime = fromMS(timeTotal);
 
-		endTime = fromMS(timeTotal);
-		spacing = bar.length - currentTime.length - endTime.length;
-
-
-		const time = '`' + currentTime + ' '.repeat(spacing * 3 - 2) + endTime + '`';
+		const time =
+			'`' + currentTime + ' '.repeat(bar.length - currentTime.length - endTime.length * 3 - 2) + endTime + '`';
 
 		embed.addFields({ name: bar, value: time });
 	}

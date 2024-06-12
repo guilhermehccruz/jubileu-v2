@@ -14,7 +14,7 @@ export class Track {
 			type: ApplicationCommandOptionType.String,
 		})
 		code: string,
-		interaction: CommandInteraction
+		interaction: CommandInteraction,
 	): Promise<void> {
 		await interaction.deferReply();
 
