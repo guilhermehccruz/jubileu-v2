@@ -25,7 +25,6 @@ module.exports = {
 		'import',
 		'eslint-plugin-import-helpers',
 		'prettier',
-		'no-relative-import-paths',
 		'deprecation'
 	],
 	'rules': {
@@ -44,11 +43,10 @@ module.exports = {
 			'error',
 			{
 				'newlinesBetween': 'always',
-				'groups': ['module', '/^@\//', ['sibling', 'index']],
+				'groups': ['module', ['parent', 'sibling', 'index']],
 				'alphabetize': { 'order': 'asc', 'ignoreCase': true }
 			}
 		],
-		"no-relative-import-paths/no-relative-import-paths": ["warn", { "allowSameFolder": false }],
 		'import/no-extraneous-dependencies': [
 			'error',
 			{ 'devDependencies': true }

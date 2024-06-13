@@ -3,7 +3,7 @@ import type { Client } from 'discordx';
 import { ButtonComponent, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { MusicPlayer } from '@/utils/music/MusicPlayer.js';
+import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()

@@ -4,7 +4,7 @@ import { GuildMember } from 'discord.js';
 import type { Client } from 'discordx';
 import { Discord } from 'discordx';
 
-import { MusicQueue } from '@/utils/music/MusicQueue.js';
+import { MusicQueue } from './MusicQueue.js';
 
 @Discord()
 export class MusicPlayer {

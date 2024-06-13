@@ -1,7 +1,4 @@
-import type {
-	VoiceServerUpdate,
-	VoiceStateUpdate,
-  } from "@discordx/lava-player";
+import type { VoiceServerUpdate, VoiceStateUpdate } from '@discordx/lava-player';
 import { Node } from '@discordx/lava-player';
 import { GatewayDispatchEvents } from 'discord.js';
 import type { Client } from 'discordx';
@@ -25,11 +22,15 @@ export function getLavaNode(client: Client): Node {
 	});
 
 	client.ws.on(GatewayDispatchEvents.VoiceStateUpdate, (data: VoiceStateUpdate) => {
-		lavaNode.voiceStateUpdate(data).catch((error) => console.error(error, client));
+		lavaNode.voiceStateUpdate(data).catch((error: unknown) => {
+			console.error(error, client);
+		});
 	});
 
 	client.ws.on(GatewayDispatchEvents.VoiceServerUpdate, (data: VoiceServerUpdate) => {
-		lavaNode.voiceServerUpdate(data).catch((error) => console.error(error));
+		lavaNode.voiceServerUpdate(data).catch((error: unknown) => {
+			console.error(error);
+		});
 	});
 
 	return lavaNode;

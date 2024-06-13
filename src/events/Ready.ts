@@ -6,8 +6,8 @@ import { setTimeout } from 'node:timers/promises';
 import { setIntervalAsync } from 'set-interval-async';
 import { container, injectable } from 'tsyringe';
 
-import { MusicPlayer } from '@/utils/music/MusicPlayer.js';
-import { getLavaNode } from '@/utils/music/node.js';
+import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { getLavaNode } from '../utils/music/node.js';
 
 @Discord()
 @injectable()

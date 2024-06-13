@@ -2,13 +2,13 @@ import { PlayerStatus, Track } from '@discordx/lava-player';
 import type { Player } from '@discordx/lava-queue';
 import { Queue, RepeatMode, fromMS } from '@discordx/lava-queue';
 import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagination';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Message } from 'discord.js';
 import type {
 	ButtonInteraction,
 	CommandInteraction,
 	MessageActionRowComponentBuilder,
 	TextBasedChannel,
 } from 'discord.js';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Message } from 'discord.js';
 
 export class MusicQueue extends Queue {
 	lastControlMessage?: Message;

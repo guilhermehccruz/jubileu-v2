@@ -4,7 +4,7 @@ import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
 import { Client, Discord, Slash, SlashChoice, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { MusicPlayer } from '@/utils/music/MusicPlayer.js';
+import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
