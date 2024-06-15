@@ -287,27 +287,20 @@ export class MusicQueue extends Queue {
 			return;
 		}
 
-		const arrow = '🔘';
 		const block = '━';
 		const size = 15;
 
 		const timeNow = this.currentPlaybackPosition;
 		const timeTotal = this.currentPlaybackTrack.info.length;
 
-		const tempProgress = Math.round((size * timeNow) / timeTotal);
-		const progress = tempProgress <= 15 ? tempProgress : 15;
-		const emptyProgress = size - (Number.isFinite(progress) ? progress : 0);
+		const progress = Math.round((size * timeNow) / timeTotal);
 
-		const progressString = block.repeat(progress) + arrow + block.repeat(emptyProgress);
+		const bar = `${this.isPlaying ? '▶️' : '⏸️'} ${block.repeat(progress)} 🔘 ${block.repeat(size - progress)}`;
 
-		const bar = (this.isPlaying ? '▶️' : '⏸️') + ' ' + progressString;
 		const currentTime = fromMS(timeNow);
-
 		const endTime = fromMS(timeTotal);
+		const spacing = bar.length - currentTime.length - endTime.length;
 
-		const time =
-			'`' + currentTime + ' '.repeat(bar.length - currentTime.length - endTime.length * 3 - 2) + endTime + '`';
-
-		embed.addFields({ name: bar, value: time });
+		embed.addFields({ name: bar, value: `\`${currentTime}${' '.repeat(spacing * 3 - 2)}${endTime}\`` });
 	}
 }

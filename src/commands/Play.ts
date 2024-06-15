@@ -52,7 +52,7 @@ export class Play {
 
 		if (!input.startsWith('http://') && !input.startsWith('https://')) {
 			if (platform === 'ftts') {
-				input = `ftts://${encodeURIComponent(input)}`;
+				input = `ftts://${encodeURIComponent(input).slice(0, 2_000)}`;
 			} else {
 				input = `${platform}:${input}`;
 			}

@@ -45,8 +45,8 @@ lavalink:
 
 logging:
     level:
-        root: ERROR
-        lavalink: ERROR
+        root: INFO
+        lavalink: INFO
 
     request:
         enabled: true
@@ -82,25 +82,6 @@ plugins:
             countryCode: "BR" # the country code you want to use for filtering the artists top tracks. See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
             playlistLoadLimit: 6 # The number of pages at 100 tracks each
             albumLoadLimit: 6 # The number of pages at 50 tracks each
-        # applemusic:
-        #     countryCode: "BR" # the country code you want to use for filtering the artists top tracks and language. See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
-        #   mediaAPIToken: "your apple music api token" # apple music api token
-        #   # or specify an apple music key
-        #   keyID: "your key id"
-        #   teamID: "your team id"
-        #   musicKitKey: |
-        #     -----BEGIN PRIVATE KEY-----
-        #     your key
-        #     -----END PRIVATE KEY-----
-        # playlistLoadLimit: 6 # The number of pages at 300 tracks each
-        # albumLoadLimit: 6 # The number of pages at 300 tracks each
-        # deezer:
-        #     masterDecryptionKey: "your master decryption key" # the master key used for decrypting the deezer tracks. (yes this is not here you need to get it from somewhere else)
-        # yandexmusic:
-        #     accessToken: "your access token" # the token used for accessing the yandex music api. See https://github.com/TopiSenpai/LavaSrc#yandex-music
-        #     playlistLoadLimit: 1 # The number of pages at 100 tracks each
-        #     albumLoadLimit: 1 # The number of pages at 50 tracks each
-        #     artistLoadLimit: 1 # The number of pages at 10 tracks each
         flowerytts:
             voice: "Felipe" # (case-sensitive) get default voice from here https://api.flowery.pw/v1/tts/voices
             translate: false # whether to translate the text to the native language of voice
@@ -136,5 +117,3 @@ plugins:
         sources:
             - spotify
             - youtube
-            - deezer
-            - yandexMusic

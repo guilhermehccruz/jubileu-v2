@@ -12,6 +12,13 @@ export class InteractionCreate {
 			}
 		}
 
-		await client.executeInteraction(interaction);
+		try {
+			await client.executeInteraction(interaction);
+		} catch (error) {
+			console.error(error);
+			if (interaction.isCommand() && !interaction.replied) {
+				await interaction.followUp('> Ocorreu um erro');
+			}
+		}
 	}
 }

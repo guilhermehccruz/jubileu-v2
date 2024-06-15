@@ -33,28 +33,26 @@ export class MusicPlayer {
 		await interaction.deferReply();
 
 		if (!interaction.channel || !(interaction.member instanceof GuildMember) || !interaction.guild) {
-			await interaction.followUp('Não foi possível processar o comando. Tente novamente');
+			await interaction.followUp('> Não foi possível processar o comando. Tente novamente');
 			return;
 		}
 
 		if (!interaction.member.voice.channelId) {
-			await interaction.followUp('Entre em um canal de voz primeiro.');
+			await interaction.followUp('> Entre em um canal de voz primeiro.');
 			return;
 		}
 
 		const bot = interaction.guild.members.cache.get(interaction.client.user.id);
 
 		if (!bot) {
-			await interaction.followUp({
-				content: 'Onde é que eu to? Será que estou em Alagoinha?',
-			});
+			await interaction.followUp('> Onde é que eu to? Será que estou em Alagoinha?');
 			return;
 		}
 
 		const queue = this.GetQueue(client.botId, interaction.guild.id);
 
 		if (!queue) {
-			await interaction.followUp('O reprodutor de música ainda não está pronto. Tente novamente mais tarde');
+			await interaction.followUp('> O reprodutor de música ainda não está pronto. Tente novamente mais tarde');
 			return;
 		}
 
@@ -66,9 +64,7 @@ export class MusicPlayer {
 				deaf: true,
 			});
 		} else if (interaction.member.voice.channelId !== bot.voice.channelId) {
-			await interaction.followUp({
-				content: 'Entre no mesmo canal de voz que eu primeiro',
-			});
+			await interaction.followUp('> Entre no mesmo canal de voz que eu primeiro');
 			return;
 		}
 

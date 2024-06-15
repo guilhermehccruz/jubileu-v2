@@ -21,3 +21,6 @@ Run `npm run docker:prod`
 #### Development environment
 
 Run `npm run docker:dev`
+
+TODO: tts max length
+TODO: lyrics max length
