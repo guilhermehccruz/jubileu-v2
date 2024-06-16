@@ -9,9 +9,11 @@ lavalink:
         - dependency: "com.github.topi314.lavasearch:lavasearch-plugin:1.0.0"
         - dependency: "dev.lavalink.youtube:youtube-plugin:1.3.0"
         - dependency: "com.github.topi314.lavalyrics:lavalyrics-plugin:1.0.0"
+        # - dependency: "me.duncte123.java-lyrics-plugin:lavalyrics:1.6.4"
     server:
         password: ""
         sources:
+            # The default Youtube source is now deprecated and won't receive further updates. Please use https://github.com/lavalink-devs/youtube-source#plugin instead.
             youtube: false
             bandcamp: true
             soundcloud: true
@@ -117,3 +119,6 @@ plugins:
         sources:
             - spotify
             - youtube
+    # lyrics:
+    #     countryCode: BR #country code for resolving isrc tracks
+    #     # geniusApiKey: "Your Genius Client Access Token" # leave this out to disable genius searching. Get your api key (Client Access Token) from https://genius.com/api-clients

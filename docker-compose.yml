@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
     lavalink:
         image: fredboat/lavalink:4.0.6

@@ -1,3 +1,5 @@
+import { MusicQueue } from '@/utils/music/MusicQueue.js';
+import { LoadType } from '@discordx/lava-player';
 import { EmbedBuilder } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
 import { Client, Discord, Slash } from 'discordx';
@@ -36,16 +38,16 @@ export class Lyrics {
 			return;
 		}
 
-		const response = await queue.lavaPlayer.node.rest.getCurrentPlaybackLyrics(guild.id);
+		const lyrics = await this.getLyrics(queue, guild.id);
 
-		if (!response) {
+		if (!lyrics) {
 			await interaction.followUp('> Letra não encontrada');
 			return;
 		}
 
 		const embed = new EmbedBuilder()
 			.setTitle(`${queue.currentPlaybackTrack.info.author} - ${queue.currentPlaybackTrack.info.title}`)
-			.setDescription(response.lines.map((line) => line.line).join('\n'));
+			.setDescription(lyrics);
 
 		if (queue.currentPlaybackTrack.info.uri) {
 			embed.setURL(queue.currentPlaybackTrack.info.uri);
@@ -58,5 +60,30 @@ export class Lyrics {
 		await interaction.followUp({ embeds: [embed] });
 
 		await queue.updateControlMessage();
+	}
+
+	private async getLyrics(queue: MusicQueue, guildId: string): Promise<string | undefined> {
+		try {
+			let response = await queue.lavaPlayer.node.rest.getCurrentPlaybackLyrics(guildId);
+
+			if (response) {
+				return response.lines.map((line) => line.line).join('\n');
+			}
+
+			const youtubeMusicSearch = await queue.search(`ytmsearch:${queue.currentPlaybackTrack!.info.title}`);
+
+			if (youtubeMusicSearch.loadType === LoadType.SEARCH && youtubeMusicSearch.data[0].encoded) {
+				console.log(youtubeMusicSearch.data);
+				response = await queue.lavaPlayer.node.rest.getLyrics(
+					Buffer.from(youtubeMusicSearch.data[0].encoded).toString('base64'),
+				);
+
+				return response?.lines.map((line) => line.line).join('\n');
+			}
+		} catch (error) {
+			console.error(error);
+
+			return;
+		}
 	}
 }

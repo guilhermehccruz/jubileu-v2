@@ -15,7 +15,7 @@ export class Play {
 	 *
 	 * Links podem ser de:
 	 *
-	 * Youtube, Soundcloud, Spotify, Apple Music, Bandcamp, Vimeo e Twitch
+	 * Youtube, Soundcloud, Spotify, Bandcamp, Vimeo e Twitch
 	 *
 	 */
 	@Slash({ description: 'Toca o audio do link enviado ou procura o que foi digitado.' })

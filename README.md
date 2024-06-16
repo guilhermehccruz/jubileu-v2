@@ -24,3 +24,4 @@ Run `npm run docker:dev`
 
 TODO: tts max length
 TODO: lyrics max length
+TODO: improve lyrics implementations
