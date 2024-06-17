@@ -2,7 +2,7 @@ import { MusicQueue } from '@/utils/music/MusicQueue.js';
 import { LoadType } from '@discordx/lava-player';
 import { EmbedBuilder } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
-import { Client, Discord, Slash } from 'discordx';
+import { Discord, Slash } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
@@ -13,8 +13,8 @@ export class Lyrics {
 	constructor(private readonly musicPlayer: MusicPlayer) {}
 
 	@Slash({ description: 'Busca as letras da música tocando' })
-	async lyrics(interaction: CommandInteraction, client: Client): Promise<void> {
-		const cmd = await this.musicPlayer.ParseCommand(client, interaction);
+	async lyrics(interaction: CommandInteraction): Promise<void> {
+		const cmd = await this.musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
 		}
@@ -64,7 +64,7 @@ export class Lyrics {
 
 	private async getLyrics(queue: MusicQueue, guildId: string): Promise<string | undefined> {
 		try {
-			let response = await queue.lavaPlayer.node.rest.getCurrentPlaybackLyrics(guildId);
+			let response = await queue.getCurrentPlaybackLyrics(guildId);
 
 			if (response) {
 				return response.lines.map((line) => line.line).join('\n');
@@ -72,13 +72,20 @@ export class Lyrics {
 
 			const youtubeMusicSearch = await queue.search(`ytmsearch:${queue.currentPlaybackTrack!.info.title}`);
 
-			if (youtubeMusicSearch.loadType === LoadType.SEARCH && youtubeMusicSearch.data[0].encoded) {
-				console.log(youtubeMusicSearch.data);
-				response = await queue.lavaPlayer.node.rest.getLyrics(
-					Buffer.from(youtubeMusicSearch.data[0].encoded).toString('base64'),
-				);
+			if (youtubeMusicSearch.loadType === LoadType.SEARCH) {
+				const title = queue.currentPlaybackTrack!.info.title.toLowerCase();
+				console.log({ title });
 
-				return response?.lines.map((line) => line.line).join('\n');
+				const lyric = youtubeMusicSearch.data.find((lyric) => {
+					console.log(lyric.info.title);
+					return title.includes(lyric.info.title.toLowerCase());
+				});
+
+				if (lyric) {
+					response = await queue.getLyrics(lyric.encoded!);
+
+					return response?.lines.map((line) => line.line).join('\n');
+				}
 			}
 		} catch (error) {
 			console.error(error);

@@ -1,5 +1,4 @@
 import { ButtonInteraction } from 'discord.js';
-import type { Client } from 'discordx';
 import { ButtonComponent, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
@@ -11,8 +10,8 @@ export class PauseControl {
 	constructor(private readonly musicPlayer: MusicPlayer) {}
 
 	@ButtonComponent({ id: 'btn-pause' })
-	async pauseControl(interaction: ButtonInteraction, client: Client): Promise<void> {
-		const cmd = await this.musicPlayer.ParseCommand(client, interaction);
+	async pauseControl(interaction: ButtonInteraction): Promise<void> {
+		const cmd = await this.musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
 		}

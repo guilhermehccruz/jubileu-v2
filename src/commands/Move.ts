@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
-import { Client, Discord, Slash, SlashOption } from 'discordx';
+import { Discord, Slash, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
@@ -27,9 +27,8 @@ export class Move {
 		})
 		finalPosition: number,
 		interaction: CommandInteraction,
-		client: Client,
 	): Promise<void> {
-		const cmd = await this.musicPlayer.ParseCommand(client, interaction);
+		const cmd = await this.musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
 		}
@@ -52,7 +51,7 @@ export class Move {
 			finalPosition = queue.size;
 		}
 
-		queue.tracks.splice(finalPosition - 1, 0, queue.tracks.splice(initialPosition - 1, 1)[0]);
+		queue.changeTrackPosition(initialPosition - 1, finalPosition - 1);
 
 		await interaction.followUp('> Música movida');
 		return;

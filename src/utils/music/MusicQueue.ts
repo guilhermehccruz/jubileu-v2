@@ -1,6 +1,5 @@
-import { PlayerStatus, Track } from '@discordx/lava-player';
-import type { Player } from '@discordx/lava-queue';
-import { Queue, RepeatMode, fromMS } from '@discordx/lava-queue';
+import { PlayerStatus, RequestType, Track, Lyrics, LoadSearchResponse } from '@discordx/lava-player';
+import { Queue, QueueManager, RepeatMode, fromMS } from '@discordx/lava-queue';
 import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagination';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Message } from 'discord.js';
 import type {
@@ -17,20 +16,15 @@ export class MusicQueue extends Queue {
 	channel?: TextBasedChannel;
 
 	get isPlaying(): boolean {
-		return this.currentPlaybackTrack !== null && this.lavaPlayer.status === PlayerStatus.PLAYING;
+		return this.currentPlaybackTrack !== null && this.guildPlayer.status === PlayerStatus.PLAYING;
 	}
 
-	get isControlLastMessage(): boolean {
-		return this.lastControlMessage?.id === this.channel?.lastMessageId;
+	get http() {
+		return this.guildPlayer.http;
 	}
 
-	override get tracks(): Track[] {
-		// @ts-expect-error override to be able to change the queue
-		return this._tracks as Track[];
-	}
-
-	constructor(player: Player, guildId: string) {
-		super(player, guildId);
+	constructor(queueManager: QueueManager, guildId: string) {
+		super(queueManager, guildId);
 		setInterval(() => {
 			this.updateControlMessage().catch((error: unknown) => {
 				console.log(error);
@@ -149,7 +143,7 @@ export class MusicQueue extends Queue {
 			embeds: [embed],
 		};
 
-		if (!this.lastControlMessage || !this.isControlLastMessage || options?.force) {
+		if (!this.lastControlMessage || this.lastControlMessage.id !== this.channel.lastMessageId || options?.force) {
 			if (this.lastControlMessage) {
 				await this.lastControlMessage.delete().catch((error: unknown) => {
 					console.error(error);
@@ -302,5 +296,42 @@ export class MusicQueue extends Queue {
 		const spacing = bar.length - currentTime.length - endTime.length;
 
 		embed.addFields({ name: bar, value: `\`${currentTime}${' '.repeat(spacing * 3 - 2)}${endTime}\`` });
+	}
+
+	/**
+	 * Get the lyrics for the currently playing track.
+	 *
+	 * Requires [LavaLyrics](https://github.com/topi314/LavaLyrics) plugin and a supported
+	 * [lyrics source](https://github.com/topi314/LavaLyrics?tab=readme-ov-file#supported-sources) plugin.
+	 */
+	public getCurrentPlaybackLyrics(guildId: string, skipTrackSource = true): Promise<Lyrics | null> {
+		const uri = `sessions/${this.guildPlayer.node.sessionId}/players/${guildId}/track/lyrics?skipTrackSource=${String(skipTrackSource)}`;
+		const url = this.http.url(uri);
+		return this.http.request(RequestType.GET, url);
+	}
+
+	/**
+	 * Get the lyrics for the track.
+	 *
+	 * Requires [LavaLyrics](https://github.com/topi314/LavaLyrics) plugin and a supported
+	 * [lyrics source](https://github.com/topi314/LavaLyrics?tab=readme-ov-file#supported-sources) plugin.
+	 */
+	public getLyrics(encodedTrack: string, skipTrackSource = true): Promise<Lyrics | null> {
+		const uri = `lyrics?track=${encodeURIComponent(encodedTrack)}&skipTrackSource=${String(skipTrackSource)}`;
+		const url = this.http.url(uri);
+		return this.http.request(RequestType.GET, url);
+	}
+	/**
+	 * Requires [LavaSearch](https://github.com/topi314/LavaSearch).
+	 *
+	 * Does not work with `ytsearch` identifier
+	 *
+	 * @param query query with identifier
+	 * @example "ytmsearch:katy perry fireworks"
+	 */
+	public loadSearch(query: string): Promise<LoadSearchResponse | null> {
+		const url = this.http.url('loadsearch');
+		url.searchParams.append('query', query);
+		return this.http.request(RequestType.GET, url);
 	}
 }

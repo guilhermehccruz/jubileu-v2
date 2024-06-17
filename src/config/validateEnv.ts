@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import Joi from 'joi';
 
 const schema = Joi.object({
@@ -23,9 +24,9 @@ const schema = Joi.object({
 try {
 	Joi.assert(process.env, schema);
 } catch (error) {
-	throw new Error((error as IValidationError).details[0].message);
+	throw new Error((error as ValidationError).details[0].message);
 }
 
-interface IValidationError {
+interface ValidationError {
 	details: { message: string }[];
 }

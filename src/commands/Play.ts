@@ -1,7 +1,7 @@
 import { LoadType } from '@discordx/lava-player';
 import type { CommandInteraction } from 'discord.js';
 import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
-import { Client, Discord, Slash, SlashChoice, SlashOption } from 'discordx';
+import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
@@ -41,9 +41,8 @@ export class Play {
 		platform: 'ytsearch' | 'ytmsearch' | 'scsearch' | 'spsearch' | 'ftts' = 'ytsearch',
 
 		interaction: CommandInteraction,
-		client: Client,
 	): Promise<void> {
-		const cmd = await this.musicPlayer.ParseCommand(client, interaction);
+		const cmd = await this.musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
 		}

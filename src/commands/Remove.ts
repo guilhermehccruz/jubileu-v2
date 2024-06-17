@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
-import { Client, Discord, Slash, SlashOption } from 'discordx';
+import { Discord, Slash, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
@@ -20,9 +20,8 @@ export class Remove {
 		})
 		position: number,
 		interaction: CommandInteraction,
-		client: Client,
 	): Promise<void> {
-		const cmd = await this.musicPlayer.ParseCommand(client, interaction);
+		const cmd = await this.musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
 		}
@@ -34,7 +33,7 @@ export class Remove {
 			return;
 		}
 
-		queue.tracks.splice(position - 1, 1);
+		queue.removeTracks(position - 1);
 
 		await interaction.followUp('> Música removida');
 		return;

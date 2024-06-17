@@ -1,4 +1,4 @@
-import { Player } from '@discordx/lava-queue';
+import { QueueManager } from '@discordx/lava-queue';
 import { EmbedBuilder } from 'discord.js';
 import { Discord, Once } from 'discordx';
 import type { Client } from 'discordx';
@@ -29,7 +29,7 @@ export class Ready {
 		// Instantiate music player
 		await setTimeout(5e3);
 		const musicPlayer = container.resolve(MusicPlayer);
-		musicPlayer.player[client.botId] = new Player(getLavaNode(client));
+		musicPlayer.queueManager = new QueueManager(getLavaNode(client));
 
 		console.log('>> Bot started');
 	}

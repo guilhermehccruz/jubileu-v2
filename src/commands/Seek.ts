@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
-import { Client, Discord, Slash, SlashOption } from 'discordx';
+import { Discord, Slash, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
@@ -20,9 +20,8 @@ export class Seek {
 		})
 		seconds: number,
 		interaction: CommandInteraction,
-		client: Client,
 	): Promise<void> {
-		const cmd = await this.musicPlayer.ParseCommand(client, interaction);
+		const cmd = await this.musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
 		}
@@ -44,7 +43,7 @@ export class Seek {
 			return;
 		}
 
-		await queue.lavaPlayer.update({ position: seconds * 1000 });
+		await queue.guildPlayer.update({ position: seconds * 1000 });
 
 		await interaction.followUp('> Pulado até o segundo requisitado');
 		return;

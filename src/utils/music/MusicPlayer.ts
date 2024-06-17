@@ -1,27 +1,24 @@
-import { Player } from '@discordx/lava-queue';
+import { QueueManager } from '@discordx/lava-queue';
 import type { ButtonInteraction, CommandInteraction, Guild, TextBasedChannel } from 'discord.js';
 import { GuildMember } from 'discord.js';
-import type { Client } from 'discordx';
 import { Discord } from 'discordx';
 
 import { MusicQueue } from './MusicQueue.js';
 
 @Discord()
 export class MusicPlayer {
-	player: Record<string, Player> = {};
+	queueManager: QueueManager | null = null;
 
-	GetQueue(botId: string, guildId: string): MusicQueue | null {
-		const player = this.player[botId];
+	getQueue(guildId: string): MusicQueue | null {
+		if (!this.queueManager) {
+			return null;
+		}
 
-		const queue = new MusicQueue(player, guildId);
-
-		return player.queue(guildId, () => queue);
+		const queue = new MusicQueue(this.queueManager, guildId);
+		return this.queueManager.queue(guildId, () => queue);
 	}
 
-	async ParseCommand(
-		client: Client,
-		interaction: CommandInteraction | ButtonInteraction,
-	): Promise<
+	async parseCommand(interaction: CommandInteraction | ButtonInteraction): Promise<
 		| {
 				channel: TextBasedChannel;
 				guild: Guild;
@@ -49,7 +46,7 @@ export class MusicPlayer {
 			return;
 		}
 
-		const queue = this.GetQueue(client.botId, interaction.guild.id);
+		const queue = this.getQueue(interaction.guild.id);
 
 		if (!queue) {
 			await interaction.followUp('> O reprodutor de música ainda não está pronto. Tente novamente mais tarde');
@@ -59,7 +56,7 @@ export class MusicPlayer {
 		if (bot.voice.channelId === null) {
 			queue.channel = interaction.channel;
 
-			await queue.lavaPlayer.join({
+			await queue.guildPlayer.join({
 				channel: interaction.member.voice.channelId,
 				deaf: true,
 			});
