@@ -1,4 +1,4 @@
-import { PlayerStatus, RequestType, Track, Lyrics, LoadSearchResponse } from '@discordx/lava-player';
+import { RequestType, Track, Lyrics } from '@discordx/lava-player';
 import { Queue, QueueManager, RepeatMode, fromMS } from '@discordx/lava-queue';
 import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagination';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Message } from 'discord.js';
@@ -14,14 +14,6 @@ export class MusicQueue extends Queue {
 	lockUpdate = false;
 
 	channel?: TextBasedChannel;
-
-	get isPlaying(): boolean {
-		return this.currentPlaybackTrack !== null && this.guildPlayer.status === PlayerStatus.PLAYING;
-	}
-
-	get http() {
-		return this.guildPlayer.http;
-	}
 
 	constructor(queueManager: QueueManager, guildId: string) {
 		super(queueManager, guildId);
@@ -304,8 +296,8 @@ export class MusicQueue extends Queue {
 	 * Requires [LavaLyrics](https://github.com/topi314/LavaLyrics) plugin and a supported
 	 * [lyrics source](https://github.com/topi314/LavaLyrics?tab=readme-ov-file#supported-sources) plugin.
 	 */
-	public getCurrentPlaybackLyrics(guildId: string, skipTrackSource = true): Promise<Lyrics | null> {
-		const uri = `sessions/${this.guildPlayer.node.sessionId}/players/${guildId}/track/lyrics?skipTrackSource=${String(skipTrackSource)}`;
+	public getCurrentPlaybackLyrics(skipTrackSource = true): Promise<Lyrics | null> {
+		const uri = `sessions/${this.sessionId}/players/${this.guildId}/track/lyrics?skipTrackSource=${String(skipTrackSource)}`;
 		const url = this.http.url(uri);
 		return this.http.request(RequestType.GET, url);
 	}
@@ -319,19 +311,6 @@ export class MusicQueue extends Queue {
 	public getLyrics(encodedTrack: string, skipTrackSource = true): Promise<Lyrics | null> {
 		const uri = `lyrics?track=${encodeURIComponent(encodedTrack)}&skipTrackSource=${String(skipTrackSource)}`;
 		const url = this.http.url(uri);
-		return this.http.request(RequestType.GET, url);
-	}
-	/**
-	 * Requires [LavaSearch](https://github.com/topi314/LavaSearch).
-	 *
-	 * Does not work with `ytsearch` identifier
-	 *
-	 * @param query query with identifier
-	 * @example "ytmsearch:katy perry fireworks"
-	 */
-	public loadSearch(query: string): Promise<LoadSearchResponse | null> {
-		const url = this.http.url('loadsearch');
-		url.searchParams.append('query', query);
 		return this.http.request(RequestType.GET, url);
 	}
 }

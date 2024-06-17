@@ -1,5 +1,3 @@
-import type { PlaylistResponseData, Track } from '@discordx/lava-player';
-
 export module '@discordx/lava-player' {
 	export interface LyricsLine {
 		/**
@@ -41,40 +39,5 @@ export module '@discordx/lava-player' {
 		 * The lyrics text
 		 */
 		text: string | null;
-	}
-
-	export interface AlbumInfo {
-		name: string;
-		selectedTrack: number;
-	}
-
-	export interface Album {
-		info: AlbumInfo;
-		pluginInfo: Record<string, any>;
-		tracks: Track[];
-	}
-	export interface ArtistInfo {
-		name: string;
-		selectedTrack: number;
-	}
-
-	export interface Artist {
-		info: AlbumInfo;
-		pluginInfo: Record<string, any>;
-		tracks: Track[];
-	}
-
-	export interface LoadSearchTexts {
-		plugin: Record<string, any>;
-		text: string;
-	}
-
-	export interface LoadSearchResponse {
-		albums: Album[];
-		artists: Artist[];
-		playlists: PlaylistResponseData[];
-		plugin: Record<string, any>;
-		texts: LoadSearchTexts[];
-		tracks: Track[];
 	}
 }
