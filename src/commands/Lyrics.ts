@@ -1,8 +1,10 @@
 import { MusicQueue } from '@/utils/music/MusicQueue.js';
-import { LoadType } from '@discordx/lava-player';
 import { EmbedBuilder } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
 import { Discord, Slash } from 'discordx';
+import Genius from 'genius-lyrics';
+import { find } from 'llyrics';
+import lyricsSearcher from 'lyrics-searcher';
 import { injectable } from 'tsyringe';
 
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
@@ -19,7 +21,7 @@ export class Lyrics {
 			return;
 		}
 
-		const { queue, guild } = cmd;
+		const { queue } = cmd;
 
 		if (!queue.currentPlaybackTrack) {
 			await interaction.followUp('> Não tem nada tocando');
@@ -38,59 +40,105 @@ export class Lyrics {
 			return;
 		}
 
-		const lyrics = await this.getLyrics(queue, guild.id);
+		let lyrics = await this.getLyrics(queue);
 
 		if (!lyrics) {
 			await interaction.followUp('> Letra não encontrada');
 			return;
 		}
 
-		const embed = new EmbedBuilder()
-			.setTitle(`${queue.currentPlaybackTrack.info.author} - ${queue.currentPlaybackTrack.info.title}`)
-			.setDescription(lyrics);
+		lyrics = lyrics.replaceAll(/\[.*\]\n/g, '');
+
+		const embeds = this.getEmbeds(lyrics);
+
+		embeds[0].setTitle(`${queue.currentPlaybackTrack.info.author} - ${queue.currentPlaybackTrack.info.title}`);
 
 		if (queue.currentPlaybackTrack.info.uri) {
-			embed.setURL(queue.currentPlaybackTrack.info.uri);
+			embeds[0].setURL(queue.currentPlaybackTrack.info.uri);
 		}
 
 		if (queue.currentPlaybackTrack.info.artworkUrl) {
-			embed.setThumbnail(queue.currentPlaybackTrack.info.artworkUrl);
+			embeds[0].setThumbnail(queue.currentPlaybackTrack.info.artworkUrl);
 		}
 
-		await interaction.followUp({ embeds: [embed] });
+		await interaction.followUp({ embeds });
 
 		await queue.updateControlMessage();
 	}
 
-	private async getLyrics(queue: MusicQueue, guildId: string): Promise<string | undefined> {
+	private async getLyrics(queue: MusicQueue): Promise<string | undefined> {
 		try {
-			let response = await queue.getCurrentPlaybackLyrics(guildId);
-
-			if (response) {
-				return response.lines.map((line) => line.line).join('\n');
+			if (!queue.currentPlaybackTrack) {
+				return;
 			}
 
-			const youtubeMusicSearch = await queue.search(`ytmsearch:${queue.currentPlaybackTrack!.info.title}`);
+			const title = queue.currentPlaybackTrack.info.title.replaceAll(/\(.*\)/g, '');
 
-			if (youtubeMusicSearch.loadType === LoadType.SEARCH) {
-				const title = queue.currentPlaybackTrack!.info.title.toLowerCase();
-				console.log({ title });
+			const lavaLyricsResult = await queue.getCurrentPlaybackLyrics().catch(() => undefined);
 
-				const lyric = youtubeMusicSearch.data.find((lyric) => {
-					console.log(lyric.info.title);
-					return title.includes(lyric.info.title.toLowerCase());
-				});
+			if (lavaLyricsResult) {
+				return lavaLyricsResult.lines.map((line) => line.line).join('\n');
+			}
 
-				if (lyric) {
-					response = await queue.getLyrics(lyric.encoded!);
+			const lyricsSearcherResult = await lyricsSearcher('', title).catch(() => undefined);
 
-					return response?.lines.map((line) => line.line).join('\n');
+			if (lyricsSearcherResult) {
+				return lyricsSearcherResult;
+			}
+
+			const geniusResult = await new Genius.Client(process.env.GENIUS_ACCESS_TOKEN).songs
+				.search(title)
+				.catch(() => undefined);
+
+			if (geniusResult?.length) {
+				const lyrics = await geniusResult[0].lyrics().catch(() => undefined);
+
+				if (lyrics) {
+					return lyrics;
 				}
+			}
+
+			const llyricsResult = await find({
+				song: title,
+				geniusApiKey: process.env.GENIUS_ACCESS_TOKEN,
+				forceSearch: true,
+			}).catch(() => undefined);
+
+			if (llyricsResult?.lyrics) {
+				return llyricsResult.lyrics;
 			}
 		} catch (error) {
 			console.error(error);
 
 			return;
 		}
+	}
+
+	private getEmbeds(lyrics: string): EmbedBuilder[] {
+		if (lyrics.length <= 4096) {
+			const embed = new EmbedBuilder().setDescription(lyrics);
+
+			return [embed];
+		}
+
+		const embeds: EmbedBuilder[] = [];
+
+		let currentString = '';
+		const splits = lyrics.split('\n');
+		for (const split of splits) {
+			if (currentString.length + split.length + 1 > 4096) {
+				embeds.push(new EmbedBuilder().setDescription(currentString));
+
+				currentString = '';
+			}
+
+			currentString += currentString ? `\n${split}` : split;
+		}
+
+		if (currentString) {
+			embeds.push(new EmbedBuilder().setDescription(currentString));
+		}
+
+		return embeds;
 	}
 }
