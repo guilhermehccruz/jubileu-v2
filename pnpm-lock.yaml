@@ -12,11 +12,11 @@ importers:
         specifier: ^1.3.0
         version: 1.3.0
       '@discordx/lava-player':
-        specifier: link:/home/guicruz/Documentos/personal-projects/discordx-fork/packages/lava-player
-        version: link:../discordx-fork/packages/lava-player
+        specifier: ^2.1.2
+        version: 2.1.2
       '@discordx/lava-queue':
-        specifier: link:/home/guicruz/Documentos/personal-projects/discordx-fork/packages/lava-queue
-        version: link:../discordx-fork/packages/lava-queue
+        specifier: ^4.0.4
+        version: 4.0.4(@discordx/lava-player@2.1.2)(discord.js@14.15.3)
       '@discordx/pagination':
         specifier: ^3.5.3
         version: 3.5.3(discord.js@14.15.3)
@@ -142,6 +142,17 @@ packages:
     resolution: {integrity: sha512-5VgFXdmITr3NgmpMUJnTPVAcgR2Ac7MvTFrBAjG4sIA+FId3eb6nHkhR/Y5r2LmbtIIh5I9Xp02phB1lSq6BEA==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
 
+  '@discordx/lava-player@2.1.2':
+    resolution: {integrity: sha512-WZ6biDGw47IDdRydKS6RuRrHuvia7CWlJtZfT6AZUkLx6uhXFblj1cQFZ0Adhq2gXj3BGTaSVyYisexIMQ0N/A==}
+    engines: {node: '>=16.0.0', npm: '>=7.0.0'}
+
+  '@discordx/lava-queue@4.0.4':
+    resolution: {integrity: sha512-ZGY9/PTCOENkyi0tONmj8isW0vz/HVSBzzRlIhkUukmMvRLStFn2Kvs2KPFwqxdVjXhfUFYyR8uz0VWmUvpk5w==}
+    engines: {node: '>=16.0.0', npm: '>=7.0.0'}
+    peerDependencies:
+      '@discordx/lava-player': '>=2.1.2'
+      discord.js: '>=13'
+
   '@discordx/pagination@3.5.3':
     resolution: {integrity: sha512-5DlYAWGzFfVRUEVtxPd2YxrRfigJewoXUQ1xL236dn/sUMLBJ0tQsbGXiEgqmHj8JyLRFvm9FaYNlknqNGwBeA==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
@@ -254,6 +265,9 @@ packages:
 
   '@tsconfig/node16@1.0.4':
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
+
+  '@types/backoff@2.5.5':
+    resolution: {integrity: sha512-4gv8BiXZMG4yxwn9Jii6ooCBVo+DXYq8kcKg6OvoHiWNh8rSjbYwQANTbUBx0c7ZKFv8aSYg9yDO6fOX2GkkAQ==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -448,6 +462,10 @@ packages:
 
   axios@1.7.2:
     resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
+
+  backoff@2.5.0:
+    resolution: {integrity: sha512-wC5ihrnUXmR2douXmXLCe5O3zg3GKIyvRi/hi58a/XyRxVI+3/yM0PYueQOZXPXQ9pxBislYkw+sF9b7C/RuMA==}
+    engines: {node: '>= 0.6'}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -1283,6 +1301,10 @@ packages:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
     engines: {node: '>= 0.4'}
 
+  precond@0.2.3:
+    resolution: {integrity: sha512-QCYG84SgGyGzqJ/vlMsxeXd/pgL/I94ixdNFyh1PusWmTCyVfPJjZ1K1jvHtsbfnXQs2TSkEP2fR7QiMZAnKFQ==}
+    engines: {node: '>= 0.6'}
+
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -1675,6 +1697,21 @@ snapshots:
     dependencies:
       tslib: 2.6.3
 
+  '@discordx/lava-player@2.1.2':
+    dependencies:
+      '@types/backoff': 2.5.5
+      backoff: 2.5.0
+      ws: 8.17.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
+  '@discordx/lava-queue@4.0.4(@discordx/lava-player@2.1.2)(discord.js@14.15.3)':
+    dependencies:
+      '@discordx/lava-player': 2.1.2
+      discord.js: 14.15.3
+      lodash: 4.17.21
+
   '@discordx/pagination@3.5.3(discord.js@14.15.3)':
     dependencies:
       discord.js: 14.15.3
@@ -1786,6 +1823,10 @@ snapshots:
   '@tsconfig/node14@1.0.3': {}
 
   '@tsconfig/node16@1.0.4': {}
+
+  '@types/backoff@2.5.5':
+    dependencies:
+      '@types/node': 20.14.2
 
   '@types/json-schema@7.0.15': {}
 
@@ -2040,6 +2081,10 @@ snapshots:
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
+
+  backoff@2.5.0:
+    dependencies:
+      precond: 0.2.3
 
   balanced-match@1.0.2: {}
 
@@ -3039,6 +3084,8 @@ snapshots:
   picomatch@2.3.1: {}
 
   possible-typed-array-names@1.0.0: {}
+
+  precond@0.2.3: {}
 
   prelude-ls@1.2.1: {}
 

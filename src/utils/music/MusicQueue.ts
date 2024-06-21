@@ -1,5 +1,5 @@
-import { RequestType, Track, Lyrics } from '@discordx/lava-player';
-import { Queue, QueueManager, RepeatMode, fromMS } from '@discordx/lava-queue';
+import { RequestType, Track, Lyrics, Node } from '@discordx/lava-player';
+import { Queue, RepeatMode, fromMS } from '@discordx/lava-queue';
 import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagination';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Message } from 'discord.js';
 import type {
@@ -15,8 +15,8 @@ export class MusicQueue extends Queue {
 
 	channel?: TextBasedChannel;
 
-	constructor(queueManager: QueueManager, guildId: string) {
-		super(queueManager, guildId);
+	constructor(node: Node, guildId: string) {
+		super(node, guildId);
 		setInterval(() => {
 			this.updateControlMessage().catch((error: unknown) => {
 				console.log(error);

@@ -14,7 +14,7 @@ export class MusicPlayer {
 			return null;
 		}
 
-		const queue = new MusicQueue(this.queueManager, guildId);
+		const queue = new MusicQueue(this.queueManager.node, guildId);
 		return this.queueManager.queue(guildId, () => queue);
 	}
 

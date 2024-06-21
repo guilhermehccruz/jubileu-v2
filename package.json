@@ -46,8 +46,8 @@
 	},
 	"dependencies": {
 		"@discordx/importer": "^1.3.0",
-		"@discordx/lava-player": "link:/home/guicruz/Documentos/personal-projects/discordx-fork/packages/lava-player",
-		"@discordx/lava-queue": "link:/home/guicruz/Documentos/personal-projects/discordx-fork/packages/lava-queue",
+		"@discordx/lava-player": "^2.1.2",
+		"@discordx/lava-queue": "^4.0.4",
 		"@discordx/pagination": "^3.5.3",
 		"discord.js": "^14.15.3",
 		"discordx": "^11.9.4",
