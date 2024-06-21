@@ -58,7 +58,6 @@
 		"lyrics-searcher": "^1.0.58",
 		"rastreio-correios": "^1.1.7",
 		"reflect-metadata": "^0.2.2",
-		"set-interval-async": "^3.0.3",
 		"tslib": "^2.6.3",
 		"tsyringe": "^4.8.0"
 	}

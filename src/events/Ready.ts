@@ -3,7 +3,6 @@ import { EmbedBuilder } from 'discord.js';
 import { Discord, Once } from 'discordx';
 import type { Client } from 'discordx';
 import { setTimeout } from 'node:timers/promises';
-import { setIntervalAsync } from 'set-interval-async';
 import { container, injectable } from 'tsyringe';
 
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
@@ -24,7 +23,7 @@ export class Ready {
 
 		await this.sendServersMessage(client);
 
-		this.sendConnectedToMessage(client);
+		await this.disconnectVoiceChannels(client);
 
 		// Instantiate music player
 		await setTimeout(5e3);
@@ -60,48 +59,9 @@ export class Ready {
 		}
 	}
 
-	private sendConnectedToMessage(client: Client) {
-		setIntervalAsync(async () => {
-			// Servers the bot is connected to a voice channel
-			const connectedToChannel = await client.channels.fetch(process.env.SERVERS_CONNECTED_CHANNEL_ID);
-			if (connectedToChannel?.isTextBased()) {
-				const servers: string[] = [];
-
-				for await (const guild of client.guilds.cache) {
-					if (guild[1].members.me?.voice.channelId) {
-						servers.push(`${guild[1].name}\n`);
-					}
-				}
-
-				if (connectedToChannel.lastMessageId) {
-					const message = await connectedToChannel.messages
-						.fetch(connectedToChannel.lastMessageId)
-						.catch(() => {
-							return;
-						});
-
-					// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-					if (message && message.deletable) {
-						await message.delete().catch(() => {
-							return;
-						});
-					}
-				}
-
-				const serversEmbed = new EmbedBuilder().setTitle(
-					'Servidores que estou atualmente conectado a um canal de voz',
-				);
-
-				if (servers.length) {
-					serversEmbed.setDescription(servers.join('\n'));
-
-					await connectedToChannel.send({ embeds: [serversEmbed] });
-				} else {
-					serversEmbed.setDescription('Nenhum');
-
-					await connectedToChannel.send({ embeds: [serversEmbed] });
-				}
-			}
-		}, 30000);
+	private async disconnectVoiceChannels(client: Client) {
+		for (const guild of client.guilds.cache) {
+			await guild[1].members.me?.voice.disconnect();
+		}
 	}
 }
