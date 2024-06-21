@@ -1,4 +1,4 @@
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, type TextBasedChannel } from 'discord.js';
 import { Discord, On } from 'discordx';
 import type { ArgsOf, Client } from 'discordx';
 
@@ -9,20 +9,15 @@ export class GuildCreate {
 		// Synchronize applications commands with Discord
 		await client.initApplicationCommands();
 
-		if (process.env.SERVERS_CHANNEL_ID) {
-			const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID);
+		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID) as TextBasedChannel;
 
-			const newServerEmbed = new EmbedBuilder()
-				.setTitle('Entrei em um servidor')
-				.setDescription(`Servidor: ${guild.name}`);
-
-			const updatedServersEmbed = new EmbedBuilder()
-				.setTitle('Lista de servidores atualizada')
-				.setDescription(client.guilds.cache.map((server) => server.name).join('\n'));
-
-			if (serversChannel?.isTextBased()) {
-				await serversChannel.send({ embeds: [newServerEmbed, updatedServersEmbed] });
-			}
-		}
+		await serversChannel.send({
+			embeds: [
+				new EmbedBuilder().setTitle('Entrei em um servidor').setDescription(`Servidor: ${guild.name}`),
+				new EmbedBuilder()
+					.setTitle('Lista de servidores atualizada')
+					.setDescription(client.guilds.cache.map((server) => server.name).join('\n')),
+			],
+		});
 	}
 }

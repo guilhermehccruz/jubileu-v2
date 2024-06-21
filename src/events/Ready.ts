@@ -1,5 +1,5 @@
 import { QueueManager } from '@discordx/lava-queue';
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, type TextBasedChannel } from 'discord.js';
 import { Discord, Once } from 'discordx';
 import type { Client } from 'discordx';
 import { setTimeout } from 'node:timers/promises';
@@ -35,28 +35,30 @@ export class Ready {
 
 	private async sendReadyMessage(client: Client) {
 		// Send ready message
-		const readyChannel = client.channels.cache.get(process.env.READY_CHANNEL_ID);
+		const readyChannel = client.channels.cache.get(process.env.READY_CHANNEL_ID) as TextBasedChannel;
 
-		const readyAtDate = new Date().toLocaleString('pt-br').split(' ').reverse().join(' - ').replace(',', '');
-
-		const readyEmbed = new EmbedBuilder().setTitle('Pai ta on').setDescription(readyAtDate);
-
-		if (readyChannel?.isTextBased()) {
-			await readyChannel.send({ embeds: [readyEmbed] });
-		}
+		await readyChannel.send({
+			embeds: [
+				new EmbedBuilder()
+					.setTitle('Pai ta on')
+					.setDescription(
+						new Date().toLocaleString('pt-br').split(' ').reverse().join(' - ').replace(',', ''),
+					),
+			],
+		});
 	}
 
 	private async sendServersMessage(client: Client) {
 		// Send servers message
-		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID);
+		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID) as TextBasedChannel;
 
-		const serversEmbed = new EmbedBuilder()
-			.setTitle('Lista de servidores na hora que ligou')
-			.setDescription(client.guilds.cache.map((server) => server.name).join('\n'));
-
-		if (serversChannel?.isTextBased()) {
-			await serversChannel.send({ embeds: [serversEmbed] });
-		}
+		await serversChannel.send({
+			embeds: [
+				new EmbedBuilder()
+					.setTitle('Lista de servidores na hora que ligou')
+					.setDescription(client.guilds.cache.map((server) => server.name).join('\n')),
+			],
+		});
 	}
 
 	private async disconnectVoiceChannels(client: Client) {
