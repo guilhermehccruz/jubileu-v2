@@ -19,11 +19,11 @@ export class Ready {
 		// Synchronize applications commands with Discord
 		await client.initApplicationCommands();
 
-		await this.sendReadyMessage(client);
-
-		await this.sendServersMessage(client);
-
-		await this.disconnectVoiceChannels(client);
+		await Promise.all([
+			this.sendReadyMessage(client),
+			this.sendServersMessage(client),
+			this.disconnectVoiceChannels(client),
+		]);
 
 		// Instantiate music player
 		await setTimeout(5e3);
