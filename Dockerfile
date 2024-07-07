@@ -38,7 +38,7 @@ USER node
 
 FROM node:20-alpine AS production
 
-WORKDIR /
+WORKDIR /usr/app
 
 COPY --chown=node:node --from=build /usr/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/app/package.json ./package.json

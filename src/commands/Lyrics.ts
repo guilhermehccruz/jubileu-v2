@@ -3,7 +3,7 @@ import type { CommandInteraction } from 'discord.js';
 import { Discord, Slash } from 'discordx';
 import Genius from 'genius-lyrics';
 import { find } from 'llyrics';
-import lyricsSearcher from 'lyrics-searcher';
+// import lyricsSearcher from 'lyrics-searcher';
 import { injectable } from 'tsyringe';
 
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
@@ -80,11 +80,12 @@ export class Lyrics {
 				return lavaLyricsResult.lines.map((line) => line.line).join('\n');
 			}
 
-			const lyricsSearcherResult = await lyricsSearcher('', title).catch(() => undefined);
+			//* temporarily disable lyrics-searcher
+			// const lyricsSearcherResult = await lyricsSearcher('', title).catch(() => undefined);
 
-			if (lyricsSearcherResult) {
-				return lyricsSearcherResult;
-			}
+			// if (lyricsSearcherResult) {
+			// 	return lyricsSearcherResult;
+			// }
 
 			const geniusResult = await new Genius.Client(process.env.GENIUS_ACCESS_TOKEN).songs
 				.search(title)

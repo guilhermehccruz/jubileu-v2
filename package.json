@@ -55,7 +55,6 @@
 		"genius-lyrics": "^4.4.7",
 		"joi": "^17.13.1",
 		"llyrics": "^1.1.7",
-		"lyrics-searcher": "^1.0.58",
 		"rastreio-correios": "^1.1.7",
 		"reflect-metadata": "^0.2.2",
 		"tslib": "^2.6.3",
