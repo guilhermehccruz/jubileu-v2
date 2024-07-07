@@ -1,4 +1,3 @@
-import { MusicQueue } from '@/utils/music/MusicQueue.js';
 import { EmbedBuilder } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
 import { Discord, Slash } from 'discordx';
@@ -8,6 +7,7 @@ import lyricsSearcher from 'lyrics-searcher';
 import { injectable } from 'tsyringe';
 
 import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { MusicQueue } from '../utils/music/MusicQueue.js';
 
 @Discord()
 @injectable()
