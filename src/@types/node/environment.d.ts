@@ -4,6 +4,7 @@ declare global {
 		interface ProcessEnv {
 			BOT_TOKEN: string;
 
+			JUBILEU_ID: string;
 			JUBILEU_SERVER: string;
 			READY_CHANNEL_ID: string;
 			SERVERS_CHANNEL_ID: string;
@@ -15,6 +16,10 @@ declare global {
 			SPOTIFY_CLIENT_ID: string;
 			SPOTIFY_SECRET: string;
 			SPOTIFY_DC_COOKIE: string;
+
+			GENIUS_CLIENT_ID: string;
+			GENIUS_CLIENT_SECRET: string;
+			GENIUS_ACCESS_TOKEN: string;
 		}
 	}
 }

@@ -9,6 +9,10 @@ export class VoiceStateUpdate {
 
 	@On({ event: 'voiceStateUpdate' })
 	async voiceServerUpdate([, newState]: ArgsOf<'voiceStateUpdate'>, client: Client): Promise<void> {
+		if (newState.member?.id !== process.env.JUBILEU_ID) {
+			return;
+		}
+
 		if (newState.channelId && !this.activeVoices.includes(newState.guild.name)) {
 			this.activeVoices.push(newState.guild.name);
 
