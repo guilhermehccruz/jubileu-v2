@@ -124,6 +124,24 @@ export class Lyrics {
 
 		const embeds: EmbedBuilder[] = [];
 
+		if (lyrics.length <= 8192) {
+			const doubleLineBreaks = lyrics.split('\n\n');
+			if (doubleLineBreaks.length >= 5) {
+				const firstEmbed: string[] = doubleLineBreaks.splice(0, 1);
+
+				while (firstEmbed.join('\n\n').length < doubleLineBreaks.join('\n\n').length) {
+					firstEmbed.push(doubleLineBreaks.splice(0, 1)[0]);
+				}
+
+				embeds.push(
+					new EmbedBuilder().setDescription(firstEmbed.join('\n\n')),
+					new EmbedBuilder().setDescription(doubleLineBreaks.join('\n\n')),
+				);
+
+				return embeds;
+			}
+		}
+
 		let currentString = '';
 		const splits = lyrics.split('\n');
 		for (const split of splits) {
