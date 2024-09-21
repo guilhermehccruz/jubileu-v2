@@ -1,4 +1,5 @@
-import { EmbedBuilder, type TextBasedChannel } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
+import type { TextChannel } from 'discord.js'
 import { Discord, On } from 'discordx';
 import type { ArgsOf, Client } from 'discordx';
 
@@ -9,7 +10,7 @@ export class GuildCreate {
 		// Synchronize applications commands with Discord
 		await client.initApplicationCommands();
 
-		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID) as TextBasedChannel;
+		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID) as TextChannel;
 
 		await serversChannel.send({
 			embeds: [

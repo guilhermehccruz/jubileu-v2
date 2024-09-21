@@ -1,5 +1,5 @@
 import { QueueManager } from '@discordx/lava-queue';
-import type { ButtonInteraction, CommandInteraction, Guild, TextBasedChannel } from 'discord.js';
+import type { ButtonInteraction, CommandInteraction, Guild, TextBasedChannel, TextChannel } from 'discord.js';
 import { GuildMember } from 'discord.js';
 import { Discord } from 'discordx';
 
@@ -54,7 +54,7 @@ export class MusicPlayer {
 		}
 
 		if (bot.voice.channelId === null) {
-			queue.channel = interaction.channel;
+			queue.channel = interaction.channel as TextChannel;
 
 			await queue.guildPlayer.join({
 				channel: interaction.member.voice.channelId,

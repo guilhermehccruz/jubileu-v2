@@ -1,4 +1,5 @@
-import { EmbedBuilder, type TextBasedChannel } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
+import type { TextChannel } from 'discord.js'
 import { Discord, On, type ArgsOf, type Client } from 'discordx';
 import { injectable } from 'tsyringe';
 
@@ -27,7 +28,7 @@ export class VoiceStateUpdate {
 	private async sendServersConnectedToMessage(client: Client) {
 		const connectedToChannel = (await client.channels.fetch(
 			process.env.SERVERS_CONNECTED_CHANNEL_ID,
-		)) as TextBasedChannel;
+		)) as TextChannel;
 
 		await connectedToChannel.send({
 			embeds: [

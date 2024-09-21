@@ -1,5 +1,6 @@
 import { QueueManager } from '@discordx/lava-queue';
-import { EmbedBuilder, type TextBasedChannel } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
+import type { TextChannel } from 'discord.js'
 import { Discord, Once } from 'discordx';
 import type { Client } from 'discordx';
 import { setTimeout } from 'node:timers/promises';
@@ -35,7 +36,7 @@ export class Ready {
 
 	private async sendReadyMessage(client: Client) {
 		// Send ready message
-		const readyChannel = client.channels.cache.get(process.env.READY_CHANNEL_ID) as TextBasedChannel;
+		const readyChannel = client.channels.cache.get(process.env.READY_CHANNEL_ID) as TextChannel;
 
 		await readyChannel.send({
 			embeds: [
@@ -50,7 +51,7 @@ export class Ready {
 
 	private async sendServersMessage(client: Client) {
 		// Send servers message
-		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID) as TextBasedChannel;
+		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID) as TextChannel;
 
 		await serversChannel.send({
 			embeds: [

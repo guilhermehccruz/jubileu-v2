@@ -6,14 +6,14 @@ import type {
 	ButtonInteraction,
 	CommandInteraction,
 	MessageActionRowComponentBuilder,
-	TextBasedChannel,
+	TextChannel
 } from 'discord.js';
 
 export class MusicQueue extends Queue {
 	lastControlMessage?: Message;
 	lockUpdate = false;
 
-	channel?: TextBasedChannel;
+	channel?: TextChannel;
 
 	constructor(node: Node, guildId: string) {
 		super(node, guildId);
