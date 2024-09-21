@@ -6,11 +6,11 @@ import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
-export class ControlsControl {
+export class LeaveButton {
 	constructor(private readonly musicPlayer: MusicPlayer) {}
 
-	@ButtonComponent({ id: 'btn-controls' })
-	async controlsControl(interaction: ButtonInteraction): Promise<void> {
+	@ButtonComponent({ id: 'btn-leave' })
+	async leaveButton(interaction: ButtonInteraction): Promise<void> {
 		const cmd = await this.musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
@@ -18,7 +18,8 @@ export class ControlsControl {
 
 		const { queue } = cmd;
 
-		await queue.updateControlMessage({ force: true });
+		await queue.exit();
+		await queue.updateControlMessage();
 
 		// delete interaction
 		await interaction.deleteReply();

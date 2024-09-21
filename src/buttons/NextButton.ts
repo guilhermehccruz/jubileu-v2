@@ -6,11 +6,11 @@ import { MusicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
-export class NextControl {
+export class NextButton {
 	constructor(private readonly musicPlayer: MusicPlayer) {}
 
 	@ButtonComponent({ id: 'btn-next' })
-	async nextControl(interaction: ButtonInteraction): Promise<void> {
+	async nextButton(interaction: ButtonInteraction): Promise<void> {
 		const cmd = await this.musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
