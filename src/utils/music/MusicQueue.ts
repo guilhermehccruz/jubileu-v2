@@ -1,6 +1,14 @@
 import { RequestType, Track, Lyrics, Node } from '@discordx/lava-player';
 import { Queue, RepeatMode, fromMS } from '@discordx/lava-queue';
 import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagination';
+import { ControlsButton } from 'buttons/ControlsButton';
+import { LeaveButton } from 'buttons/LeaveButton';
+import { LoopButton } from 'buttons/LoopButton';
+import { MixButton } from 'buttons/MixButton';
+import { NextButton } from 'buttons/NextButton';
+import { PauseButton } from 'buttons/PauseButton';
+import { QueueButton } from 'buttons/QueueButton';
+import { RepeatButton } from 'buttons/ReapeatButton';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Message } from 'discord.js';
 import type {
 	ButtonInteraction,
@@ -25,71 +33,20 @@ export class MusicQueue extends Queue {
 	}
 
 	private controlsRow(): ActionRowBuilder<MessageActionRowComponentBuilder>[] {
-		const nextButton = new ButtonBuilder()
-			.setLabel('Próximo')
-			.setEmoji('⏭')
-			.setStyle(ButtonStyle.Primary)
-			.setDisabled(!this.isPlaying)
-			.setCustomId('btn-next');
-
-		const pauseButton = new ButtonBuilder()
-			.setLabel(this.isPlaying ? 'Pausar' : 'Continuar')
-			.setEmoji(this.isPlaying ? '⏸️' : '▶️')
-			.setStyle(ButtonStyle.Primary)
-			.setCustomId('btn-pause');
-
-		const stopButton = new ButtonBuilder()
-			.setLabel('Parar e sair')
-			.setStyle(ButtonStyle.Danger)
-			.setCustomId('btn-leave');
-
-		const repeatButton = new ButtonBuilder()
-			.setLabel('Repetir Música atual')
-			.setEmoji('🔂')
-			.setDisabled(!this.isPlaying)
-			.setStyle(this.repeatMode === RepeatMode.REPEAT_ONE ? ButtonStyle.Danger : ButtonStyle.Primary)
-			.setCustomId('btn-repeat');
-
-		const loopButton = new ButtonBuilder()
-			.setLabel('Loop na fila')
-			.setEmoji('🔁')
-			.setDisabled(!this.isPlaying)
-			.setStyle(this.repeatMode === RepeatMode.REPEAT_ALL ? ButtonStyle.Danger : ButtonStyle.Primary)
-			.setCustomId('btn-loop');
-
-		const row1 = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-			stopButton,
-			pauseButton,
-			nextButton,
-			repeatButton,
-		);
-
-		const queueButton = new ButtonBuilder()
-			.setLabel('Fila')
-			.setEmoji('🎵')
-			.setStyle(ButtonStyle.Primary)
-			.setCustomId('btn-queue');
-
-		const mixButton = new ButtonBuilder()
-			.setLabel('Aleatorizar')
-			.setEmoji('🎛️')
-			.setDisabled(!this.isPlaying)
-			.setStyle(ButtonStyle.Primary)
-			.setCustomId('btn-mix');
-
-		const controlsButton = new ButtonBuilder()
-			.setLabel('Atualizar controles')
-			.setEmoji('🔄')
-			.setStyle(ButtonStyle.Primary)
-			.setCustomId('btn-controls');
-
-		const row2 = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-			loopButton,
-			queueButton,
-			mixButton,
-			controlsButton,
-		);
-		return [row1, row2];
+		return [
+			new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+				LeaveButton.button(),
+				PauseButton.button(this.isPlaying),
+				NextButton.button(this.isPlaying),
+				RepeatButton.button(this.isPlaying, this.repeatMode),
+			),
+			new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+				LoopButton.button(this.isPlaying, this.repeatMode),
+				QueueButton.button(),
+				MixButton.button(this.isPlaying),
+				ControlsButton.button(),
+			)
+		];
 	}
 
 	public async updateControlMessage(options?: { force?: boolean; text?: string }): Promise<void> {
@@ -130,7 +87,7 @@ export class MusicQueue extends Queue {
 		});
 
 		const pMsg = {
-			components: [...this.controlsRow()],
+			components: this.controlsRow(),
 			content: options?.text,
 			embeds: [embed],
 		};

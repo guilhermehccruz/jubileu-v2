@@ -1,4 +1,4 @@
-import { ButtonInteraction } from 'discord.js';
+import { ButtonBuilder, ButtonInteraction, ButtonStyle } from 'discord.js';
 import { ButtonComponent, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
@@ -23,5 +23,12 @@ export class LeaveButton {
 
 		// delete interaction
 		await interaction.deleteReply();
+	}
+
+	static button() {
+		return new ButtonBuilder()
+			.setLabel('Parar e sair')
+			.setStyle(ButtonStyle.Danger)
+			.setCustomId('btn-leave');
 	}
 }

@@ -1,4 +1,4 @@
-import { ButtonInteraction } from 'discord.js';
+import { ButtonBuilder, ButtonInteraction, ButtonStyle } from 'discord.js';
 import { ButtonComponent, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
@@ -21,5 +21,13 @@ export class PauseButton {
 
 		// delete interaction
 		await interaction.deleteReply();
+	}
+
+	static button(isPlaying: boolean) {
+		return new ButtonBuilder()
+			.setLabel(isPlaying ? 'Pausar' : 'Continuar')
+			.setEmoji(isPlaying ? '⏸️' : '▶️')
+			.setStyle(ButtonStyle.Primary)
+			.setCustomId('btn-pause');
 	}
 }

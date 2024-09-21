@@ -1,4 +1,4 @@
-import { ButtonInteraction } from 'discord.js';
+import { ButtonBuilder, ButtonInteraction, ButtonStyle } from 'discord.js';
 import { ButtonComponent, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
@@ -22,5 +22,13 @@ export class ControlsButton {
 
 		// delete interaction
 		await interaction.deleteReply();
+	}
+
+	static button() {
+		return new ButtonBuilder()
+			.setLabel('Atualizar controles')
+			.setEmoji('🔄')
+			.setStyle(ButtonStyle.Primary)
+			.setCustomId('btn-controls');
 	}
 }

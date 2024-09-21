@@ -1,5 +1,5 @@
 import { RepeatMode } from '@discordx/lava-queue';
-import { ButtonInteraction } from 'discord.js';
+import { ButtonBuilder, ButtonInteraction, ButtonStyle } from 'discord.js';
 import { ButtonComponent, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
@@ -24,5 +24,14 @@ export class LoopButton {
 
 		// delete interaction
 		await interaction.deleteReply();
+	}
+
+	static button(isPlaying: boolean, repeatMode: RepeatMode) {
+		return new ButtonBuilder()
+			.setLabel('Loop na fila')
+			.setEmoji('🔁')
+			.setDisabled(!isPlaying)
+			.setStyle(repeatMode === RepeatMode.REPEAT_ALL ? ButtonStyle.Danger : ButtonStyle.Primary)
+			.setCustomId('btn-loop');
 	}
 }
