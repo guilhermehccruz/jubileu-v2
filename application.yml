@@ -5,8 +5,8 @@ server: # REST and WS server
         enabled: false # Whether to enable HTTP/2 support
 lavalink:
     plugins:
-        - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.1.1"
-        - dependency: "dev.lavalink.youtube:youtube-plugin:1.3.0"
+        - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.2.0"
+        - dependency: "dev.lavalink.youtube:youtube-plugin:1.8.0"
         - dependency: "com.github.topi314.lavalyrics:lavalyrics-plugin:1.0.0"
     server:
         password: ""
@@ -98,20 +98,16 @@ plugins:
         # The clients to use for track loading. See below for a list of valid clients.
         # Clients are queried in the order they are given (so the first client is queried first and so on...)
         clients:
+            - TVHTML5EMBEDDED
             - MUSIC
-            - ANDROID
             - WEB
-        # You can configure individual clients with the following.
-        # Any options or clients left unspecified will use their default values,
-        # which enables everything for all clients.
-        WEB: # names are specified as they are written below under "Available Clients".
-            # This will disable using the WEB client for video playback.
-            playback: false
-        TVHTML5EMBEDDED:
-            # The below config disables everything except playback for this client.
-            playlistLoading: false # Disables loading of playlists and mixes for this client.
-            videoLoading: false # Disables loading of videos for this client (playback is still allowed).
-            searching: false # Disables the ability to search for videos for this client.
+            - ANDROID_MUSIC
+            # You can configure individual clients with the following.
+            # Any options or clients left unspecified will use their default values,
+            # which enables everything for all clients.
+        pot:
+            token: ${PO_TOKEN}
+            visitorData: ${VISITOR_DATA}
     lavalyrics:
         # sources is used to sort the different lyrics sources by priority (from highest to lowest)
         sources:

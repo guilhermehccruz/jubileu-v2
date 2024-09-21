@@ -1,6 +1,6 @@
 services:
     lavalink:
-        image: fredboat/lavalink:4.0.6
+        image: fredboat/lavalink:4.0.8
         container_name: lavalink
         volumes:
             - ./application.yml:/opt/Lavalink/application.yml
