@@ -1,5 +1,5 @@
 import { EmbedBuilder } from 'discord.js';
-import type { TextChannel } from 'discord.js'
+import type { TextChannel } from 'discord.js';
 import { Discord, On } from 'discordx';
 import type { ArgsOf, Client } from 'discordx';
 

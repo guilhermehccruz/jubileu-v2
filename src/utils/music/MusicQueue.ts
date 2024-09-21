@@ -1,21 +1,17 @@
 import { RequestType, Track, Lyrics, Node } from '@discordx/lava-player';
-import { Queue, RepeatMode, fromMS } from '@discordx/lava-queue';
+import { Queue, fromMS } from '@discordx/lava-queue';
 import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagination';
-import { ControlsButton } from 'buttons/ControlsButton';
-import { LeaveButton } from 'buttons/LeaveButton';
-import { LoopButton } from 'buttons/LoopButton';
-import { MixButton } from 'buttons/MixButton';
-import { NextButton } from 'buttons/NextButton';
-import { PauseButton } from 'buttons/PauseButton';
-import { QueueButton } from 'buttons/QueueButton';
-import { RepeatButton } from 'buttons/ReapeatButton';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Message } from 'discord.js';
-import type {
-	ButtonInteraction,
-	CommandInteraction,
-	MessageActionRowComponentBuilder,
-	TextChannel
-} from 'discord.js';
+import { ActionRowBuilder, EmbedBuilder, Message } from 'discord.js';
+import type { ButtonInteraction, CommandInteraction, MessageActionRowComponentBuilder, TextChannel } from 'discord.js';
+
+import { ControlsButton } from '../../buttons/ControlsButton.js';
+import { LeaveButton } from '../../buttons/LeaveButton.js';
+import { LoopButton } from '../../buttons/LoopButton.js';
+import { MixButton } from '../../buttons/MixButton.js';
+import { NextButton } from '../../buttons/NextButton.js';
+import { PauseButton } from '../../buttons/PauseButton.js';
+import { QueueButton } from '../../buttons/QueueButton.js';
+import { RepeatButton } from '../../buttons/ReapeatButton.js';
 
 export class MusicQueue extends Queue {
 	lastControlMessage?: Message;
@@ -45,7 +41,7 @@ export class MusicQueue extends Queue {
 				QueueButton.button(),
 				MixButton.button(this.isPlaying),
 				ControlsButton.button(),
-			)
+			),
 		];
 	}
 

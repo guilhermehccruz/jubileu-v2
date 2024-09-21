@@ -2,16 +2,14 @@ import { ButtonBuilder, ButtonInteraction, ButtonStyle } from 'discord.js';
 import { ButtonComponent, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { musicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
 export class NextButton {
-	constructor(private readonly musicPlayer: MusicPlayer) {}
-
 	@ButtonComponent({ id: 'btn-next' })
 	async nextButton(interaction: ButtonInteraction): Promise<void> {
-		const cmd = await this.musicPlayer.parseCommand(interaction);
+		const cmd = await musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
 		}

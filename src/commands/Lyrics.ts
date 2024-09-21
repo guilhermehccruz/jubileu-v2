@@ -6,17 +6,15 @@ import { find } from 'llyrics';
 // import lyricsSearcher from 'lyrics-searcher';
 import { injectable } from 'tsyringe';
 
-import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { musicPlayer } from '../utils/music/MusicPlayer.js';
 import { MusicQueue } from '../utils/music/MusicQueue.js';
 
 @Discord()
 @injectable()
 export class Lyrics {
-	constructor(private readonly musicPlayer: MusicPlayer) {}
-
 	@Slash({ description: 'Busca as letras da música tocando' })
 	async lyrics(interaction: CommandInteraction): Promise<void> {
-		const cmd = await this.musicPlayer.parseCommand(interaction);
+		const cmd = await musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
 		}

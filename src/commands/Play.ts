@@ -4,13 +4,11 @@ import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
 import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { musicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
 export class Play {
-	constructor(private readonly musicPlayer: MusicPlayer) {}
-
 	/**
 	 *
 	 * Links podem ser de:
@@ -42,7 +40,7 @@ export class Play {
 
 		interaction: CommandInteraction,
 	): Promise<void> {
-		const cmd = await this.musicPlayer.parseCommand(interaction);
+		const cmd = await musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
 		}

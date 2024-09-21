@@ -1,12 +1,12 @@
 import { QueueManager } from '@discordx/lava-queue';
 import { EmbedBuilder } from 'discord.js';
-import type { TextChannel } from 'discord.js'
+import type { TextChannel } from 'discord.js';
 import { Discord, Once } from 'discordx';
 import type { Client } from 'discordx';
 import { setTimeout } from 'node:timers/promises';
-import { container, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 
-import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { musicPlayer } from '../utils/music/MusicPlayer.js';
 import { getLavaNode } from '../utils/music/node.js';
 
 @Discord()
@@ -28,7 +28,6 @@ export class Ready {
 
 		// Instantiate music player
 		await setTimeout(5e3);
-		const musicPlayer = container.resolve(MusicPlayer);
 		musicPlayer.queueManager = new QueueManager(getLavaNode(client));
 
 		console.log('>> Bot started');

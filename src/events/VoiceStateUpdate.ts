@@ -1,5 +1,5 @@
 import { EmbedBuilder } from 'discord.js';
-import type { TextChannel } from 'discord.js'
+import type { TextChannel } from 'discord.js';
 import { Discord, On, type ArgsOf, type Client } from 'discordx';
 import { injectable } from 'tsyringe';
 

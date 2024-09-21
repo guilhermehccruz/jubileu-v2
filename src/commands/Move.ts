@@ -3,13 +3,11 @@ import type { CommandInteraction } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { MusicPlayer } from '../utils/music/MusicPlayer.js';
+import { musicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
 export class Move {
-	constructor(private readonly musicPlayer: MusicPlayer) {}
-
 	@Slash({ description: 'Troca a música de lugar, tirando de "posição-inicial" e colocando em "posição-final"' })
 	async move(
 		@SlashOption({
@@ -28,7 +26,7 @@ export class Move {
 		finalPosition: number,
 		interaction: CommandInteraction,
 	): Promise<void> {
-		const cmd = await this.musicPlayer.parseCommand(interaction);
+		const cmd = await musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
 		}

@@ -1,11 +1,9 @@
 import { QueueManager } from '@discordx/lava-queue';
 import type { ButtonInteraction, CommandInteraction, Guild, TextChannel } from 'discord.js';
 import { GuildMember } from 'discord.js';
-import { Discord } from 'discordx';
 
 import { MusicQueue } from './MusicQueue.js';
 
-@Discord()
 export class MusicPlayer {
 	queueManager: QueueManager | null = null;
 
@@ -73,4 +71,6 @@ export interface ParsedCommand {
 	guild: Guild;
 	member: GuildMember;
 	queue: MusicQueue;
-  }
+}
+
+export const musicPlayer = new MusicPlayer();
