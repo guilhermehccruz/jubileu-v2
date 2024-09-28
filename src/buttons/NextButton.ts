@@ -31,7 +31,7 @@ export class NextButton {
 			.setLabel('Próximo')
 			.setEmoji('⏭')
 			.setStyle(ButtonStyle.Primary)
-			.setDisabled(isPlaying)
+			.setDisabled(!isPlaying)
 			.setCustomId('btn-next');
 	}
 }
