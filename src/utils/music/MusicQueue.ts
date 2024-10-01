@@ -25,7 +25,7 @@ export class MusicQueue extends Queue {
 			this.updateControlMessage().catch((error: unknown) => {
 				console.log(error);
 			});
-		}, 1e4);
+		}, 10_000);
 	}
 
 	private controlsRow(): ActionRowBuilder<MessageActionRowComponentBuilder>[] {
@@ -179,7 +179,7 @@ export class MusicQueue extends Queue {
 					});
 				}
 			},
-			time: 6e4,
+			time: 60_000,
 			type: Math.round(this.size / 10) <= 5 ? PaginationType.Button : PaginationType.SelectMenu,
 			start: { label: 'Início' },
 			previous: { label: 'Anterior' },
@@ -189,10 +189,6 @@ export class MusicQueue extends Queue {
 		});
 
 		await pagination.send();
-	}
-
-	async exit(): Promise<void> {
-		await super.exit();
 	}
 
 	getTrackTitle(track: Track): string {

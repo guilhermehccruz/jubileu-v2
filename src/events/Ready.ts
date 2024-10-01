@@ -27,7 +27,7 @@ export class Ready {
 		]);
 
 		// Instantiate music player
-		await setTimeout(5e3);
+		await setTimeout(5_000);
 		musicPlayer.queueManager = new QueueManager(getLavaNode(client));
 
 		console.log('>> Bot started');
