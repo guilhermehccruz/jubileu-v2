@@ -28,7 +28,7 @@ COPY --chown=node:node tsconfig.json src ./
 
 RUN pnpm build
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 RUN pnpm i --frozen-lockfile -P && pnpm prune
 
