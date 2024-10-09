@@ -11,7 +11,7 @@ import { getLavaNode } from '../utils/music/node.js';
 
 @Discord()
 @injectable()
-export class Ready {
+export class ReadyEvent {
 	@Once({ event: 'ready' })
 	async ready([client]: [Client]): Promise<void> {
 		// Make sure all guilds are cached

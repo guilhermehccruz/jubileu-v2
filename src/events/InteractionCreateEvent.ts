@@ -2,7 +2,7 @@ import { On, Discord } from 'discordx';
 import type { ArgsOf, Client } from 'discordx';
 
 @Discord()
-export class InteractionCreate {
+export class InteractionCreateEvent {
 	@On({ event: 'interactionCreate' })
 	async interactionCreate([interaction]: ArgsOf<'interactionCreate'>, client: Client): Promise<void> {
 		// do not execute interaction, if it's pagination (avoid warning: select-menu/button interaction not found)

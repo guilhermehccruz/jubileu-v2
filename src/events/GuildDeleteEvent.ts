@@ -4,7 +4,7 @@ import { On, Discord } from 'discordx';
 import type { ArgsOf, Client } from 'discordx';
 
 @Discord()
-export class GuildDelete {
+export class GuildDeleteEvent {
 	@On({ event: 'guildDelete' })
 	async guildDelete([guild]: ArgsOf<'guildDelete'>, client: Client): Promise<void> {
 		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID) as TextChannel;

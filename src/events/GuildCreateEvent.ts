@@ -4,7 +4,7 @@ import { Discord, On } from 'discordx';
 import type { ArgsOf, Client } from 'discordx';
 
 @Discord()
-export class GuildCreate {
+export class GuildCreateEvent {
 	@On({ event: 'guildCreate' })
 	async guildCreate([guild]: ArgsOf<'guildCreate'>, client: Client): Promise<void> {
 		// Synchronize applications commands with Discord

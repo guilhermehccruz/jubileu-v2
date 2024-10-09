@@ -5,7 +5,7 @@ import { injectable } from 'tsyringe';
 
 @Discord()
 @injectable()
-export class VoiceStateUpdate {
+export class VoiceStateUpdateEvent {
 	private activeVoices: string[] = [];
 
 	@On({ event: 'voiceStateUpdate' })
