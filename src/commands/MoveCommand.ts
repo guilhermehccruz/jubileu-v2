@@ -7,7 +7,7 @@ import { musicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
-export class Move {
+export class MoveCommand {
 	@Slash({ description: 'Troca a música de lugar, tirando de "posição-inicial" e colocando em "posição-final"' })
 	async move(
 		@SlashOption({

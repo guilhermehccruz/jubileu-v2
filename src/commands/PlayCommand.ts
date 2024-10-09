@@ -8,7 +8,7 @@ import { musicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
-export class Play {
+export class PlayCommand {
 	/**
 	 *
 	 * Links podem ser de:

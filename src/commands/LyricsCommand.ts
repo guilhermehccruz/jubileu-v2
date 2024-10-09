@@ -7,7 +7,7 @@ import { LyricsService } from '../services/LyricsService.js';
 
 @Discord()
 @injectable()
-export class Lyrics {
+export class LyricsCommand {
 	constructor(private readonly lyricsService: LyricsService) {}
 
 	@Slash({ description: 'Busca as letras da música tocando' })

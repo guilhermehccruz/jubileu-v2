@@ -6,7 +6,7 @@ import { injectable } from 'tsyringe';
 import { musicPlayer } from '../utils/music/MusicPlayer.js';
 @Discord()
 @injectable()
-export class Seek {
+export class SeekCommand {
 	@Slash({ description: 'Toca a música a partir do segundo digitado' })
 	async seek(
 		@SlashOption({

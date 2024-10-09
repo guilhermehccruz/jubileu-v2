@@ -7,7 +7,7 @@ import { musicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
-export class Remove {
+export class RemoveCommand {
 	@Slash({ description: 'Remove a música da fila na posição digitada' })
 	async remove(
 		@SlashOption({

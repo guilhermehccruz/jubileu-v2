@@ -4,7 +4,7 @@ import { Discord, Slash, SlashOption } from 'discordx';
 import { rastreio } from 'rastreio-correios';
 
 @Discord()
-export class Track {
+export class TrackCommand {
 	@Slash({ description: 'Pesquisa o status de entrega do correio' })
 	async track(
 		@SlashOption({
