@@ -6,9 +6,9 @@ import { musicPlayer } from '../utils/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
-export class ControlsButton {
-	@ButtonComponent({ id: 'btn-controls' })
-	async controlsButton(interaction: ButtonInteraction): Promise<void> {
+export class RefreshControlsButton {
+	@ButtonComponent({ id: 'btn-refresh-controls' })
+	async refreshControlsButton(interaction: ButtonInteraction): Promise<void> {
 		const cmd = await musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
@@ -24,9 +24,9 @@ export class ControlsButton {
 
 	static button() {
 		return new ButtonBuilder()
-			.setLabel('Atualizar controles')
+			.setLabel('Atualizar')
 			.setEmoji('🔄')
 			.setStyle(ButtonStyle.Primary)
-			.setCustomId('btn-controls');
+			.setCustomId('btn-refresh-controls');
 	}
 }

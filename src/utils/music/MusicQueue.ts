@@ -4,14 +4,15 @@ import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagina
 import { ActionRowBuilder, EmbedBuilder, Message } from 'discord.js';
 import type { ButtonInteraction, CommandInteraction, MessageActionRowComponentBuilder, TextChannel } from 'discord.js';
 
-import { ControlsButton } from '../../buttons/ControlsButton.js';
 import { LeaveButton } from '../../buttons/LeaveButton.js';
 import { LoopButton } from '../../buttons/LoopButton.js';
+import { LyricsButton } from '../../buttons/LyricsButton.js';
 import { MixButton } from '../../buttons/MixButton.js';
 import { NextButton } from '../../buttons/NextButton.js';
 import { PauseButton } from '../../buttons/PauseButton.js';
 import { QueueButton } from '../../buttons/QueueButton.js';
 import { RepeatButton } from '../../buttons/ReapeatButton.js';
+import { RefreshControlsButton } from '../../buttons/RefreshControlsButton.js';
 
 export class MusicQueue extends Queue {
 	lastControlMessage?: Message;
@@ -34,13 +35,14 @@ export class MusicQueue extends Queue {
 				LeaveButton.button(),
 				PauseButton.button(this.isPlaying),
 				NextButton.button(this.isPlaying),
-				RepeatButton.button(this.isPlaying, this.repeatMode),
+				LyricsButton.button(),
+				QueueButton.button(),
 			),
 			new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+				RepeatButton.button(this.isPlaying, this.repeatMode),
 				LoopButton.button(this.isPlaying, this.repeatMode),
-				QueueButton.button(),
 				MixButton.button(this.isPlaying),
-				ControlsButton.button(),
+				RefreshControlsButton.button(),
 			),
 		];
 	}
@@ -247,18 +249,6 @@ export class MusicQueue extends Queue {
 	 */
 	public getCurrentPlaybackLyrics(skipTrackSource = true): Promise<Lyrics | null> {
 		const uri = `sessions/${this.sessionId}/players/${this.guildId}/track/lyrics?skipTrackSource=${String(skipTrackSource)}`;
-		const url = this.http.url(uri);
-		return this.http.request(RequestType.GET, url);
-	}
-
-	/**
-	 * Get the lyrics for the track.
-	 *
-	 * Requires [LavaLyrics](https://github.com/topi314/LavaLyrics) plugin and a supported
-	 * [lyrics source](https://github.com/topi314/LavaLyrics?tab=readme-ov-file#supported-sources) plugin.
-	 */
-	public getLyrics(encodedTrack: string, skipTrackSource = true): Promise<Lyrics | null> {
-		const uri = `lyrics?track=${encodeURIComponent(encodedTrack)}&skipTrackSource=${String(skipTrackSource)}`;
 		const url = this.http.url(uri);
 		return this.http.request(RequestType.GET, url);
 	}

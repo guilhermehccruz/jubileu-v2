@@ -24,6 +24,10 @@ export class LeaveButton {
 	}
 
 	static button() {
-		return new ButtonBuilder().setLabel('Parar e sair').setStyle(ButtonStyle.Danger).setCustomId('btn-leave');
+		return new ButtonBuilder()
+			.setLabel('Sair')
+			.setEmoji('⏹️')
+			.setStyle(ButtonStyle.Danger)
+			.setCustomId('btn-leave');
 	}
 }

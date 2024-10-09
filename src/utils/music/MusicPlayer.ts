@@ -17,7 +17,9 @@ export class MusicPlayer {
 	}
 
 	async parseCommand(interaction: CommandInteraction | ButtonInteraction): Promise<ParsedCommand | null> {
-		await interaction.deferReply();
+		if (!interaction.deferred) {
+			await interaction.deferReply();
+		}
 
 		if (!interaction.channel || !(interaction.member instanceof GuildMember) || !interaction.guild) {
 			await interaction.followUp('> Não foi possível processar o comando. Tente novamente');

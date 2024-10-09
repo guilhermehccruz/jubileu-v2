@@ -6,12 +6,15 @@ import './config/validateEnv.js';
 import { dirname, importx } from '@discordx/importer';
 import { IntentsBitField } from 'discord.js';
 import { Client, DIService, tsyringeDependencyRegistryEngine } from 'discordx';
-import { container } from 'tsyringe';
+import { container, instanceCachingFactory } from 'tsyringe';
 
 async function run() {
-	DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
+	DIService.engine = tsyringeDependencyRegistryEngine
+		.setUseTokenization(true)
+		.setCashingSingletonFactory(instanceCachingFactory)
+		.setInjector(container);
 
-	await importx(`${dirname(import.meta.url)}/{events,commands,buttons}/**/*.{ts,js}`);
+	await importx(`${dirname(import.meta.url)}/{events,commands,buttons,services}/**/*.{ts,js}`);
 
 	const client = new Client({
 		// To only use global commands (use @Guild for specific guild command), comment this line

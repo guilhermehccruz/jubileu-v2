@@ -22,7 +22,7 @@ export class QueueButton {
 	static button() {
 		return new ButtonBuilder()
 			.setLabel('Fila')
-			.setEmoji('🎵')
+			.setEmoji('🎶')
 			.setStyle(ButtonStyle.Primary)
 			.setCustomId('btn-queue');
 	}
