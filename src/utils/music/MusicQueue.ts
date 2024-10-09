@@ -11,8 +11,8 @@ import { MixButton } from '../../buttons/MixButton.js';
 import { NextButton } from '../../buttons/NextButton.js';
 import { PauseButton } from '../../buttons/PauseButton.js';
 import { QueueButton } from '../../buttons/QueueButton.js';
-import { RepeatButton } from '../../buttons/ReapeatButton.js';
 import { RefreshControlsButton } from '../../buttons/RefreshControlsButton.js';
+import { RepeatButton } from '../../buttons/RepeatButton.js';
 
 export class MusicQueue extends Queue {
 	lastControlMessage?: Message;

@@ -10,7 +10,7 @@ export class LyricsButton {
 	constructor(private readonly lyricsService: LyricsService) {}
 
 	@ButtonComponent({ id: 'btn-lyrics' })
-	async lyricsButton(interaction: ButtonInteraction): Promise<void> {
+	async button(interaction: ButtonInteraction): Promise<void> {
 		await this.lyricsService.lyrics(interaction);
 	}
 

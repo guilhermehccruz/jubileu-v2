@@ -8,7 +8,7 @@ import { musicPlayer } from '../utils/music/MusicPlayer.js';
 @injectable()
 export class QueueButton {
 	@ButtonComponent({ id: 'btn-queue' })
-	async queueButton(interaction: ButtonInteraction): Promise<void> {
+	async button(interaction: ButtonInteraction): Promise<void> {
 		const cmd = await musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;

@@ -8,7 +8,7 @@ import { musicPlayer } from '../utils/music/MusicPlayer.js';
 @injectable()
 export class LeaveButton {
 	@ButtonComponent({ id: 'btn-leave' })
-	async leaveButton(interaction: ButtonInteraction): Promise<void> {
+	async button(interaction: ButtonInteraction): Promise<void> {
 		const cmd = await musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
