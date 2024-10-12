@@ -7,12 +7,12 @@ import type { ButtonInteraction, CommandInteraction, MessageActionRowComponentBu
 import { LeaveButton } from '../../buttons/LeaveButton.js';
 import { LoopButton } from '../../buttons/LoopButton.js';
 import { LyricsButton } from '../../buttons/LyricsButton.js';
-import { MixButton } from '../../buttons/MixButton.js';
 import { NextButton } from '../../buttons/NextButton.js';
 import { PauseButton } from '../../buttons/PauseButton.js';
 import { QueueButton } from '../../buttons/QueueButton.js';
 import { RefreshControlsButton } from '../../buttons/RefreshControlsButton.js';
 import { RepeatButton } from '../../buttons/RepeatButton.js';
+import { ShuffleButton } from '../../buttons/ShuffleButton.js';
 
 export class MusicQueue extends Queue {
 	lastControlMessage?: Message;
@@ -41,7 +41,7 @@ export class MusicQueue extends Queue {
 			new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
 				RepeatButton.button(this.isPlaying, this.repeatMode),
 				LoopButton.button(this.isPlaying, this.repeatMode),
-				MixButton.button(this.isPlaying),
+				ShuffleButton.button(this.isPlaying),
 				RefreshControlsButton.button(),
 			),
 		];
