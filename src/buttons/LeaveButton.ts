@@ -2,25 +2,16 @@ import { ButtonBuilder, ButtonInteraction, ButtonStyle } from 'discord.js';
 import { ButtonComponent, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../utils/music/MusicPlayer.js';
+import { LeaveService } from '../services/LeaveService.js';
 
 @Discord()
 @injectable()
 export class LeaveButton {
+	constructor(private readonly leaveService: LeaveService) {}
+
 	@ButtonComponent({ id: 'btn-leave' })
 	async button(interaction: ButtonInteraction): Promise<void> {
-		const cmd = await musicPlayer.parseCommand(interaction);
-		if (!cmd) {
-			return;
-		}
-
-		const { queue } = cmd;
-
-		await queue.exit();
-		await queue.updateControlMessage();
-
-		// delete interaction
-		await interaction.deleteReply();
+		await this.leaveService.leave(interaction);
 	}
 
 	static button() {
