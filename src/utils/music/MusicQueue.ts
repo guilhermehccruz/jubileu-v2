@@ -145,6 +145,27 @@ export class MusicQueue extends Queue {
 			return;
 		}
 
+		if (this.size <= 10) {
+			const pMsg = await interaction.followUp({
+				content: `> Tocando **${this.currentPlaybackTrack.info.title}**\n\n${this.tracks
+					.map((track, index) => {
+						const endTime = this.getEndTime(track);
+
+						return `${index + 1}. ${this.getTrackTitle(track)} ${endTime ? `(${endTime})` : ''}`;
+					})
+					.join('\n\n')}`,
+				ephemeral: true,
+			});
+			if (pMsg instanceof Message) {
+				setTimeout(() => {
+					pMsg.delete().catch((error: unknown) => {
+						console.error(error);
+					});
+				}, 1e4);
+			}
+			return;
+		}
+
 		const pageOptions = new PaginationResolver(
 			(index, paginator) => {
 				paginator.maxLength = this.size / 10;
@@ -193,7 +214,13 @@ export class MusicQueue extends Queue {
 		await pagination.send();
 	}
 
-	getTrackTitle(track: Track): string {
+	getTrackTitle(track: null): null;
+	getTrackTitle(track: Track): string;
+	getTrackTitle(track: Track | null) {
+		if (!track) {
+			return null;
+		}
+
 		const title = track.info.title.length < 50 ? track.info.title : `${track.info.title.slice(0, 47)}...`;
 
 		if (track.info.sourceName === 'flowery-tts') {
