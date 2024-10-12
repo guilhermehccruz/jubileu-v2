@@ -11,6 +11,6 @@ export class LyricsCommand {
 
 	@Slash({ description: 'Busca as letras da música tocando' })
 	async lyrics(interaction: CommandInteraction): Promise<void> {
-		await this.lyricsService.lyrics(interaction);
+		await this.lyricsService.execute(interaction);
 	}
 }

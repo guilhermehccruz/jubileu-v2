@@ -3,7 +3,6 @@ import { EmbedBuilder } from 'discord.js';
 import type { TextChannel } from 'discord.js';
 import { Discord, Once } from 'discordx';
 import type { Client } from 'discordx';
-import { setTimeout } from 'node:timers/promises';
 import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../utils/music/MusicPlayer.js';
@@ -27,7 +26,6 @@ export class ReadyEvent {
 		]);
 
 		// Instantiate music player
-		await setTimeout(5_000);
 		musicPlayer.queueManager = new QueueManager(getLavaNode(client));
 
 		console.log('>> Bot started');

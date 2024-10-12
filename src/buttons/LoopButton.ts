@@ -3,25 +3,15 @@ import { ButtonBuilder, ButtonInteraction, ButtonStyle } from 'discord.js';
 import { ButtonComponent, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../utils/music/MusicPlayer.js';
+import { LoopService } from '../services/LoopService.js';
 
 @Discord()
 @injectable()
 export class LoopButton {
+	constructor(private readonly loopService: LoopService) {}
 	@ButtonComponent({ id: 'btn-loop' })
 	async button(interaction: ButtonInteraction): Promise<void> {
-		const cmd = await musicPlayer.parseCommand(interaction);
-		if (!cmd) {
-			return;
-		}
-
-		const { queue } = cmd;
-
-		queue.setRepeatMode(queue.repeatMode === RepeatMode.REPEAT_ALL ? RepeatMode.OFF : RepeatMode.REPEAT_ALL);
-		await queue.updateControlMessage();
-
-		// delete interaction
-		await interaction.deleteReply();
+		await this.loopService.execute(interaction);
 	}
 
 	static button(isPlaying: boolean, repeatMode: RepeatMode) {

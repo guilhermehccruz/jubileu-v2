@@ -12,7 +12,7 @@ import { MusicQueue } from '../utils/music/MusicQueue.js';
 @Discord()
 @injectable()
 export class LyricsService {
-	async lyrics(interaction: CommandInteraction | ButtonInteraction): Promise<void> {
+	async execute(interaction: CommandInteraction | ButtonInteraction): Promise<void> {
 		const cmd = await musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;

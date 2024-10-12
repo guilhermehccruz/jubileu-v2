@@ -11,7 +11,7 @@ export class LyricsButton {
 
 	@ButtonComponent({ id: 'btn-lyrics' })
 	async button(interaction: ButtonInteraction): Promise<void> {
-		await this.lyricsService.lyrics(interaction);
+		await this.lyricsService.execute(interaction);
 	}
 
 	static button() {

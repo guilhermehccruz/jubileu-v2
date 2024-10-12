@@ -11,6 +11,6 @@ export class LeaveCommand {
 
 	@Slash({ description: 'Sai do canal conectado' })
 	async leave(interaction: CommandInteraction): Promise<void> {
-		await this.leaveService.leave(interaction);
+		await this.leaveService.execute(interaction);
 	}
 }

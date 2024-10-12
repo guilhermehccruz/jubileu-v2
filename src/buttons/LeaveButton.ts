@@ -11,7 +11,7 @@ export class LeaveButton {
 
 	@ButtonComponent({ id: 'btn-leave' })
 	async button(interaction: ButtonInteraction): Promise<void> {
-		await this.leaveService.leave(interaction);
+		await this.leaveService.execute(interaction);
 	}
 
 	static button() {
