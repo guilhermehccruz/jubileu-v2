@@ -2,24 +2,16 @@ import { ButtonBuilder, ButtonInteraction, ButtonStyle } from 'discord.js';
 import { ButtonComponent, Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../utils/music/MusicPlayer.js';
+import { PauseService } from '../services/PauseService.js';
 
 @Discord()
 @injectable()
 export class PauseButton {
+	constructor(private readonly pauseService: PauseService) {}
+
 	@ButtonComponent({ id: 'btn-pause' })
 	async button(interaction: ButtonInteraction): Promise<void> {
-		const cmd = await musicPlayer.parseCommand(interaction);
-		if (!cmd) {
-			return;
-		}
-
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		cmd.queue.isPlaying ? await cmd.queue.pause() : await cmd.queue.resume();
-		await cmd.queue.updateControlMessage();
-
-		// delete interaction
-		await interaction.deleteReply();
+		await this.pauseService.execute(interaction);
 	}
 
 	static button(isPlaying: boolean) {

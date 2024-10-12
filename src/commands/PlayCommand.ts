@@ -92,7 +92,7 @@ export class PlayCommand {
 
 		await interaction.followUp({ embeds: [embed] });
 
-		if (!queue.isPlaying) {
+		if (!queue.currentPlaybackTrack) {
 			await queue.playNext();
 		}
 
