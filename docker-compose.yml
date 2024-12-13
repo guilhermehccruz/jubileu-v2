@@ -10,8 +10,8 @@ services:
             - 2333:2333
         env_file: .env
         restart: always
-    app:
-        container_name: app
+    bot:
+        container_name: bot
         build:
             context: .
         env_file: .env
