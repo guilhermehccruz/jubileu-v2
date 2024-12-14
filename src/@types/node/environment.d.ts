@@ -9,6 +9,7 @@ declare global {
 			READY_CHANNEL_ID: string;
 			SERVERS_CHANNEL_ID: string;
 			SERVERS_CONNECTED_CHANNEL_ID: string;
+			REPORTS_CHANNEL_ID: string;
 
 			LAVALINK_HOST: string;
 			LAVALINK_PORT: number;

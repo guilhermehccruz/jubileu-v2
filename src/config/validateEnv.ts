@@ -9,6 +9,7 @@ const schema = Joi.object({
 	READY_CHANNEL_ID: Joi.number().unsafe().required(),
 	SERVERS_CHANNEL_ID: Joi.number().unsafe().required(),
 	SERVERS_CONNECTED_CHANNEL_ID: Joi.number().unsafe().required(),
+	REPORTS_CHANNEL_ID: Joi.number().unsafe().required(),
 
 	LAVALINK_HOST: Joi.string().required(),
 	LAVALINK_PORT: Joi.number().required(),
