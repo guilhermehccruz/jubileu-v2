@@ -1,4 +1,4 @@
-import { ButtonInteraction } from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import { Discord, Slash } from 'discordx';
 import { injectable } from 'tsyringe';
 
@@ -10,7 +10,7 @@ export class LoopCommand {
 	constructor(private readonly loopService: LoopService) {}
 
 	@Slash({ description: 'Coloca ou tira a fila do modo loop' })
-	async loop(interaction: ButtonInteraction): Promise<void> {
+	async loop(interaction: CommandInteraction): Promise<void> {
 		await this.loopService.execute(interaction);
 	}
 }
