@@ -32,6 +32,10 @@ export class ReadyEvent {
 	}
 
 	private async sendReadyMessage(client: Client) {
+		if (client.user?.id !== process.env.JUBILEU_ID) {
+			return;
+		}
+
 		// Send ready message
 		const readyChannel = client.channels.cache.get(process.env.READY_CHANNEL_ID) as TextChannel;
 
@@ -47,6 +51,10 @@ export class ReadyEvent {
 	}
 
 	private async sendServersMessage(client: Client) {
+		if (client.user?.id !== process.env.JUBILEU_ID) {
+			return;
+		}
+
 		// Send servers message
 		const serversChannel = client.channels.cache.get(process.env.SERVERS_CHANNEL_ID) as TextChannel;
 
