@@ -7,7 +7,7 @@ import { MusicQueue } from './MusicQueue.js';
 export class MusicPlayer {
 	queueManager: QueueManager | null = null;
 
-	getQueue(guildId: string): MusicQueue | null {
+	private getQueue(guildId: string): MusicQueue | null {
 		if (!this.queueManager) {
 			return null;
 		}

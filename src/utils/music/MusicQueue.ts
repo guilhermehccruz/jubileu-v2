@@ -29,6 +29,22 @@ export class MusicQueue extends Queue {
 		}, 10_000);
 	}
 
+	async exit() {
+		await super.exit();
+
+		if (!this.channel) {
+			return;
+		}
+
+		const message = await this.channel.send('>>> Se encontrou algum bug, reporte com o comando `/report`');
+
+		setTimeout(() => {
+			void message.delete().catch((error: unknown) => {
+				console.error(error);
+			});
+		}, 30_000);
+	}
+
 	private controlsRow(): ActionRowBuilder<MessageActionRowComponentBuilder>[] {
 		return [
 			new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
