@@ -5,8 +5,8 @@ server: # REST and WS server
         enabled: false # Whether to enable HTTP/2 support
 lavalink:
     plugins:
-        - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.3.0"
-        - dependency: "dev.lavalink.youtube:youtube-plugin:1.11.1"
+        - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.4.1"
+        - dependency: "dev.lavalink.youtube:youtube-plugin:1.11.4"
         - dependency: "com.github.topi314.lavalyrics:lavalyrics-plugin:1.0.0"
     server:
         password: ""
