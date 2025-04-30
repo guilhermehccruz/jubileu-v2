@@ -71,11 +71,12 @@ export class LyricsService {
 
 			const title = queue.currentPlaybackTrack.info.title.replaceAll(/\(.*\)/g, '');
 
-			const lavaLyricsResult = await queue.getCurrentPlaybackLyrics().catch(() => undefined);
+			//* temporarily disable lava lyrics
+			// const lavaLyricsResult = await queue.getCurrentPlaybackLyrics().catch(() => undefined);
 
-			if (lavaLyricsResult) {
-				return lavaLyricsResult.lines.map((line) => line.line).join('\n');
-			}
+			// if (lavaLyricsResult) {
+			// 	return lavaLyricsResult.lines.map((line) => line.line).join('\n');
+			// }
 
 			//* temporarily disable lyrics-searcher
 			// const lyricsSearcherResult = await lyricsSearcher('', title).catch(() => undefined);
@@ -92,7 +93,7 @@ export class LyricsService {
 				const lyrics = await geniusResult[0].lyrics().catch(() => undefined);
 
 				if (lyrics) {
-					return lyrics;
+					return lyrics.split('\n').slice(1).join('\n');
 				}
 			}
 

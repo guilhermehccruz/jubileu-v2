@@ -8,7 +8,7 @@ lavalink:
         - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.6.0"
         - dependency: "dev.lavalink.youtube:youtube-plugin:0e5cfca4e88c32db430ce76e6866b13035c85d22"
           snapshot: true
-        - dependency: "com.github.topi314.lavalyrics:lavalyrics-plugin:1.0.0"
+        # - dependency: "com.github.topi314.lavalyrics:lavalyrics-plugin:1.0.0"
     server:
         password: ""
         sources:
@@ -107,11 +107,11 @@ plugins:
         pot:
             token: ${PO_TOKEN}
             visitorData: ${VISITOR_DATA}
-    lavalyrics:
-        # sources is used to sort the different lyrics sources by priority (from highest to lowest)
-        sources:
-            - spotify
-            - youtube
+    # lavalyrics:
+    #     # sources is used to sort the different lyrics sources by priority (from highest to lowest)
+    #     sources:
+    #         - spotify
+    #         - youtube
     # lyrics:
     #     countryCode: BR #country code for resolving isrc tracks
     #     # geniusApiKey: "Your Genius Client Access Token" # leave this out to disable genius searching. Get your api key (Client Access Token) from https://genius.com/api-clients
