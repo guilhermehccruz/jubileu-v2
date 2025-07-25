@@ -14,7 +14,9 @@ async function run() {
 		.setCashingSingletonFactory(instanceCachingFactory)
 		.setInjector(container);
 
-	await importx(`${dirname(import.meta.url)}/{events,commands,buttons,services}/**/*.{ts,js}`);
+	//* import the services first, as other classes depend on them
+	await importx(`${dirname(import.meta.url)}/{services}/**/*.{ts,js}`);
+	await importx(`${dirname(import.meta.url)}/{events,commands,buttons}/**/*.{ts,js}`);
 
 	const client = new Client({
 		// To only use global commands (use @Guild for specific guild command), comment this line
