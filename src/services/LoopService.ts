@@ -3,7 +3,7 @@ import { ButtonInteraction, CommandInteraction } from 'discord.js';
 import { Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../utils/music/MusicPlayer.js';
+import { musicPlayer } from '../core/music/MusicPlayer.js';
 
 @Discord()
 @injectable()

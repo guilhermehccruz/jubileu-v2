@@ -5,8 +5,8 @@ import { Discord, Once } from 'discordx';
 import type { Client } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../utils/music/MusicPlayer.js';
-import { getLavaNode } from '../utils/music/node.js';
+import { getLavaNode } from '../core/music/lavaNode.js';
+import { musicPlayer } from '../core/music/MusicPlayer.js';
 
 @Discord()
 @injectable()

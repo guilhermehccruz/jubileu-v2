@@ -3,7 +3,7 @@ import type { CommandInteraction } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../utils/music/MusicPlayer.js';
+import { musicPlayer } from '../core/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
@@ -34,12 +34,15 @@ export class MoveCommand {
 		const { queue } = cmd;
 
 		if (initialPosition < 1 || initialPosition > queue.size) {
-			await interaction.followUp('> Posição inicial não encontrada na fila');
+			await interaction.followUp({ content: '> Posição inicial não encontrada na fila', ephemeral: true });
 			return;
 		}
 
 		if (initialPosition === finalPosition) {
-			await interaction.followUp('> Posição inicial não pode ser a mesma da posição final');
+			await interaction.followUp({
+				content: '> Posição inicial não pode ser a mesma da posição final',
+				ephemeral: true,
+			});
 			return;
 		}
 

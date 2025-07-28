@@ -17,7 +17,7 @@ export class InteractionCreateEvent {
 		} catch (error) {
 			console.error(error);
 			if (interaction.isCommand() && !interaction.replied) {
-				await interaction.followUp('> Ocorreu um erro');
+				await interaction.followUp({ content: '> Ocorreu um erro', ephemeral: true });
 			}
 		}
 	}

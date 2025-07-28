@@ -6,8 +6,8 @@ import { find } from 'llyrics';
 import { injectable } from 'tsyringe';
 // import lyricsSearcher from 'lyrics-searcher';
 
-import { musicPlayer } from '../utils/music/MusicPlayer.js';
-import { MusicQueue } from '../utils/music/MusicQueue.js';
+import { musicPlayer } from '../core/music/MusicPlayer.js';
+import { MusicQueue } from '../core/music/MusicQueue.js';
 
 @Discord()
 @injectable()
@@ -21,14 +21,17 @@ export class LyricsService {
 		const { queue } = cmd;
 
 		if (!queue.currentPlaybackTrack) {
-			await interaction.followUp('> Não tem nada tocando');
+			await interaction.followUp({ content: '> Não tem nada tocando', ephemeral: true });
 
 			await queue.exit();
 			return;
 		}
 
 		if (!queue.currentPlaybackTrack.info.isSeekable) {
-			await interaction.followUp('> Não é possível pegar a letra de uma livestream.');
+			await interaction.followUp({
+				content: '> Não é possível pegar a letra de uma livestream.',
+				ephemeral: true,
+			});
 			return;
 		}
 
@@ -40,7 +43,7 @@ export class LyricsService {
 		let lyrics = await this.getLyrics(queue);
 
 		if (!lyrics) {
-			await interaction.followUp('> Letra não encontrada');
+			await interaction.followUp({ content: '> Letra não encontrada', ephemeral: true });
 			return;
 		}
 

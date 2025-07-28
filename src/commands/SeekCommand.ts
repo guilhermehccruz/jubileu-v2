@@ -3,7 +3,7 @@ import type { CommandInteraction } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../utils/music/MusicPlayer.js';
+import { musicPlayer } from '../core/music/MusicPlayer.js';
 @Discord()
 @injectable()
 export class SeekCommand {
@@ -26,17 +26,20 @@ export class SeekCommand {
 		const { queue } = cmd;
 
 		if (!queue.currentPlaybackTrack) {
-			await interaction.followUp('> Não tem nada tocando');
+			await interaction.followUp({ content: '> Não tem nada tocando', ephemeral: true });
 			return;
 		}
 
 		if (!queue.currentPlaybackTrack.info.isSeekable) {
-			await interaction.followUp('> Não é possível alterar o tempo de uma livestream.');
+			await interaction.followUp({
+				content: '> Não é possível alterar o tempo de uma livestream.',
+				ephemeral: true,
+			});
 			return;
 		}
 
 		if (seconds * 1000 > queue.currentPlaybackTrack.info.length) {
-			await interaction.followUp('> Segundos excede a duração da música');
+			await interaction.followUp({ content: '> O tempo excede a duração da música', ephemeral: true });
 			return;
 		}
 

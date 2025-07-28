@@ -2,7 +2,13 @@ import { RequestType, Track, Lyrics, Node } from '@discordx/lava-player';
 import { Queue, fromMS } from '@discordx/lava-queue';
 import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagination';
 import { ActionRowBuilder, EmbedBuilder, Message } from 'discord.js';
-import type { ButtonInteraction, CommandInteraction, MessageActionRowComponentBuilder, TextChannel } from 'discord.js';
+import type {
+	BaseMessageOptions,
+	ButtonInteraction,
+	CommandInteraction,
+	MessageActionRowComponentBuilder,
+	TextChannel,
+} from 'discord.js';
 
 import { LeaveButton } from '../../buttons/LeaveButton.js';
 import { LoopButton } from '../../buttons/LoopButton.js';
@@ -29,6 +35,14 @@ export class MusicQueue extends Queue {
 		}, 10_000);
 	}
 
+	private async deleteMessage(message?: Message | null): Promise<void> {
+		if (message?.deletable) {
+			await message.delete().catch((error: unknown) => {
+				console.log(error);
+			});
+		}
+	}
+
 	async exit() {
 		await super.exit();
 
@@ -38,11 +52,7 @@ export class MusicQueue extends Queue {
 
 		const message = await this.channel.send('>>> Se encontrou algum bug, reporte com o comando `/report`');
 
-		setTimeout(() => {
-			void message.delete().catch((error: unknown) => {
-				console.error(error);
-			});
-		}, 30_000);
+		setTimeout(() => void this.deleteMessage(message), 30_000);
 	}
 
 	private controlsRow(): ActionRowBuilder<MessageActionRowComponentBuilder>[] {
@@ -63,22 +73,18 @@ export class MusicQueue extends Queue {
 		];
 	}
 
-	public async updateControlMessage(options?: { force?: boolean; text?: string }): Promise<void> {
+	async updateControlMessage(options?: { force?: boolean; text?: string }): Promise<void> {
 		if (this.lockUpdate || !this.channel) {
 			return;
 		}
 
 		this.lockUpdate = true;
-		const embed = new EmbedBuilder();
-		embed.setTitle('Controles da música');
+
+		const embed = new EmbedBuilder().setTitle('Controles da música');
 
 		if (!this.currentPlaybackTrack) {
-			if (this.lastControlMessage) {
-				await this.lastControlMessage.delete().catch((error: unknown) => {
-					console.error(error);
-				});
-				this.lastControlMessage = undefined;
-			}
+			await this.deleteMessage(this.lastControlMessage);
+			this.lastControlMessage = undefined;
 
 			this.lockUpdate = false;
 			return;
@@ -100,28 +106,25 @@ export class MusicQueue extends Queue {
 			value: this.nextTrack ? this.getTrackTitle(this.nextTrack) : 'Nenhuma',
 		});
 
-		const pMsg = {
+		const messageOptions: BaseMessageOptions = {
 			components: this.controlsRow(),
 			content: options?.text,
 			embeds: [embed],
 		};
 
-		if (!this.lastControlMessage || this.lastControlMessage.id !== this.channel.lastMessageId || options?.force) {
-			if (this.lastControlMessage) {
-				await this.lastControlMessage.delete().catch((error: unknown) => {
-					console.error(error);
-				});
-				this.lastControlMessage = undefined;
-			}
+		if (this.lastControlMessage?.id !== this.channel.lastMessageId || options?.force) {
+			await this.deleteMessage(this.lastControlMessage);
+			this.lastControlMessage = undefined;
 
-			const msg = await this.channel.send(pMsg).catch((error: unknown) => {
+			const message = await this.channel.send(messageOptions).catch((error: unknown) => {
 				console.error(error);
 			});
-			if (msg) {
-				this.lastControlMessage = msg;
+
+			if (message) {
+				this.lastControlMessage = message;
 			}
 		} else {
-			await this.lastControlMessage.edit(pMsg).catch((error: unknown) => {
+			await this.lastControlMessage.edit(messageOptions).catch((error: unknown) => {
 				console.error(error);
 			});
 		}
@@ -129,40 +132,30 @@ export class MusicQueue extends Queue {
 		this.lockUpdate = false;
 	}
 
-	public async view(interaction: ButtonInteraction | CommandInteraction): Promise<void> {
+	async view(interaction: ButtonInteraction | CommandInteraction): Promise<void> {
 		if (!this.currentPlaybackTrack) {
-			const pMsg = await interaction.followUp({
+			const message = await interaction.followUp({
 				content: '> Não foi possível processar a fila, tente novamente mais tarde',
 				ephemeral: true,
 			});
 
-			if (pMsg instanceof Message) {
-				setTimeout(() => {
-					pMsg.delete().catch((error: unknown) => {
-						console.error(error);
-					});
-				}, 3000);
-			}
+			setTimeout(() => void this.deleteMessage(message), 3_000);
 			return;
 		}
 
 		if (!this.size) {
-			const pMsg = await interaction.followUp({
+			const message = await interaction.followUp({
 				content: `> Tocando **${this.currentPlaybackTrack.info.title}**`,
 				ephemeral: true,
 			});
-			if (pMsg instanceof Message) {
-				setTimeout(() => {
-					pMsg.delete().catch((error: unknown) => {
-						console.error(error);
-					});
-				}, 1e4);
-			}
+
+			setTimeout(() => void this.deleteMessage(message), 10_000);
+
 			return;
 		}
 
 		if (this.size <= 10) {
-			const pMsg = await interaction.followUp({
+			const message = await interaction.followUp({
 				content: `> Tocando **${this.currentPlaybackTrack.info.title}**\n\n${this.tracks
 					.map((track, index) => {
 						const endTime = this.getEndTime(track);
@@ -172,13 +165,9 @@ export class MusicQueue extends Queue {
 					.join('\n\n')}`,
 				ephemeral: true,
 			});
-			if (pMsg instanceof Message) {
-				setTimeout(() => {
-					pMsg.delete().catch((error: unknown) => {
-						console.error(error);
-					});
-				}, 1e4);
-			}
+
+			setTimeout(() => void this.deleteMessage(message), 10_000);
+
 			return;
 		}
 
@@ -211,13 +200,7 @@ export class MusicQueue extends Queue {
 
 		const pagination = new Pagination(interaction, pageOptions, {
 			enableExit: true,
-			onTimeout: (_, message) => {
-				if (message.deletable) {
-					message.delete().catch((error: unknown) => {
-						console.error(error);
-					});
-				}
-			},
+			onTimeout: (_, message) => void this.deleteMessage(message),
 			time: 60_000,
 			type: Math.round(this.size / 10) <= 5 ? PaginationType.Button : PaginationType.SelectMenu,
 			start: { label: 'Início' },
@@ -290,7 +273,7 @@ export class MusicQueue extends Queue {
 	 * Requires [LavaLyrics](https://github.com/topi314/LavaLyrics) plugin and a supported
 	 * [lyrics source](https://github.com/topi314/LavaLyrics?tab=readme-ov-file#supported-sources) plugin.
 	 */
-	public getCurrentPlaybackLyrics(skipTrackSource = true): Promise<Lyrics | null> {
+	getCurrentPlaybackLyrics(skipTrackSource = true): Promise<Lyrics | null> {
 		const uri = `sessions/${this.sessionId}/players/${this.guildId}/track/lyrics?skipTrackSource=${String(skipTrackSource)}`;
 		const url = this.http.url(uri);
 		return this.http.request(RequestType.GET, url);

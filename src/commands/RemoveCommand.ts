@@ -3,7 +3,7 @@ import type { CommandInteraction } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../utils/music/MusicPlayer.js';
+import { musicPlayer } from '../core/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
@@ -27,7 +27,7 @@ export class RemoveCommand {
 		const { queue } = cmd;
 
 		if (position < 1 || position > queue.size) {
-			await interaction.followUp('> Posição não encontrada na fila');
+			await interaction.followUp({ content: '> Posição não encontrada na fila', ephemeral: true });
 			return;
 		}
 

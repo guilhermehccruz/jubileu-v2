@@ -4,7 +4,7 @@ import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
 import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../utils/music/MusicPlayer.js';
+import { musicPlayer } from '../core/music/MusicPlayer.js';
 
 @Discord()
 @injectable()
@@ -60,6 +60,7 @@ export class PlayCommand {
 		if (loadType === LoadType.ERROR) {
 			await interaction.followUp({
 				content: `> Ocorreu um erro: ${data.cause}`,
+				ephemeral: true,
 			});
 			return;
 		}
@@ -67,6 +68,7 @@ export class PlayCommand {
 		if (loadType === LoadType.EMPTY) {
 			await interaction.followUp({
 				content: '> Não encontramos nada com o identificador utilizado',
+				ephemeral: true,
 			});
 			return;
 		}

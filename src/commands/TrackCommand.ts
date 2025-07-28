@@ -20,7 +20,10 @@ export class TrackCommand {
 
 		const [tracking] = await rastreio(code);
 		if (!tracking.sucesso) {
-			await interaction.followUp(`> ${tracking.mensagem ?? 'Ocorreu um erro na busca dos dados'}`);
+			await interaction.followUp({
+				content: `> ${tracking.mensagem ?? 'Ocorreu um erro na busca dos dados'}`,
+				ephemeral: true,
+			});
 			return;
 		}
 
