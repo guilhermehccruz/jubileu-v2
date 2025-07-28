@@ -14,7 +14,13 @@ services:
         container_name: bot
         build:
             context: .
+            target: development
+        volumes:
+            - ./src:/usr/app/src
         env_file: .env
+        environment:
+            - LAVALINK_HOST=lavalink
         depends_on:
             - lavalink
         restart: always
+        command: ["pnpm", "start:dev"]
