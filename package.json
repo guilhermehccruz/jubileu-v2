@@ -2,13 +2,13 @@
 	"name": "jubileu-v2",
 	"version": "1.0.0",
 	"description": "",
-	"main": "src/index.ts",
+	"main": "src/main.ts",
 	"type": "module",
 	"scripts": {
 		"prebuild": "rimraf dist",
 		"build": "tsc",
-		"start": "node dist/index.js",
-		"start:dev": "node --watch --experimental-specifier-resolution=node --loader ts-node/esm/transpile-only src/index.ts",
+		"start": "node dist/main.js",
+		"start:dev": "node --watch --experimental-specifier-resolution=node --loader ts-node/esm/transpile-only src/main.ts",
 		"lint": "eslint \"src/**/*.ts\" --fix --max-warnings=0"
 	},
 	"repository": {
@@ -42,23 +42,23 @@
 		"eslint-plugin-prettier": "^5.2.1",
 		"prettier": "^3.3.3",
 		"ts-node": "^10.9.2",
-		"tslib": "^2.8.1",
 		"typescript": "^5.7.2"
 	},
 	"dependencies": {
-		"@discordx/importer": "^1.3.1",
-		"@discordx/lava-player": "^2.1.3",
-		"@discordx/lava-queue": "^4.0.6",
-		"@discordx/pagination": "^3.5.5",
-		"discord.js": "^14.16.3",
-		"discordx": "^11.12.2",
-		"dotenv": "^16.4.7",
+		"@discordx/importer": "^1.3.3",
+		"@discordx/lava-player": "^2.1.5",
+		"@discordx/lava-queue": "^4.0.9",
+		"@discordx/pagination": "^4.0.1",
+		"discord.js": "^14.21.0",
+		"discordx": "^11.12.5",
+		"dotenv": "^17.2.1",
 		"genius-lyrics": "^4.4.7",
 		"joi": "^17.13.3",
 		"llyrics": "^1.1.7",
 		"rastreio-correios": "^1.1.7",
 		"reflect-metadata": "^0.2.2",
 		"rimraf": "^6.0.1",
-		"tsyringe": "^4.8.0"
+		"tslib": "^2.8.1",
+		"tsyringe": "^4.10.0"
 	}
 }

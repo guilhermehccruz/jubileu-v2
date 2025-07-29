@@ -1,6 +1,6 @@
 import { RequestType, Track, Lyrics, Node } from '@discordx/lava-player';
 import { Queue, fromMS } from '@discordx/lava-queue';
-import { Pagination, PaginationResolver, PaginationType } from '@discordx/pagination';
+import { Pagination, PaginationResolver } from '@discordx/pagination';
 import { ActionRowBuilder, EmbedBuilder, Message } from 'discord.js';
 import type {
 	BaseMessageOptions,
@@ -30,16 +30,14 @@ export class MusicQueue extends Queue {
 		super(node, guildId);
 		setInterval(() => {
 			this.updateControlMessage().catch((error: unknown) => {
-				console.log(error);
+				console.error(error);
 			});
 		}, 10_000);
 	}
 
-	private async deleteMessage(message?: Message | null): Promise<void> {
+	async deleteMessage(message?: Message | null): Promise<void> {
 		if (message?.deletable) {
-			await message.delete().catch((error: unknown) => {
-				console.log(error);
-			});
+			await message.delete().catch(() => null);
 		}
 	}
 
@@ -171,43 +169,60 @@ export class MusicQueue extends Queue {
 			return;
 		}
 
-		const pageOptions = new PaginationResolver(
-			(index, paginator) => {
-				paginator.maxLength = this.size / 10;
-				if (index > paginator.maxLength) {
-					paginator.currentPage = 0;
-				}
+		const pagesCount = Math.ceil(this.size / 10);
 
-				const currentPage = paginator.currentPage;
+		const pageOptions = new PaginationResolver((index, paginator) => {
+			paginator.maxLength = pagesCount;
+			if (index > paginator.maxLength) {
+				paginator.currentPage = 0;
+			}
 
-				const queue = this.tracks
-					.slice(currentPage * 10, currentPage * 10 + 10)
-					.map((track, index) => {
-						const endTime = this.getEndTime(track);
+			const currentPage = paginator.currentPage;
 
-						return `${currentPage * 10 + index + 1}. ${this.getTrackTitle(track)} ${endTime ? `(${endTime})` : ''}`;
-					})
-					.join('\n\n');
+			const queue = this.tracks
+				.slice(currentPage * 10, currentPage * 10 + 10)
+				.map((track, index) => {
+					const endTime = this.getEndTime(track);
 
-				return {
-					content: `> Tocando **${this.getTrackTitle(this.currentPlaybackTrack!)}** de ${
-						this.size + 1
-					} músicas\n\n${queue}`,
-				};
-			},
-			Math.round(this.size / 10),
-		);
+					console.log({
+						message: `${currentPage * 10 + index + 1}. ${this.getTrackTitle(track)} ${endTime ? `(${endTime})` : ''}`,
+					});
+
+					return `${currentPage * 10 + index + 1}. ${this.getTrackTitle(track)} ${endTime ? `(${endTime})` : ''}`;
+				})
+				.join('\n\n');
+
+			return {
+				content: `> Tocando **${this.getTrackTitle(this.currentPlaybackTrack!)}** de ${
+					this.size + 1
+				} músicas\n\n${queue}`,
+			};
+		}, pagesCount);
 
 		const pagination = new Pagination(interaction, pageOptions, {
 			enableExit: true,
 			onTimeout: (_, message) => void this.deleteMessage(message),
 			time: 60_000,
-			type: Math.round(this.size / 10) <= 5 ? PaginationType.Button : PaginationType.SelectMenu,
-			start: { label: 'Início' },
-			previous: { label: 'Anterior' },
-			next: { label: 'Próximo' },
-			end: { label: 'Fim' },
-			exit: { label: 'Fechar' },
+			buttons: {
+				previous: {
+					label: 'Anterior',
+				},
+				next: {
+					label: 'Próximo',
+				},
+				exit: {
+					emoji: '',
+					label: 'Fechar',
+				},
+			},
+			selectMenu: {
+				labels: {
+					start: 'Primeira página',
+					end: 'Última página',
+				},
+				pageText: 'Página {page}',
+				rangePlaceholderFormat: '',
+			},
 		});
 
 		await pagination.send();
