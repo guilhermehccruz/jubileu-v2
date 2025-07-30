@@ -1,6 +1,6 @@
 import { QueueManager } from '@discordx/lava-queue';
 import type { ButtonInteraction, CommandInteraction, Guild, TextChannel } from 'discord.js';
-import { GuildMember } from 'discord.js';
+import { GuildMember, PartialGroupDMChannel } from 'discord.js';
 
 import { MusicQueue } from './MusicQueue.js';
 
@@ -21,7 +21,12 @@ export class MusicPlayer {
 			await interaction.deferReply();
 		}
 
-		if (!interaction.channel || !(interaction.member instanceof GuildMember) || !interaction.guild) {
+		if (
+			!interaction.channel ||
+			!(interaction.member instanceof GuildMember) ||
+			!interaction.guild ||
+			interaction.channel instanceof PartialGroupDMChannel
+		) {
 			await interaction.followUp({
 				content: '> Não foi possível processar o comando. Tente novamente',
 				ephemeral: true,
