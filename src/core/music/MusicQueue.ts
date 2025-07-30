@@ -89,7 +89,7 @@ export class MusicQueue extends Queue {
 		}
 
 		embed.addFields({
-			name: 'Agora tocando' + (this.size > 2 ? ` (Total: ${this.size} músicas na fila)` : ''),
+			name: 'Tocando agora',
 			value: this.getTrackTitle(this.currentPlaybackTrack),
 		});
 
@@ -103,6 +103,8 @@ export class MusicQueue extends Queue {
 			name: 'Próxima música',
 			value: this.nextTrack ? this.getTrackTitle(this.nextTrack) : 'Nenhuma',
 		});
+
+		this.getTotalMusicsInQueueText(embed);
 
 		const messageOptions: BaseMessageOptions = {
 			components: this.controlsRow(),
@@ -292,5 +294,40 @@ export class MusicQueue extends Queue {
 		const uri = `sessions/${this.sessionId}/players/${this.guildId}/track/lyrics?skipTrackSource=${String(skipTrackSource)}`;
 		const url = this.http.url(uri);
 		return this.http.request(RequestType.GET, url);
+	}
+
+	private getTotalMusicsInQueueText(embed: EmbedBuilder): void {
+		if (!this.size) {
+			return;
+		}
+
+		let totalTimeLeft = this.isSong(this.currentPlaybackTrack)
+			? this.currentPlaybackTrack!.info.length - this.currentPlaybackPosition
+			: 0;
+
+		for (const track of this.tracks) {
+			if (!this.isSong(track)) {
+				continue;
+			}
+
+			totalTimeLeft += track.info.length;
+		}
+
+		embed.addFields(
+			{
+				name: 'Músicas na fila',
+				value: this.size.toString(),
+				inline: true,
+			},
+			{
+				name: 'Tempo total da fila',
+				value: fromMS(totalTimeLeft),
+				inline: true,
+			},
+		);
+	}
+
+	private isSong(track: Track | null) {
+		return track && !track.info.isStream && track.info.sourceName !== 'flowery-tts';
 	}
 }
