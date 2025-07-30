@@ -1,29 +1,43 @@
 import { ApplicationCommandOptionType } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { Discord, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../core/music/MusicPlayer.js';
+import { SlashWithAliases } from '../decorators/SlashWithAliases.js';
 
 @Discord()
 @injectable()
 export class MoveCommand {
-	@Slash({ description: 'Troca a música de lugar, tirando de "posição-inicial" e colocando em "posição-final"' })
+	@SlashWithAliases(
+		{
+			name: 'move',
+			description: 'Move the song from "initial position" to "final position"',
+			descriptionLocalizations: {
+				'pt-BR': 'Troca a posição da música, tirando de "posição-inicial" e colocando em "posição-final"',
+			},
+		},
+		['mover'],
+	)
 	async move(
 		@SlashOption({
-			name: 'posição-inicial',
-			description: 'Posição que a música está na fila',
+			name: 'current-position',
+			nameLocalizations: { 'pt-BR': 'posição-atual' },
+			description: 'Current position in the queue',
+			descriptionLocalizations: { 'pt-BR': 'Posição atual da música na fila' },
 			required: true,
 			type: ApplicationCommandOptionType.String,
 		})
-		initialPosition: number,
+		currentPosition: number,
 		@SlashOption({
-			name: 'posição-final',
-			description: 'Posição que a música vai ficar na fila',
+			name: 'new-position',
+			nameLocalizations: { 'pt-BR': 'nova-posição' },
+			description: 'New song position in the queue',
+			descriptionLocalizations: { 'pt-BR': 'Nova posição da música na fila' },
 			required: true,
 			type: ApplicationCommandOptionType.String,
 		})
-		finalPosition: number,
+		newPosition: number,
 		interaction: CommandInteraction,
 	): Promise<void> {
 		const cmd = await musicPlayer.parseCommand(interaction);
@@ -33,12 +47,12 @@ export class MoveCommand {
 
 		const { queue } = cmd;
 
-		if (initialPosition < 1 || initialPosition > queue.size) {
+		if (currentPosition < 1 || currentPosition > queue.size) {
 			await interaction.followUp({ content: '> Posição inicial não encontrada na fila', ephemeral: true });
 			return;
 		}
 
-		if (initialPosition === finalPosition) {
+		if (currentPosition === newPosition) {
 			await interaction.followUp({
 				content: '> Posição inicial não pode ser a mesma da posição final',
 				ephemeral: true,
@@ -46,13 +60,13 @@ export class MoveCommand {
 			return;
 		}
 
-		if (finalPosition < 1) {
-			finalPosition = 1;
-		} else if (finalPosition > queue.size) {
-			finalPosition = queue.size;
+		if (newPosition < 1) {
+			newPosition = 1;
+		} else if (newPosition > queue.size) {
+			newPosition = queue.size;
 		}
 
-		queue.changeTrackPosition(initialPosition - 1, finalPosition - 1);
+		queue.changeTrackPosition(currentPosition - 1, newPosition - 1);
 
 		await interaction.followUp('> Música movida');
 		return;

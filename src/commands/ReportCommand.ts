@@ -1,15 +1,22 @@
 import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, TextChannel } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { Discord, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
+
+import { SlashWithAliases } from '../decorators/SlashWithAliases';
 
 @Discord()
 @injectable()
 export class ReportCommand {
-	@Slash({ description: 'Reporta uma mensagem de bug' })
+	@SlashWithAliases(
+		{ name: 'report', description: 'Report bug', descriptionLocalizations: { 'pt-BR': 'Reporta um bug' } },
+		['bug'],
+	)
 	async report(
 		@SlashOption({
-			name: 'descrição',
-			description: 'Descreva o bug e a situação em que ele aconteceu',
+			name: 'description',
+			nameLocalizations: { 'pt-BR': 'descrição' },
+			description: 'Describe the bug and how  it happened',
+			descriptionLocalizations: { 'pt-BR': 'Descreva o bug e a situação em que ele aconteceu' },
 			required: true,
 			type: ApplicationCommandOptionType.String,
 		})

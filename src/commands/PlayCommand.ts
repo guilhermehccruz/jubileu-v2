@@ -1,10 +1,11 @@
 import { LoadType } from '@discordx/lava-player';
 import type { CommandInteraction } from 'discord.js';
 import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
-import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
+import { Discord, SlashChoice, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../core/music/MusicPlayer.js';
+import { SlashWithAliases } from '../decorators/SlashWithAliases.js';
 
 @Discord()
 @injectable()
@@ -16,11 +17,22 @@ export class PlayCommand {
 	 * Youtube, Soundcloud, Spotify, Bandcamp, Vimeo e Twitch
 	 *
 	 */
-	@Slash({ description: 'Toca o audio do link enviado ou procura o que foi digitado.' })
+	@SlashWithAliases(
+		{
+			name: 'play',
+			description: 'Play the song from the provided link or search based on the input',
+			descriptionLocalizations: {
+				'pt-BR': 'Toca a partir do link enviado ou procura o que foi digitado',
+			},
+		},
+		['tocar'],
+	)
 	async play(
 		@SlashOption({
-			name: 'pesquisa',
-			description: 'O que o bot deve pesquisar',
+			name: 'input',
+			nameLocalizations: { 'pt-BR': 'pesquisa' },
+			description: 'What should be played',
+			descriptionLocalizations: { 'pt-BR': 'O que deve tocar' },
 			required: true,
 			type: ApplicationCommandOptionType.String,
 		})

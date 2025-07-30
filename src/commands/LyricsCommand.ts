@@ -1,7 +1,8 @@
 import type { CommandInteraction } from 'discord.js';
-import { Discord, Slash } from 'discordx';
+import { Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
+import { SlashWithAliases } from '../decorators/SlashWithAliases.js';
 import { LyricsService } from '../services/LyricsService.js';
 
 @Discord()
@@ -9,7 +10,14 @@ import { LyricsService } from '../services/LyricsService.js';
 export class LyricsCommand {
 	constructor(private readonly lyricsService: LyricsService) {}
 
-	@Slash({ description: 'Busca as letras da música tocando' })
+	@SlashWithAliases(
+		{
+			name: 'lyrics',
+			description: 'Search lyrics of the current song',
+			descriptionLocalizations: { 'pt-BR': 'Busca as letras da música tocando' },
+		},
+		['letra'],
+	)
 	async lyrics(interaction: CommandInteraction): Promise<void> {
 		await this.lyricsService.execute(interaction);
 	}

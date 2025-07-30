@@ -1,17 +1,27 @@
 import { ApplicationCommandOptionType } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { Discord, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../core/music/MusicPlayer.js';
+import { SlashWithAliases } from '../decorators/SlashWithAliases.js';
 
 @Discord()
 @injectable()
 export class RemoveCommand {
-	@Slash({ description: 'Remove a música da fila na posição digitada' })
+	@SlashWithAliases(
+		{
+			name: 'remove',
+			nameLocalizations: { 'pt-BR': 'remover' },
+			description: 'Removes the song from the indicated positions',
+			descriptionLocalizations: { 'pt-BR': 'Remove a música da fila na posição digitada' },
+		},
+		['remover'],
+	)
 	async remove(
 		@SlashOption({
-			name: 'posição',
+			name: 'position',
+			nameLocalizations: { 'pt-BR': 'posição' },
 			description: 'Posição que a música está na fila',
 			required: true,
 			type: ApplicationCommandOptionType.Integer,

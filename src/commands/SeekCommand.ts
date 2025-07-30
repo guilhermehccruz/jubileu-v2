@@ -1,17 +1,22 @@
 import { ApplicationCommandOptionType } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { Discord, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../core/music/MusicPlayer.js';
+import { SlashWithAliases } from '../decorators/SlashWithAliases.js';
 @Discord()
 @injectable()
 export class SeekCommand {
-	@Slash({ description: 'Toca a música a partir do segundo digitado' })
+	@SlashWithAliases({ name: 'seek', description: 'Toca a música a partir do segundo digitado' }, [
+		'tocar-a-partir-de',
+	])
 	async seek(
 		@SlashOption({
-			name: 'segundos',
-			description: 'O segundo que a música deve começar',
+			name: 'seconds',
+			nameLocalizations: { 'pt-BR': 'segundos' },
+			description: 'The second the music should start playing',
+			descriptionLocalizations: { 'pt-BR': 'O segundo que a música deve começar a tocar' },
 			required: true,
 			type: ApplicationCommandOptionType.Integer,
 		})

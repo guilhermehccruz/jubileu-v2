@@ -1,15 +1,26 @@
 import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { Discord, SlashOption } from 'discordx';
 import { rastreio } from 'rastreio-correios';
+
+import { SlashWithAliases } from '../decorators/SlashWithAliases';
 
 @Discord()
 export class TrackCommand {
-	@Slash({ description: 'Pesquisa o status de entrega do correio' })
+	@SlashWithAliases(
+		{
+			name: 'track',
+			description: 'Searches for the status of a package',
+			descriptionLocalizations: { 'pt-BR': 'Pesquisa o status de entrega do correio' },
+		},
+		['rastrear'],
+	)
 	async track(
 		@SlashOption({
-			name: 'código',
-			description: 'Código de rastreio do pedido',
+			name: 'code',
+			nameLocalizations: { 'pt-BR': 'código' },
+			description: 'Tracking code',
+			descriptionLocalizations: { 'pt-BR': 'Código de rastreio do pedido' },
 			required: true,
 			type: ApplicationCommandOptionType.String,
 		})

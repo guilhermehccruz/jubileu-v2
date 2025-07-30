@@ -9,7 +9,11 @@ import { LoopService } from '../services/LoopService.js';
 export class LoopCommand {
 	constructor(private readonly loopService: LoopService) {}
 
-	@Slash({ description: 'Coloca ou tira a fila do modo loop' })
+	@Slash({
+		name: 'loop',
+		description: 'Enable or disable loop mode for the queue',
+		descriptionLocalizations: { 'pt-BR': 'Coloca ou tira a fila do modo loop' },
+	})
 	async loop(interaction: CommandInteraction): Promise<void> {
 		await this.loopService.execute(interaction);
 	}

@@ -1,7 +1,8 @@
 import { CommandInteraction } from 'discord.js';
-import { Discord, Slash } from 'discordx';
+import { Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
+import { SlashWithAliases } from '../decorators/SlashWithAliases.js';
 import { NextService } from '../services/NextService.js';
 
 @Discord()
@@ -9,13 +10,15 @@ import { NextService } from '../services/NextService.js';
 export class NextButton {
 	constructor(private readonly nextService: NextService) {}
 
-	@Slash({ description: 'Pula para a próxima música na fila' })
+	@SlashWithAliases(
+		{
+			name: 'next',
+			description: 'Skips to the next song in the queue',
+			descriptionLocalizations: { 'pt-BR': 'Pula para a próxima música na fila' },
+		},
+		['skip', 'proximo', 'pular'],
+	)
 	async next(interaction: CommandInteraction): Promise<void> {
-		await this.nextService.execute(interaction);
-	}
-
-	@Slash({ description: 'Pula para a próxima música na fila' })
-	async skip(interaction: CommandInteraction): Promise<void> {
 		await this.nextService.execute(interaction);
 	}
 }
