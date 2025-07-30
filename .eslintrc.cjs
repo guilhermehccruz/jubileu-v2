@@ -28,9 +28,6 @@ module.exports = {
 		'deprecation'
 	],
 	'rules': {
-		'@typescript-eslint/naming-convention': [
-			'error',
-		],
 		'import-helpers/order-imports': [
 			'error',
 			{
@@ -52,7 +49,6 @@ module.exports = {
 				'tabWidth': 4,
 			}
 		],
-		'@typescript-eslint/no-explicit-any': 'off',
 		'@typescript-eslint/no-extraneous-class': ['error', { 'allowWithDecorator': true }],
 		'@typescript-eslint/no-non-null-assertion': 'off',
 		'@typescript-eslint/no-unused-vars': ["warn", { "ignoreRestSiblings": true }],
