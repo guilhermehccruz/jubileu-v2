@@ -78,8 +78,6 @@ export class MusicQueue extends Queue {
 
 		this.lockUpdate = true;
 
-		const embed = new EmbedBuilder().setTitle('Controles da música');
-
 		if (!this.currentPlaybackTrack) {
 			await this.deleteMessage(this.lastControlMessage);
 			this.lastControlMessage = undefined;
@@ -88,16 +86,21 @@ export class MusicQueue extends Queue {
 			return;
 		}
 
-		embed.addFields({
-			name: 'Tocando agora',
-			value: this.getTrackTitle(this.currentPlaybackTrack),
-		});
+		const embed = new EmbedBuilder().setTitle('Controles da música');
 
 		if (this.currentPlaybackTrack.info.artworkUrl) {
 			embed.setThumbnail(this.currentPlaybackTrack.info.artworkUrl);
 		}
 
+		embed.addFields({
+			name: 'Tocando agora',
+			value: this.getTrackTitle(this.currentPlaybackTrack),
+			inline: true,
+		});
+
 		this.getProgressBar(embed);
+
+		this.embedEmptyLine(embed);
 
 		embed.addFields({
 			name: 'Próxima música',
@@ -301,6 +304,8 @@ export class MusicQueue extends Queue {
 			return;
 		}
 
+		this.embedEmptyLine(embed);
+
 		let totalTimeLeft = this.isSong(this.currentPlaybackTrack)
 			? this.currentPlaybackTrack!.info.length - this.currentPlaybackPosition
 			: 0;
@@ -329,5 +334,9 @@ export class MusicQueue extends Queue {
 
 	private isSong(track: Track | null) {
 		return track && !track.info.isStream && track.info.sourceName !== 'flowery-tts';
+	}
+
+	private embedEmptyLine(embed: EmbedBuilder) {
+		embed.addFields({ name: ' \n \n ', value: ' \n \n ' });
 	}
 }
