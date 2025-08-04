@@ -103,9 +103,13 @@ plugins:
             - ANDROID_VR
             - WEB
             - WEBEMBEDDED
-        pot:
-            token: ${PO_TOKEN}
-            visitorData: ${VISITOR_DATA}
+            - TV
+        # pot:
+        #     token: ${PO_TOKEN}
+        #     visitorData: ${VISITOR_DATA}
+        oauth:
+            enabled: true
+            refreshToken: ${OAUTH_REFRESH_TOKEN}
     # lavalyrics:
     #     # sources is used to sort the different lyrics sources by priority (from highest to lowest)
     #     sources:

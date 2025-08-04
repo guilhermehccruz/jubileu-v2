@@ -21,6 +21,11 @@ declare global {
 			GENIUS_CLIENT_ID: string;
 			GENIUS_CLIENT_SECRET: string;
 			GENIUS_ACCESS_TOKEN: string;
+
+			PO_TOKEN: string;
+			VISITOR_DATA: string;
+
+			OAUTH_REFRESH_TOKEN: string;
 		}
 	}
 }
