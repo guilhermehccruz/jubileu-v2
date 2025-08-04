@@ -37,7 +37,7 @@ export class SeekCommand {
 
 		if (!queue.currentPlaybackTrack.info.isSeekable) {
 			await interaction.followUp({
-				content: '> Não é possível alterar o tempo de uma livestream.',
+				content: '> Não é possível alterar o tempo desse áudio.',
 				ephemeral: true,
 			});
 			return;
