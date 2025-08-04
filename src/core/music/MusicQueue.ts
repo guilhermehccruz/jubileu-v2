@@ -1,6 +1,6 @@
 import { RequestType, Track, Lyrics, Node } from '@discordx/lava-player';
 import { Queue, fromMS } from '@discordx/lava-queue';
-import { Pagination, PaginationResolver } from '@discordx/pagination';
+import { Pagination, PaginationItem, PaginationResolver } from '@discordx/pagination';
 import { ActionRowBuilder, EmbedBuilder, Message } from 'discord.js';
 import type {
 	BaseMessageOptions,
@@ -176,33 +176,7 @@ export class MusicQueue extends Queue {
 
 		const pagesCount = Math.ceil(this.size / 10);
 
-		const pageOptions = new PaginationResolver((index, paginator) => {
-			paginator.maxLength = pagesCount;
-			if (index > paginator.maxLength) {
-				paginator.currentPage = 0;
-			}
-
-			const currentPage = paginator.currentPage;
-
-			const queue = this.tracks
-				.slice(currentPage * 10, currentPage * 10 + 10)
-				.map((track, index) => {
-					const endTime = this.getEndTime(track);
-
-					console.log({
-						message: `${currentPage * 10 + index + 1}. ${this.getTrackTitle(track)} ${endTime ? `(${endTime})` : ''}`,
-					});
-
-					return `${currentPage * 10 + index + 1}. ${this.getTrackTitle(track)} ${endTime ? `(${endTime})` : ''}`;
-				})
-				.join('\n\n');
-
-			return {
-				content: `> Tocando **${this.getTrackTitle(this.currentPlaybackTrack!)}** de ${
-					this.size + 1
-				} músicas\n\n${queue}`,
-			};
-		}, pagesCount);
+		const pageOptions = new PaginationResolver(this.resolvePagination, pagesCount);
 
 		const pagination = new Pagination(interaction, pageOptions, {
 			enableExit: true,
@@ -221,12 +195,7 @@ export class MusicQueue extends Queue {
 				},
 			},
 			selectMenu: {
-				labels: {
-					start: 'Primeira página',
-					end: 'Última página',
-				},
-				pageText: 'Página {page}',
-				rangePlaceholderFormat: '',
+				disabled: true,
 			},
 		});
 
@@ -339,4 +308,33 @@ export class MusicQueue extends Queue {
 	private embedEmptyLine(embed: EmbedBuilder) {
 		embed.addFields({ name: ' \n \n ', value: ' \n \n ' });
 	}
+
+	private resolvePagination = (index: number, pagination: Pagination): PaginationItem => {
+		const pagesCount = Math.ceil(this.size / 10);
+
+		pagination.maxLength = pagesCount;
+		if (index > pagination.maxLength) {
+			pagination.currentPage = 0;
+		}
+
+		const currentPage = pagination.currentPage;
+
+		const embed = new EmbedBuilder().setDescription(
+			`Tocando **${this.getTrackTitle(this.currentPlaybackTrack!)}** de ${this.size + 1} músicas`,
+		);
+
+		this.tracks.slice(currentPage * 10, currentPage * 10 + 10).forEach((track, index) => {
+			const endTime = this.getEndTime(track);
+			const trackTitle = this.getTrackTitle(track);
+
+			embed.addFields({
+				name: '',
+				value: `${currentPage * 10 + index + 1}. ${trackTitle} ${endTime ? `(${endTime})` : ''}`,
+			});
+		});
+
+		return {
+			embeds: [embed],
+		};
+	};
 }
