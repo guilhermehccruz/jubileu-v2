@@ -3,7 +3,7 @@ import type { CommandInteraction } from 'discord.js';
 import { Discord, SlashOption } from 'discordx';
 import { rastreio } from 'rastreio-correios';
 
-import { SlashWithAliases } from '../decorators/SlashWithAliases';
+import { SlashWithAliases } from '../../decorators/SlashWithAliases';
 
 @Discord()
 export class TrackCommand {

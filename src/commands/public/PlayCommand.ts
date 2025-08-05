@@ -4,8 +4,8 @@ import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
 import { Discord, SlashChoice, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../core/music/MusicPlayer.js';
-import { SlashWithAliases } from '../decorators/SlashWithAliases.js';
+import { musicPlayer } from '../../core/music/MusicPlayer.js';
+import { SlashWithAliases } from '../../decorators/SlashWithAliases.js';
 
 @Discord()
 @injectable()

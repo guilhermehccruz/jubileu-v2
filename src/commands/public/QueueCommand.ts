@@ -2,8 +2,8 @@ import { CommandInteraction } from 'discord.js';
 import { Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../core/music/MusicPlayer.js';
-import { SlashWithAliases } from '../decorators/SlashWithAliases.js';
+import { musicPlayer } from '../../core/music/MusicPlayer.js';
+import { SlashWithAliases } from '../../decorators/SlashWithAliases.js';
 
 @Discord()
 @injectable()

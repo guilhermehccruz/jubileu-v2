@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, TextCha
 import { Discord, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { SlashWithAliases } from '../decorators/SlashWithAliases';
+import { SlashWithAliases } from '../../decorators/SlashWithAliases';
 
 @Discord()
 @injectable()

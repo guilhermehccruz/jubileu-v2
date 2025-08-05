@@ -10,6 +10,7 @@ declare global {
 			SERVERS_CHANNEL_ID: string;
 			SERVERS_CONNECTED_CHANNEL_ID: string;
 			REPORTS_CHANNEL_ID: string;
+			ADMIN_USER_ID: string;
 
 			LAVALINK_HOST: string;
 			LAVALINK_PORT: number;
@@ -24,7 +25,6 @@ declare global {
 
 			PO_TOKEN: string;
 			VISITOR_DATA: string;
-
 			OAUTH_REFRESH_TOKEN: string;
 		}
 	}

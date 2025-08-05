@@ -2,8 +2,8 @@ import { CommandInteraction } from 'discord.js';
 import { Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { SlashWithAliases } from '../decorators/SlashWithAliases.js';
-import { ShuffleService } from '../services/ShuffleService.js';
+import { SlashWithAliases } from '../../decorators/SlashWithAliases.js';
+import { ShuffleService } from '../../services/ShuffleService.js';
 
 @Discord()
 @injectable()

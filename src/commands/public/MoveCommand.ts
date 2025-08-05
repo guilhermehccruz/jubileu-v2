@@ -3,8 +3,8 @@ import type { CommandInteraction } from 'discord.js';
 import { Discord, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { musicPlayer } from '../core/music/MusicPlayer.js';
-import { SlashWithAliases } from '../decorators/SlashWithAliases.js';
+import { musicPlayer } from '../../core/music/MusicPlayer.js';
+import { SlashWithAliases } from '../../decorators/SlashWithAliases.js';
 
 @Discord()
 @injectable()

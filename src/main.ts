@@ -5,8 +5,10 @@ import './config/validateEnv.js';
 
 import { dirname, importx } from '@discordx/importer';
 import { IntentsBitField } from 'discord.js';
-import { Client, DIService, tsyringeDependencyRegistryEngine } from 'discordx';
+import { DIService, tsyringeDependencyRegistryEngine } from 'discordx';
 import { container, instanceCachingFactory } from 'tsyringe';
+
+import { Client } from './core/Client.js';
 
 async function run() {
 	DIService.engine = tsyringeDependencyRegistryEngine

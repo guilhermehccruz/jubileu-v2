@@ -2,8 +2,8 @@ import type { CommandInteraction } from 'discord.js';
 import { Discord } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { SlashWithAliases } from '../decorators/SlashWithAliases.js';
-import { LyricsService } from '../services/LyricsService.js';
+import { SlashWithAliases } from '../../decorators/SlashWithAliases.js';
+import { LyricsService } from '../../services/LyricsService.js';
 
 @Discord()
 @injectable()

@@ -2,7 +2,7 @@ import { CommandInteraction } from 'discord.js';
 import { Discord, Slash } from 'discordx';
 import { injectable } from 'tsyringe';
 
-import { LoopService } from '../services/LoopService.js';
+import { LoopService } from '../../services/LoopService.js';
 
 @Discord()
 @injectable()
