@@ -10,6 +10,7 @@ const schema = Joi.object({
 	SERVERS_CHANNEL_ID: Joi.number().unsafe().required(),
 	SERVERS_CONNECTED_CHANNEL_ID: Joi.number().unsafe().required(),
 	REPORTS_CHANNEL_ID: Joi.number().unsafe().required(),
+	ADMIN_USER_ID: Joi.number().unsafe().required(),
 
 	LAVALINK_HOST: Joi.string().required(),
 	LAVALINK_PORT: Joi.number().required(),
@@ -24,6 +25,7 @@ const schema = Joi.object({
 
 	PO_TOKEN: Joi.string().required(),
 	VISITOR_DATA: Joi.string().required(),
+	OAUTH_REFRESH_TOKEN: Joi.string().required(),
 }).options({
 	abortEarly: true,
 	messages: { 'any.required': 'The { #label } environment variable is not defined!' },
