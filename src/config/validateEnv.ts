@@ -4,8 +4,8 @@ import Joi from 'joi';
 const schema = Joi.object({
 	BOT_TOKEN: Joi.string().required(),
 
-	JUBILEU_ID: Joi.number().unsafe().required(),
-	JUBILEU_SERVER: Joi.number().unsafe().required(),
+	BOT_ID: Joi.number().unsafe().required(),
+	ADMIN_SERVER_ID: Joi.number().unsafe().required(),
 	READY_CHANNEL_ID: Joi.number().unsafe().required(),
 	SERVERS_CHANNEL_ID: Joi.number().unsafe().required(),
 	SERVERS_CONNECTED_CHANNEL_ID: Joi.number().unsafe().required(),

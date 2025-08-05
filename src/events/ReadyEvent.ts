@@ -32,7 +32,7 @@ export class ReadyEvent {
 	}
 
 	private async sendReadyMessage(client: Client) {
-		if (client.user?.id !== process.env.JUBILEU_ID) {
+		if (client.user?.id !== process.env.BOT_ID) {
 			return;
 		}
 
@@ -51,7 +51,7 @@ export class ReadyEvent {
 	}
 
 	private async sendServersMessage(client: Client) {
-		if (client.user?.id !== process.env.JUBILEU_ID) {
+		if (client.user?.id !== process.env.BOT_ID) {
 			return;
 		}
 

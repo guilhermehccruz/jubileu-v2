@@ -4,8 +4,8 @@ declare global {
 		interface ProcessEnv {
 			BOT_TOKEN: string;
 
-			JUBILEU_ID: string;
-			JUBILEU_SERVER: string;
+			BOT_ID: string;
+			ADMIN_SERVER_ID: string;
 			READY_CHANNEL_ID: string;
 			SERVERS_CHANNEL_ID: string;
 			SERVERS_CONNECTED_CHANNEL_ID: string;
