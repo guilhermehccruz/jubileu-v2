@@ -11,7 +11,7 @@ export module '@discordx/lava-player' {
 		/**
 		 * Additional plugin specific data
 		 */
-		plugin: any;
+		plugin: unknown;
 		/**
 		 * The timestamp of the line in milliseconds
 		 */
@@ -26,7 +26,7 @@ export module '@discordx/lava-player' {
 		/**
 		 * Additional plugin specific data
 		 */
-		plugin: any;
+		plugin: unknown;
 		/**
 		 * The name of the provider the lyrics was fetched from on the source
 		 */

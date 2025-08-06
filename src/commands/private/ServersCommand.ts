@@ -1,4 +1,4 @@
-import { CommandInteraction, EmbedBuilder, OAuth2Guild } from 'discord.js';
+import { CommandInteraction, EmbedBuilder, MessageFlags, OAuth2Guild } from 'discord.js';
 import { Client, Discord, Slash } from 'discordx';
 import { injectable } from 'tsyringe';
 
@@ -14,7 +14,7 @@ export class ServersCommand {
 	})
 	async servers(interaction: CommandInteraction, client: Client): Promise<void> {
 		if (!interaction.deferred) {
-			await interaction.deferReply();
+			await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 		}
 
 		const servers = await client.guilds.fetch();
@@ -23,7 +23,7 @@ export class ServersCommand {
 
 		await Promise.allSettled(servers.map((server) => this.getGuildEmbed(embeds, server)));
 
-		await interaction.followUp({ embeds, ephemeral: true });
+		await interaction.followUp({ embeds });
 	}
 
 	private async getGuildEmbed(embeds: EmbedBuilder[], server: OAuth2Guild) {
@@ -41,6 +41,7 @@ export class ServersCommand {
 					value: guild.memberCount.toString(),
 					inline: true,
 				},
+				{ name: 'Id', value: guild.id, inline: true },
 			);
 
 		embeds.push(embed);

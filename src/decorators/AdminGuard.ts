@@ -1,4 +1,4 @@
-import { CommandInteraction } from 'discord.js';
+import { CommandInteraction, MessageFlags } from 'discord.js';
 import { GuardFunction, Guard, ClassMethodDecorator, Guild } from 'discordx';
 
 /**
@@ -17,11 +17,7 @@ export function Admin(): ClassMethodDecorator {
 
 const isAdmin: GuardFunction<CommandInteraction> = async (interaction, client, next) => {
 	if (interaction.user.id !== process.env.ADMIN_USER_ID) {
-		if (!interaction.deferred) {
-			await interaction.deferReply();
-		}
-
-		await interaction.followUp({ content: 'Permissão insuficiente', ephemeral: true });
+		await interaction.reply({ content: 'Permissão insuficiente', flags: MessageFlags.Ephemeral });
 
 		return;
 	}
