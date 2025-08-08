@@ -275,17 +275,10 @@ export class MusicQueue extends Queue {
 
 		this.embedEmptyLine(embed);
 
-		let totalTimeLeft = this.isSong(this.currentPlaybackTrack)
-			? this.currentPlaybackTrack!.info.length - this.currentPlaybackPosition
-			: 0;
-
-		for (const track of this.tracks) {
-			if (!this.isSong(track)) {
-				continue;
-			}
-
-			totalTimeLeft += track.info.length;
-		}
+		const totalTimeLeft = this.tracks.reduce(
+			(total, track) => total + (this.isSong(track) ? track.info.length : 0),
+			0,
+		);
 
 		embed.addFields(
 			{
