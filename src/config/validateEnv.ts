@@ -1,43 +1,28 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import Joi from 'joi';
+import z from 'zod'
 
-const schema = Joi.object({
-	BOT_TOKEN: Joi.string().required(),
+z.object({
+	BOT_TOKEN: z.string(),
 
-	BOT_ID: Joi.number().unsafe().required(),
-	ADMIN_SERVER_ID: Joi.number().unsafe().required(),
-	READY_CHANNEL_ID: Joi.number().unsafe().required(),
-	SERVERS_CHANNEL_ID: Joi.number().unsafe().required(),
-	SERVERS_CONNECTED_CHANNEL_ID: Joi.number().unsafe().required(),
-	REPORTS_CHANNEL_ID: Joi.number().unsafe().required(),
-	ADMIN_USER_ID: Joi.number().unsafe().required(),
+	BOT_ID: z.string(),
+	ADMIN_SERVER_ID: z.string(),
+	READY_CHANNEL_ID: z.string(),
+	SERVERS_CHANNEL_ID: z.string(),
+	SERVERS_CONNECTED_CHANNEL_ID: z.string(),
+	REPORTS_CHANNEL_ID: z.string(),
+	ADMIN_USER_ID: z.string(),
 
-	LAVALINK_HOST: Joi.string().required(),
-	LAVALINK_PORT: Joi.number().required(),
+	LAVALINK_HOST: z.string(),
+	LAVALINK_PORT: z.coerce.number(),
 
-	SPOTIFY_CLIENT_ID: Joi.string().required(),
-	SPOTIFY_SECRET: Joi.string().required(),
-	SPOTIFY_DC_COOKIE: Joi.string().required(),
+	SPOTIFY_CLIENT_ID: z.string(),
+	SPOTIFY_SECRET: z.string(),
+	SPOTIFY_DC_COOKIE: z.string(),
 
-	GENIUS_CLIENT_ID: Joi.string().required(),
-	GENIUS_CLIENT_SECRET: Joi.string().required(),
-	GENIUS_ACCESS_TOKEN: Joi.string().required(),
+	GENIUS_CLIENT_ID: z.string(),
+	GENIUS_CLIENT_SECRET: z.string(),
+	GENIUS_ACCESS_TOKEN: z.string(),
 
-	PO_TOKEN: Joi.string().required(),
-	VISITOR_DATA: Joi.string().required(),
-	OAUTH_REFRESH_TOKEN: Joi.string().required(),
-}).options({
-	abortEarly: true,
-	messages: { 'any.required': 'The { #label } environment variable is not defined!' },
-	allowUnknown: true,
-});
-
-try {
-	Joi.assert(process.env, schema);
-} catch (error) {
-	throw new Error((error as ValidationError).details[0].message);
-}
-
-interface ValidationError {
-	details: { message: string }[];
-}
+	PO_TOKEN: z.string(),
+	VISITOR_DATA: z.string(),
+	OAUTH_REFRESH_TOKEN: z.string(),
+}).parse(process.env, {error: () => 'Invalid environment variable'});
