@@ -12,7 +12,11 @@ export default tseslint.config(
 	{
 		ignores: ['dist', 'node_modules'],
 		rules: {
-			'@typescript-eslint/no-non-null-assertion': 'off'
+			'@typescript-eslint/no-non-null-assertion': 'off',
+			'@typescript-eslint/no-unused-expressions': ['error', {
+				allowShortCircuit: true,
+				allowTernary: true
+			}]
 		}
 	}
 );
