@@ -50,7 +50,7 @@
 		"discordx": "^11.12.5",
 		"dotenv": "^17.2.1",
 		"genius-lyrics": "^4.4.7",
-		"llyrics": "^1.1.7",
+		"llyrics": "^1.2.1",
 		"rastreio-correios": "^1.1.7",
 		"reflect-metadata": "^0.2.2",
 		"rimraf": "^6.0.1",
