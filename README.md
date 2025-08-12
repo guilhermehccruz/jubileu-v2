@@ -1,27 +1,25 @@
 # jubileu-v2
 
-Second version of my discord bot, now using Discordx and typescript
+This is my personal bot, mainly used to listen to music with my friends on discord.
+
+This project uses typescript, discordx, docker and lavalink.
 
 ## Installing
 
 ### Set environment variables
 
-Create a `.env` file based on `.env.example`
+Create a `.env` file based on `.env.example` and fill its variables
 
 ### Install dependencies
 
-Run `npm i`
+Run `pnpm i`
 
 ### Initiate docker
 
-#### Production environment
+#### Start lavalink
 
-Run `npm run docker:prod`
+Run `docker compose up lavalink -d`
 
-#### Development environment
+#### Start the bot
 
-Run `npm run docker:dev`
-
-TODO: tts max length
-TODO: lyrics max length
-TODO: improve lyrics implementations
+The bot can be ran directly with `pnpm start:dev` or with docker `docker compose up bot -d`
