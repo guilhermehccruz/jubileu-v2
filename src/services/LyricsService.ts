@@ -74,7 +74,6 @@ export class LyricsService {
 
 			const result = await find({
 				song: title,
-				geniusApiKey: process.env.GENIUS_ACCESS_TOKEN,
 				forceSearch: true,
 			});
 
