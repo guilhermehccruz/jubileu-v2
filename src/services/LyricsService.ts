@@ -1,8 +1,6 @@
-// import lyricsSearcher from 'lyrics-searcher';
 import { EmbedBuilder } from 'discord.js';
 import type { ButtonInteraction, CommandInteraction } from 'discord.js';
 import { Discord } from 'discordx';
-import Genius from 'genius-lyrics';
 import { find } from 'llyrics';
 import { injectable } from 'tsyringe';
 
@@ -74,41 +72,17 @@ export class LyricsService {
 
 			const title = queue.currentPlaybackTrack.info.title.replaceAll(/\(.*\)/g, '');
 
-			//* temporarily disable lava lyrics
-			// const lavaLyricsResult = await queue.getCurrentPlaybackLyrics().catch(() => undefined);
-
-			// if (lavaLyricsResult) {
-			// 	return lavaLyricsResult.lines.map((line) => line.line).join('\n');
-			// }
-
-			//* temporarily disable lyrics-searcher
-			// const lyricsSearcherResult = await lyricsSearcher('', title).catch(() => undefined);
-
-			// if (lyricsSearcherResult) {
-			// 	return lyricsSearcherResult;
-			// }
-
-			const geniusResult = await new Genius.Client(process.env.GENIUS_ACCESS_TOKEN).songs
-				.search(title)
-				.catch((error) => console.error(error));
-
-			if (geniusResult?.length) {
-				const lyrics = await geniusResult[0].lyrics().catch((error) => console.error(error));
-
-				if (lyrics) {
-					return lyrics.split('\n').slice(1).join('\n');
-				}
-			}
-
-			const llyricsResult = await find({
+			const result = await find({
 				song: title,
 				geniusApiKey: process.env.GENIUS_ACCESS_TOKEN,
 				forceSearch: true,
-			}).catch((error) => console.error(error));
+			});
 
-			if (llyricsResult?.lyrics) {
-				return llyricsResult.lyrics;
+			if (!result?.lyrics) {
+				throw new Error('Not found');
 			}
+
+			return result.lyrics;
 		} catch (error) {
 			console.error(error);
 
