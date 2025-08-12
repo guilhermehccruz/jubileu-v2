@@ -77,10 +77,6 @@ export class LyricsService {
 				forceSearch: true,
 			});
 
-			if (!result?.lyrics) {
-				throw new Error('Not found');
-			}
-
 			return result.lyrics;
 		} catch (error) {
 			console.error(error);
