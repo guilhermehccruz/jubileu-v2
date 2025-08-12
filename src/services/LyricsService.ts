@@ -90,10 +90,10 @@ export class LyricsService {
 
 			const geniusResult = await new Genius.Client(process.env.GENIUS_ACCESS_TOKEN).songs
 				.search(title)
-				.catch(() => undefined);
+				.catch((error) => console.error(error));
 
 			if (geniusResult?.length) {
-				const lyrics = await geniusResult[0].lyrics().catch(() => undefined);
+				const lyrics = await geniusResult[0].lyrics().catch((error) => console.error(error));
 
 				if (lyrics) {
 					return lyrics.split('\n').slice(1).join('\n');
@@ -104,7 +104,7 @@ export class LyricsService {
 				song: title,
 				geniusApiKey: process.env.GENIUS_ACCESS_TOKEN,
 				forceSearch: true,
-			}).catch(() => undefined);
+			}).catch((error) => console.error(error));
 
 			if (llyricsResult?.lyrics) {
 				return llyricsResult.lyrics;
