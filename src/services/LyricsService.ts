@@ -1,10 +1,10 @@
+// import lyricsSearcher from 'lyrics-searcher';
 import { EmbedBuilder } from 'discord.js';
 import type { ButtonInteraction, CommandInteraction } from 'discord.js';
 import { Discord } from 'discordx';
 import Genius from 'genius-lyrics';
 import { find } from 'llyrics';
 import { injectable } from 'tsyringe';
-// import lyricsSearcher from 'lyrics-searcher';
 
 import { musicPlayer } from '../core/music/MusicPlayer.js';
 import { MusicQueue } from '../core/music/MusicQueue.js';

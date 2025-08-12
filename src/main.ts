@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import 'reflect-metadata';
-
 import './config/validateEnv.js';
 
 import { dirname, importx } from '@discordx/importer';

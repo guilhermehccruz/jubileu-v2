@@ -5,6 +5,7 @@ import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../../core/music/MusicPlayer.js';
 import { SlashWithAliases } from '../../decorators/SlashWithAliases.js';
+
 @Discord()
 @injectable()
 export class SeekCommand {

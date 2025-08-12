@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from 'zod';
 
 z.object({
 	BOT_TOKEN: z.string(),
@@ -25,4 +25,4 @@ z.object({
 	PO_TOKEN: z.string(),
 	VISITOR_DATA: z.string(),
 	OAUTH_REFRESH_TOKEN: z.string(),
-}).parse(process.env, {error: () => 'Invalid environment variable'});
+}).parse(process.env, { error: () => 'Invalid environment variable' });
