@@ -7,6 +7,8 @@ import { injectable } from 'tsyringe';
 import { musicPlayer } from '../core/music/MusicPlayer.js';
 import { MusicQueue } from '../core/music/MusicQueue.js';
 
+const EMBED_MAX_SIZE = 4_096;
+
 @Discord()
 @injectable()
 export class LyricsService {
@@ -38,14 +40,12 @@ export class LyricsService {
 			return;
 		}
 
-		let lyrics = await this.getLyrics(queue);
+		const lyrics = await this.getLyrics(queue);
 
 		if (!lyrics) {
 			await interaction.followUp({ content: '> Letra não encontrada', ephemeral: true });
 			return;
 		}
-
-		lyrics = lyrics.replaceAll(/\[.*\]\n/g, '');
 
 		const embeds = this.getEmbeds(lyrics);
 
@@ -59,7 +59,9 @@ export class LyricsService {
 			embeds[0].setThumbnail(queue.currentPlaybackTrack.info.artworkUrl);
 		}
 
-		await interaction.followUp({ embeds });
+		for (const embed of embeds) {
+			await interaction.followUp({ embeds: [embed] });
+		}
 
 		await queue.updateControlMessage();
 	}
@@ -70,14 +72,13 @@ export class LyricsService {
 				return;
 			}
 
-			const title = queue.currentPlaybackTrack.info.title.replaceAll(/\(.*\)/g, '');
-
 			const result = await find({
-				song: title,
+				song: queue.currentPlaybackTrack.info.title.replaceAll(/\(.*\)/g, ''),
+				artist: queue.currentPlaybackTrack.info.author,
 				forceSearch: true,
 			});
 
-			return result.lyrics;
+			return result.lyrics.replaceAll('\r', '').replaceAll(/\[.*\]\n/g, '');
 		} catch (error) {
 			console.error(error);
 
@@ -86,48 +87,40 @@ export class LyricsService {
 	}
 
 	private getEmbeds(lyrics: string): EmbedBuilder[] {
-		if (lyrics.length <= 4096) {
-			const embed = new EmbedBuilder().setDescription(lyrics);
-
-			return [embed];
+		if (lyrics.length <= EMBED_MAX_SIZE) {
+			return [new EmbedBuilder().setDescription(lyrics)];
 		}
+
+		const embedsCount = Math.ceil(lyrics.length / EMBED_MAX_SIZE);
+		const averageWordsPerEmbed = Math.floor(lyrics.length / embedsCount);
 
 		const embeds: EmbedBuilder[] = [];
 
-		if (lyrics.length <= 8192) {
-			const doubleLineBreaks = lyrics.split('\n\n');
-			if (doubleLineBreaks.length >= 5) {
-				const firstEmbed: string[] = doubleLineBreaks.splice(0, 1);
+		const { splitLyrics, separator } = this.splitLyrics(lyrics);
 
-				while (firstEmbed.join('\n\n').length < doubleLineBreaks.join('\n\n').length) {
-					firstEmbed.push(doubleLineBreaks.splice(0, 1)[0]);
-				}
+		let currentEmbed = '';
+		for (const split of splitLyrics) {
+			currentEmbed += currentEmbed ? `${separator}${split}` : split;
 
-				embeds.push(
-					new EmbedBuilder().setDescription(firstEmbed.join('\n\n')),
-					new EmbedBuilder().setDescription(doubleLineBreaks.join('\n\n')),
-				);
+			if (currentEmbed.length >= averageWordsPerEmbed) {
+				embeds.push(new EmbedBuilder().setDescription(currentEmbed));
 
-				return embeds;
+				currentEmbed = '';
 			}
 		}
 
-		let currentString = '';
-		const splits = lyrics.split('\n');
-		for (const split of splits) {
-			if (currentString.length + split.length + 1 > 4096) {
-				embeds.push(new EmbedBuilder().setDescription(currentString));
-
-				currentString = '';
-			}
-
-			currentString += currentString ? `\n${split}` : split;
-		}
-
-		if (currentString) {
-			embeds.push(new EmbedBuilder().setDescription(currentString));
+		if (currentEmbed) {
+			embeds.push(new EmbedBuilder().setDescription(currentEmbed));
 		}
 
 		return embeds;
+	}
+
+	private splitLyrics(lyrics: string): { splitLyrics: string[]; separator: '\n\n' | '\n' } {
+		const doubleLineBreaksCount = lyrics.match(/\n\n/g)?.length ?? 0;
+
+		return doubleLineBreaksCount >= 10
+			? { splitLyrics: lyrics.split('\n\n'), separator: '\n\n' }
+			: { splitLyrics: lyrics.replaceAll('\n\n', '\n').split('\n'), separator: '\n' };
 	}
 }
