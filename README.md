@@ -2,7 +2,7 @@
 
 This is my personal bot, mainly used to listen to music with my friends on discord.
 
-This project uses typescript, discordx, docker and lavalink.
+This project uses typescript, discordx, docker and lavalink and is currently deployed in AWS EC2
 
 ## Installing
 
