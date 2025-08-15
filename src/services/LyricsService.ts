@@ -75,6 +75,7 @@ export class LyricsService {
 			const result = await find({
 				song: queue.currentPlaybackTrack.info.title.replaceAll(/\(.*\)/g, ''),
 				artist: queue.currentPlaybackTrack.info.author,
+				engine: 'musixmatch',
 				forceSearch: true,
 			});
 
