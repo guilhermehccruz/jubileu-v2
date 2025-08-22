@@ -10,7 +10,7 @@ export class VoiceStateUpdateEvent {
 
 	@On({ event: 'voiceStateUpdate' })
 	async voiceServerUpdate([, newState]: ArgsOf<'voiceStateUpdate'>, client: Client): Promise<void> {
-		if (newState.member?.id !== process.env.BOT_ID || client.botId !== process.env.BOT_ID) {
+		if (newState.member?.id !== process.env.BOT_ID || client.user?.id !== process.env.BOT_ID) {
 			return;
 		}
 
