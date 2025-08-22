@@ -179,7 +179,6 @@ export class MusicQueue extends Queue {
 		const pageOptions = new PaginationResolver(this.resolvePagination, pagesCount);
 
 		const pagination = new Pagination(interaction, pageOptions, {
-			enableExit: true,
 			onTimeout: (_, message) => void this.deleteMessage(message),
 			time: 60_000,
 			buttons: {
@@ -189,10 +188,14 @@ export class MusicQueue extends Queue {
 				next: {
 					label: 'Próximo',
 				},
+				backward: { label: 'Início' },
+				forward: { label: 'Fim' },
 				exit: {
 					emoji: '',
 					label: 'Fechar',
+					enabled: true,
 				},
+				skipAmount: 100_000,
 			},
 			selectMenu: {
 				disabled: true,
