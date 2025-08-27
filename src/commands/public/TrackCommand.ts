@@ -4,6 +4,7 @@ import { Discord, SlashOption } from 'discordx';
 import { rastreio } from 'rastreio-correios';
 
 import { SlashWithAliases } from '../../decorators/SlashWithAliases';
+import { selfDestruct } from '../../utils/generalUtils.js';
 
 @Discord()
 export class TrackCommand {
@@ -31,11 +32,10 @@ export class TrackCommand {
 
 		const [tracking] = await rastreio(code);
 		if (!tracking.sucesso) {
-			await interaction.followUp({
-				content: `> ${tracking.mensagem ?? 'Ocorreu um erro na busca dos dados'}`,
-				ephemeral: true,
+			return selfDestruct({
+				interaction,
+				followUp: `> ${tracking.mensagem ?? 'Ocorreu um erro na busca dos dados'}`,
 			});
-			return;
 		}
 
 		const embeds: EmbedBuilder[] = [];
@@ -62,9 +62,12 @@ export class TrackCommand {
 			embeds.push(embed);
 		}
 
-		await interaction.followUp({
-			content: `>>> Entrega ${tracking.rastreio} encontrada! \nEntregue: ${tracking.entregue ? 'Sim' : 'Não'}`,
-			embeds,
+		return selfDestruct({
+			interaction,
+			followUp: {
+				content: `>>> Entrega ${tracking.rastreio} encontrada! \nEntregue: ${tracking.entregue ? 'Sim' : 'Não'}`,
+				embeds,
+			},
 		});
 	}
 }

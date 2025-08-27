@@ -6,6 +6,7 @@ import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../core/music/MusicPlayer.js';
 import { MusicQueue } from '../core/music/MusicQueue.js';
+import { selfDestruct } from '../utils/generalUtils.js';
 
 const EMBED_MAX_SIZE = 4_096;
 
@@ -21,30 +22,25 @@ export class LyricsService {
 		const { queue } = cmd;
 
 		if (!queue.currentPlaybackTrack) {
-			await interaction.followUp({ content: '> Não tem nada tocando', ephemeral: true });
-
 			await queue.exit();
-			return;
+			return selfDestruct({ interaction, followUp: '> Não tem nada tocando' });
 		}
 
 		if (!queue.currentPlaybackTrack.info.isSeekable) {
-			await interaction.followUp({
-				content: '> Não é possível pegar a letra de uma livestream.',
-				ephemeral: true,
-			});
-			return;
+			return selfDestruct({ interaction, followUp: '> Não é possível pegar a letra de uma livestream.' });
 		}
 
 		if (queue.currentPlaybackTrack.info.sourceName === 'flowery-tts') {
-			await interaction.followUp(`\`\`\`${queue.currentPlaybackTrack.info.title}\`\`\``);
-			return;
+			return selfDestruct({
+				interaction,
+				followUp: `\`\`\`${queue.currentPlaybackTrack.info.title}\`\`\``,
+			});
 		}
 
 		const lyrics = await this.getLyrics(queue);
 
 		if (!lyrics) {
-			await interaction.followUp({ content: '> Letra não encontrada', ephemeral: true });
-			return;
+			return selfDestruct({ interaction, followUp: '> Letra não encontrada' });
 		}
 
 		const embeds = this.getEmbeds(lyrics);
@@ -59,8 +55,12 @@ export class LyricsService {
 			embeds[0].setThumbnail(queue.currentPlaybackTrack.info.artworkUrl);
 		}
 
+		const timeout = queue.currentPlaybackTrack.info.length - queue.currentPlaybackPosition + 30_000;
+
 		for (const embed of embeds) {
-			await interaction.followUp({ embeds: [embed] });
+			const message = await interaction.followUp({ embeds: [embed] });
+
+			await selfDestruct({ interaction: message, timeout });
 		}
 
 		await queue.updateControlMessage();

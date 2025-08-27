@@ -5,6 +5,7 @@ import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../../core/music/MusicPlayer.js';
 import { SlashWithAliases } from '../../decorators/SlashWithAliases.js';
+import { selfDestruct } from '../../utils/generalUtils.js';
 
 @Discord()
 @injectable()
@@ -37,13 +38,11 @@ export class RemoveCommand {
 		const { queue } = cmd;
 
 		if (position < 1 || position > queue.size) {
-			await interaction.followUp({ content: '> Posição não encontrada na fila', ephemeral: true });
-			return;
+			return selfDestruct({ interaction, followUp: '> Posição não encontrada na fila' });
 		}
 
 		queue.removeTracks(position - 1);
 
-		await interaction.followUp('> Música removida');
-		return;
+		return selfDestruct({ interaction, followUp: '> Música removida' });
 	}
 }

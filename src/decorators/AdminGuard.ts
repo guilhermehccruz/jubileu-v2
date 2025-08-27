@@ -22,5 +22,9 @@ const isAdmin: GuardFunction<CommandInteraction> = async (interaction, client, n
 		return;
 	}
 
+	if (!interaction.deferred) {
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+	}
+
 	await next();
 };

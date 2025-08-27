@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, TextChannel } from 'discord.js';
+import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, MessageFlags, TextChannel } from 'discord.js';
 import { Discord, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
@@ -39,6 +39,6 @@ export class ReportCommand {
 			],
 		});
 
-		await interaction.reply({ content: 'Obrigado pelo report!', ephemeral: true });
+		await interaction.reply({ content: 'Obrigado pelo report!', flags: MessageFlags.Ephemeral });
 	}
 }

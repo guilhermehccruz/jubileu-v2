@@ -5,6 +5,7 @@ import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../../core/music/MusicPlayer.js';
 import { SlashWithAliases } from '../../decorators/SlashWithAliases.js';
+import { selfDestruct } from '../../utils/generalUtils.js';
 
 @Discord()
 @injectable()
@@ -32,26 +33,19 @@ export class SeekCommand {
 		const { queue } = cmd;
 
 		if (!queue.currentPlaybackTrack) {
-			await interaction.followUp({ content: '> Não tem nada tocando', ephemeral: true });
-			return;
+			return selfDestruct({ interaction, followUp: '> Não tem nada tocando' });
 		}
 
 		if (!queue.currentPlaybackTrack.info.isSeekable) {
-			await interaction.followUp({
-				content: '> Não é possível alterar o tempo desse áudio.',
-				ephemeral: true,
-			});
-			return;
+			return selfDestruct({ interaction, followUp: '> Não é possível alterar o tempo desse áudio.' });
 		}
 
 		if (seconds * 1000 > queue.currentPlaybackTrack.info.length) {
-			await interaction.followUp({ content: '> O tempo excede a duração da música', ephemeral: true });
-			return;
+			return selfDestruct({ interaction, followUp: '> O tempo excede a duração da música' });
 		}
 
 		await queue.guildPlayer.update({ position: seconds * 1000 });
 
-		await interaction.followUp('> Pulado até o segundo requisitado');
-		return;
+		return selfDestruct({ interaction, followUp: '> Pulado até o segundo requisitado' });
 	}
 }

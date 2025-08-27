@@ -19,6 +19,7 @@ import { QueueButton } from '../../buttons/QueueButton.js';
 import { RefreshControlsButton } from '../../buttons/RefreshControlsButton.js';
 import { RepeatButton } from '../../buttons/RepeatButton.js';
 import { ShuffleButton } from '../../buttons/ShuffleButton.js';
+import { selfDestruct } from '../../utils/generalUtils.js';
 
 export class MusicQueue extends Queue {
 	lastControlMessage?: Message;
@@ -35,12 +36,6 @@ export class MusicQueue extends Queue {
 		}, 10_000);
 	}
 
-	async deleteMessage(message?: Message | null): Promise<void> {
-		if (message?.deletable) {
-			await message.delete().catch(() => null);
-		}
-	}
-
 	async exit() {
 		await super.exit();
 
@@ -50,7 +45,7 @@ export class MusicQueue extends Queue {
 
 		const message = await this.channel.send('>>> Se encontrou algum bug, reporte com o comando `/report`');
 
-		setTimeout(() => void this.deleteMessage(message), 30_000);
+		selfDestruct({ interaction: message });
 	}
 
 	private controlsRow(): ActionRowBuilder<MessageActionRowComponentBuilder>[] {
@@ -79,7 +74,8 @@ export class MusicQueue extends Queue {
 		this.lockUpdate = true;
 
 		if (!this.currentPlaybackTrack) {
-			await this.deleteMessage(this.lastControlMessage);
+			selfDestruct({ interaction: this.lastControlMessage, timeout: 0 });
+
 			this.lastControlMessage = undefined;
 
 			this.lockUpdate = false;
@@ -116,7 +112,7 @@ export class MusicQueue extends Queue {
 		};
 
 		if (this.lastControlMessage?.id !== this.channel.lastMessageId || options?.force) {
-			await this.deleteMessage(this.lastControlMessage);
+			selfDestruct({ interaction: this.lastControlMessage, timeout: 0 });
 			this.lastControlMessage = undefined;
 
 			const message = await this.channel.send(messageOptions).catch((error: unknown) => {
@@ -137,41 +133,35 @@ export class MusicQueue extends Queue {
 
 	async view(interaction: ButtonInteraction | CommandInteraction): Promise<void> {
 		if (!this.currentPlaybackTrack) {
-			const message = await interaction.followUp({
-				content: '> Não foi possível processar a fila, tente novamente mais tarde',
-				ephemeral: true,
+			return selfDestruct({
+				interaction,
+				followUp: '> Não foi possível processar a fila, tente novamente mais tarde',
+				timeout: 3_000,
 			});
-
-			setTimeout(() => void this.deleteMessage(message), 3_000);
-			return;
 		}
 
 		if (!this.size) {
-			const message = await interaction.followUp({
-				content: `> Tocando **${this.currentPlaybackTrack.info.title}**`,
-				ephemeral: true,
+			return selfDestruct({
+				interaction,
+				followUp: `> Tocando **${this.currentPlaybackTrack.info.title}**`,
+				timeout: 10_000,
 			});
-
-			setTimeout(() => void this.deleteMessage(message), 10_000);
-
-			return;
 		}
 
 		if (this.size <= 10) {
-			const message = await interaction.followUp({
-				content: `> Tocando **${this.currentPlaybackTrack.info.title}**\n\n${this.tracks
-					.map((track, index) => {
-						const endTime = this.getEndTime(track);
+			return selfDestruct({
+				interaction,
+				followUp: {
+					content: `> Tocando **${this.currentPlaybackTrack.info.title}**\n\n${this.tracks
+						.map((track, index) => {
+							const endTime = this.getEndTime(track);
 
-						return `${index + 1}. ${this.getTrackTitle(track)} ${endTime ? `(${endTime})` : ''}`;
-					})
-					.join('\n\n')}`,
-				ephemeral: true,
+							return `${index + 1}. ${this.getTrackTitle(track)} ${endTime ? `(${endTime})` : ''}`;
+						})
+						.join('\n\n')}`,
+				},
+				timeout: 10_000,
 			});
-
-			setTimeout(() => void this.deleteMessage(message), 10_000);
-
-			return;
 		}
 
 		const pagesCount = Math.ceil(this.size / 10);
@@ -179,7 +169,11 @@ export class MusicQueue extends Queue {
 		const pageOptions = new PaginationResolver(this.resolvePagination, pagesCount);
 
 		const pagination = new Pagination(interaction, pageOptions, {
-			onTimeout: (_, message) => void this.deleteMessage(message),
+			onTimeout: (_, message) =>
+				selfDestruct({
+					interaction: message,
+					timeout: 0,
+				}),
 			time: 60_000,
 			buttons: {
 				previous: {

@@ -2,6 +2,7 @@ import { QueueManager } from '@discordx/lava-queue';
 import type { ButtonInteraction, CommandInteraction, Guild, TextChannel } from 'discord.js';
 import { GuildMember, PartialGroupDMChannel } from 'discord.js';
 
+import { selfDestruct } from '../../utils/generalUtils.js';
 import { MusicQueue } from './MusicQueue.js';
 
 export class MusicPlayer {
@@ -27,40 +28,34 @@ export class MusicPlayer {
 			!interaction.guild ||
 			interaction.channel instanceof PartialGroupDMChannel
 		) {
-			await interaction.followUp({
-				content: '> Não foi possível processar o comando. Tente novamente',
-				ephemeral: true,
-			});
+			await selfDestruct({ interaction, followUp: '> Não foi possível processar o comando. Tente novamente' });
 			return null;
 		}
 
 		if (!interaction.member.voice.channelId) {
-			await interaction.followUp({ content: '> Entre em um canal de voz primeiro.', ephemeral: true });
+			await selfDestruct({ interaction, followUp: '> Entre em um canal de voz primeiro.' });
 			return null;
 		}
 
 		const bot = interaction.guild.members.cache.get(interaction.client.user.id);
 
 		if (!bot) {
-			await interaction.followUp({
-				content: '> Onde é que eu to? Será que estou em Alagoinha?',
-				ephemeral: true,
-			});
+			await selfDestruct({ interaction, followUp: '> Onde é que eu to? Será que estou em Alagoinha?' });
 			return null;
 		}
 
 		const queue = this.getQueue(interaction.guild.id);
 
 		if (!queue) {
-			await interaction.followUp({
-				content: '> O reprodutor de música ainda não está pronto. Tente novamente mais tarde',
-				ephemeral: true,
+			await selfDestruct({
+				interaction,
+				followUp: '> O reprodutor de música ainda não está pronto. Tente novamente mais tarde',
 			});
 			return null;
 		}
 
 		if (bot.voice.channelId && interaction.member.voice.channelId !== bot.voice.channelId) {
-			await interaction.followUp({ content: '> Entre no mesmo canal de voz que eu primeiro', ephemeral: true });
+			await selfDestruct({ interaction, followUp: '> Entre no mesmo canal de voz que eu primeiro' });
 			return null;
 		}
 

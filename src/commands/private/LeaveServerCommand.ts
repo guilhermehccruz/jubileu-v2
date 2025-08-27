@@ -1,8 +1,9 @@
-import { ApplicationCommandOptionType, CommandInteraction, MessageFlags } from 'discord.js';
+import { ApplicationCommandOptionType, CommandInteraction } from 'discord.js';
 import { Client, Discord, Slash, SlashOption } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { Admin } from '../../decorators/AdminGuard.js';
+import { selfDestruct } from '../../utils/generalUtils.js';
 
 @Discord()
 @injectable()
@@ -23,19 +24,14 @@ export class ServersCommand {
 		interaction: CommandInteraction,
 		client: Client,
 	): Promise<void> {
-		if (!interaction.deferred) {
-			await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-		}
-
 		const server = client.guilds.cache.get(serverId);
 
 		if (!server) {
-			await interaction.followUp({ content: 'Server not found' });
-			return;
+			return selfDestruct({ interaction, followUp: 'Server not found' });
 		}
 
 		await server.leave();
 
-		await interaction.followUp({ content: `Saí do servidor "${server.name}"` });
+		return selfDestruct({ interaction, followUp: `Saí do servidor "${server.name}"` });
 	}
 }

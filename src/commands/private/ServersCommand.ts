@@ -1,8 +1,9 @@
-import { CommandInteraction, EmbedBuilder, MessageFlags, OAuth2Guild } from 'discord.js';
+import { CommandInteraction, EmbedBuilder, OAuth2Guild } from 'discord.js';
 import { Client, Discord, Slash } from 'discordx';
 import { injectable } from 'tsyringe';
 
 import { Admin } from '../../decorators/AdminGuard.js';
+import { selfDestruct } from '../../utils/generalUtils.js';
 
 @Discord()
 @injectable()
@@ -13,17 +14,13 @@ export class ServersCommand {
 		description: 'Bot servers',
 	})
 	async servers(interaction: CommandInteraction, client: Client): Promise<void> {
-		if (!interaction.deferred) {
-			await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-		}
-
 		const servers = await client.guilds.fetch();
 
 		const embeds: EmbedBuilder[] = [];
 
 		await Promise.allSettled(servers.map((server) => this.getGuildEmbed(embeds, server)));
 
-		await interaction.followUp({ embeds });
+		return selfDestruct({ interaction, followUp: { embeds } });
 	}
 
 	private async getGuildEmbed(embeds: EmbedBuilder[], server: OAuth2Guild) {

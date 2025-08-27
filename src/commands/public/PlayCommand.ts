@@ -6,6 +6,7 @@ import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../../core/music/MusicPlayer.js';
 import { SlashWithAliases } from '../../decorators/SlashWithAliases.js';
+import { selfDestruct } from '../../utils/generalUtils.js';
 
 @Discord()
 @injectable()
@@ -60,29 +61,18 @@ export class PlayCommand {
 		const { queue } = cmd;
 
 		if (!input.startsWith('http://') && !input.startsWith('https://')) {
-			if (platform === 'ftts') {
-				input = `ftts://${encodeURIComponent(input).slice(0, 2_000)}`;
-			} else {
-				input = `${platform}:${input}`;
-			}
+			input =
+				platform === 'ftts' ? `ftts://${encodeURIComponent(input).slice(0, 2_000)}` : `${platform}:${input}`;
 		}
 
 		const { loadType, data } = await queue.search(input);
 
 		if (loadType === LoadType.ERROR) {
-			await interaction.followUp({
-				content: `> Ocorreu um erro: ${data.cause}`,
-				ephemeral: true,
-			});
-			return;
+			return selfDestruct({ interaction, followUp: `> Ocorreu um erro: ${data.cause}` });
 		}
 
 		if (loadType === LoadType.EMPTY) {
-			await interaction.followUp({
-				content: '> Não encontramos nada com o identificador utilizado',
-				ephemeral: true,
-			});
-			return;
+			return selfDestruct({ interaction, followUp: '> Não encontramos nada com o identificador utilizado' });
 		}
 
 		const embed = new EmbedBuilder();
@@ -104,7 +94,12 @@ export class PlayCommand {
 			embed.setDescription(`${data.tracks.length} da playlist ${data.info.name}`);
 		}
 
-		await interaction.followUp({ embeds: [embed] });
+		await selfDestruct({
+			interaction,
+			followUp: {
+				embeds: [embed],
+			},
+		});
 
 		if (!queue.currentPlaybackTrack) {
 			await queue.playNext();

@@ -1,6 +1,8 @@
 import { On, Discord } from 'discordx';
 import type { ArgsOf, Client } from 'discordx';
 
+import { selfDestruct } from '../utils/generalUtils.js';
+
 @Discord()
 export class InteractionCreateEvent {
 	@On({ event: 'interactionCreate' })
@@ -17,7 +19,7 @@ export class InteractionCreateEvent {
 		} catch (error) {
 			console.error(error);
 			if (interaction.isCommand() && !interaction.replied) {
-				await interaction.followUp({ content: '> Ocorreu um erro', ephemeral: true });
+				return selfDestruct({ interaction, followUp: '> Ocorreu um erro' });
 			}
 		}
 	}

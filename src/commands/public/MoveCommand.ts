@@ -5,6 +5,7 @@ import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../../core/music/MusicPlayer.js';
 import { SlashWithAliases } from '../../decorators/SlashWithAliases.js';
+import { selfDestruct } from '../../utils/generalUtils.js';
 
 @Discord()
 @injectable()
@@ -48,16 +49,14 @@ export class MoveCommand {
 		const { queue } = cmd;
 
 		if (currentPosition < 1 || currentPosition > queue.size) {
-			await interaction.followUp({ content: '> Posição inicial não encontrada na fila', ephemeral: true });
-			return;
+			return selfDestruct({ interaction, followUp: '> Posição inicial não encontrada na fila' });
 		}
 
 		if (currentPosition === newPosition) {
-			await interaction.followUp({
-				content: '> Posição inicial não pode ser a mesma da posição final',
-				ephemeral: true,
+			return selfDestruct({
+				interaction,
+				followUp: '> Posição inicial não pode ser a mesma da posição final',
 			});
-			return;
 		}
 
 		if (newPosition < 1) {
@@ -68,7 +67,6 @@ export class MoveCommand {
 
 		queue.changeTrackPosition(currentPosition - 1, newPosition - 1);
 
-		await interaction.followUp('> Música movida');
-		return;
+		return selfDestruct({ interaction, followUp: '> Música movida' });
 	}
 }
