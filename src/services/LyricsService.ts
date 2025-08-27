@@ -72,22 +72,56 @@ export class LyricsService {
 				return;
 			}
 
-			const result = await find({
-				song: queue.currentPlaybackTrack.info.title.replaceAll(/\((.*\))|(\[.*\])/g, '').trim(),
-				artist: queue.currentPlaybackTrack.info.author,
-				forceSearch: true,
-			});
+			const title = queue.currentPlaybackTrack.info.title.replaceAll(/\((.*\))|(\[.*\])/g, '').trim();
+			const author = queue.currentPlaybackTrack.info.author;
 
-			if (isNotFoundResponse(result)) {
-				throw new Error('lyrics not found');
-			}
+			const result = await Promise.any([
+				this.getLlyricsLyrics(title, author),
+				this.getLRCLIBLyrics(title, author),
+			]);
 
-			return result.lyrics.replaceAll('\r', '').replaceAll(/\[.*\]\n/g, '');
+			return result.replaceAll('\r', '').replaceAll(/\[.*\]\n/g, '');
 		} catch (error) {
 			console.error(error);
 
 			return;
 		}
+	}
+
+	private async getLlyricsLyrics(title: string, author: string): Promise<string> {
+		const result = await find({
+			song: title,
+			artist: author,
+			forceSearch: true,
+		});
+
+		if (isNotFoundResponse(result)) {
+			throw new Error('lyrics not found');
+		}
+
+		return result.lyrics;
+	}
+
+	private async getLRCLIBLyrics(title: string, author: string): Promise<string> {
+		const url = new URL('https://lrclib.net/api/search');
+
+		url.searchParams.append('q', title);
+		url.searchParams.append('artist_name', author);
+
+		const response = await fetch(url, {
+			method: 'GET',
+			headers: {
+				'User-Agent': 'jubileu-v2 (https://github.com/guilhermehccruz/jubileu-v2)',
+			},
+		});
+
+		const data = (await response.json()) as LRCLIBSearchResponse[];
+
+		if (!data?.at(0)?.plainLyrics) {
+			throw new Error('lyrics not found');
+		}
+
+		return data[0].plainLyrics;
 	}
 
 	private getEmbeds(lyrics: string): EmbedBuilder[] {
@@ -127,4 +161,16 @@ export class LyricsService {
 			? { splitLyrics: lyrics.split('\n\n'), separator: '\n\n' }
 			: { splitLyrics: lyrics.replaceAll('\n\n', '\n').split('\n'), separator: '\n' };
 	}
+}
+
+interface LRCLIBSearchResponse {
+	id: number;
+	name: string;
+	trackName: string;
+	artistName: string;
+	albumName: string;
+	duration: number;
+	instrumental: boolean;
+	plainLyrics: string;
+	syncedLyrics: string;
 }
