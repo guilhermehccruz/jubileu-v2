@@ -49,7 +49,7 @@
 		"discord.js": "^14.22.1",
 		"discordx": "^11.12.6",
 		"dotenv": "^17.2.1",
-		"llyrics": "^1.2.5",
+		"llyrics": "^1.3.1",
 		"rastreio-correios": "^1.1.7",
 		"reflect-metadata": "^0.2.2",
 		"rimraf": "^6.0.1",

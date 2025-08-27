@@ -1,7 +1,7 @@
 import { EmbedBuilder } from 'discord.js';
 import type { ButtonInteraction, CommandInteraction } from 'discord.js';
 import { Discord } from 'discordx';
-import { find } from 'llyrics';
+import { find, isNotFoundResponse } from 'llyrics';
 import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../core/music/MusicPlayer.js';
@@ -73,11 +73,14 @@ export class LyricsService {
 			}
 
 			const result = await find({
-				song: queue.currentPlaybackTrack.info.title.replaceAll(/\(.*\)/g, ''),
+				song: queue.currentPlaybackTrack.info.title.replaceAll(/\((.*\))|(\[.*\])/g, '').trim(),
 				artist: queue.currentPlaybackTrack.info.author,
-				engine: 'musixmatch',
 				forceSearch: true,
 			});
+
+			if (isNotFoundResponse(result)) {
+				throw new Error('lyrics not found');
+			}
 
 			return result.lyrics.replaceAll('\r', '').replaceAll(/\[.*\]\n/g, '');
 		} catch (error) {
