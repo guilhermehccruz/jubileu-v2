@@ -300,14 +300,9 @@ export class MusicQueue extends Queue {
 	}
 
 	private resolvePagination = (index: number, pagination: Pagination): PaginationItem => {
-		const pagesCount = Math.ceil(this.size / 10);
+		pagination.setMaxLength(Math.ceil(this.size / 10));
 
-		pagination.maxLength = pagesCount;
-		if (index > pagination.maxLength) {
-			pagination.currentPage = 0;
-		}
-
-		const currentPage = pagination.currentPage;
+		const { currentPage } = pagination;
 
 		const embed = new EmbedBuilder().setDescription(
 			`Tocando **${this.getTrackTitle(this.currentPlaybackTrack!)}** de ${this.size + 1} músicas`,

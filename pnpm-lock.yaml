@@ -18,8 +18,8 @@ importers:
         specifier: ^4.0.9
         version: 4.0.9(@discordx/lava-player@2.1.5)(discord.js@14.22.1)
       '@discordx/pagination':
-        specifier: ^4.3.0
-        version: 4.3.0(discord.js@14.22.1)
+        specifier: ^4.4.0
+        version: 4.4.0(discord.js@14.22.1)
       discord.js:
         specifier: ^14.22.1
         version: 14.22.1
@@ -48,8 +48,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       zod:
-        specifier: ^4.1.1
-        version: 4.1.1
+        specifier: ^4.1.4
+        version: 4.1.4
     devDependencies:
       '@eslint/js':
         specifier: ^9.34.0
@@ -172,8 +172,8 @@ packages:
       '@discordx/lava-player': '>=2.1.5'
       discord.js: '>=13'
 
-  '@discordx/pagination@4.3.0':
-    resolution: {integrity: sha512-f+aDH6VVRR4/OqHXR451VymGPio6LhuBL9ABIPobW7RcnfJoqwf0O2hKrCBejcmctIcPE6NrwlB7nozXOSuD+w==}
+  '@discordx/pagination@4.4.0':
+    resolution: {integrity: sha512-z5Z141DnHiaNBoplSN2qbRwWxWCQgV9HckjXV7ZhxLq3VOU2hLFbCPrXkKJKf5m4eVn8cePmm77QmccJm4dp8Q==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     peerDependencies:
       discord.js: '>=14 || ^14.0.0-dev'
@@ -1476,8 +1476,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  zod@4.1.1:
-    resolution: {integrity: sha512-SgMZK/h8Tigt9nnKkfJMvB/mKjiJXaX26xegP4sa+0wHIFVFWVlsQGdhklDmuargBD3Hsi3rsQRIzwJIhTPJHA==}
+  zod@4.1.4:
+    resolution: {integrity: sha512-2YqJuWkU6IIK9qcE4k1lLLhyZ6zFw7XVRdQGpV97jEIZwTrscUw+DY31Xczd8nwaoksyJUIxCojZXwckJovWxA==}
 
 snapshots:
 
@@ -1605,7 +1605,7 @@ snapshots:
       discord.js: 14.22.1
       lodash: 4.17.21
 
-  '@discordx/pagination@4.3.0(discord.js@14.22.1)':
+  '@discordx/pagination@4.4.0(discord.js@14.22.1)':
     dependencies:
       discord.js: 14.22.1
       lodash: 4.17.21
@@ -3143,4 +3143,4 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod@4.1.1: {}
+  zod@4.1.4: {}
