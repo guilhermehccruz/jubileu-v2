@@ -22,6 +22,9 @@
 		"importHelpers": true,
 		"types": [
 			"node"
-		]
-	}
+		],
+	},
+	"exclude": [
+		"eslint.config.mjs"
+	]
 }

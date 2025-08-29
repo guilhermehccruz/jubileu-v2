@@ -23,3 +23,7 @@ Run `docker compose up lavalink -d`
 #### Start the bot
 
 The bot can be ran directly with `pnpm start:dev` or with docker `docker compose up bot -d`
+
+#### Manually running the container
+
+`docker build -t bot . && docker run --network host --env-file .env bot`

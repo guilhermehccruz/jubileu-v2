@@ -6,11 +6,11 @@ WORKDIR /usr/app
 
 RUN npm i -g pnpm
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml tsconfig.json ./
 
 RUN pnpm install
 
-COPY tsconfig.json src ./
+COPY src ./src
 
 # Build
 
@@ -20,11 +20,11 @@ WORKDIR /usr/app
 
 RUN npm i -g pnpm
 
-COPY --chown=node:node package.json pnpm-lock.yaml ./
+COPY --chown=node:node --from=development /usr/app/package.json /usr/app/pnpm-lock.yaml /usr/app/tsconfig.json ./
 
 COPY --chown=node:node --from=development /usr/app/node_modules ./node_modules
 
-COPY --chown=node:node tsconfig.json src ./
+COPY --chown=node:node --from=development /usr/app/src ./src
 
 RUN pnpm build
 
@@ -44,4 +44,4 @@ COPY --chown=node:node --from=build /usr/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/app/package.json ./package.json
 COPY --chown=node:node --from=build /usr/app/dist ./dist
 
-CMD [ "node", "dist/index.js" ]
+CMD [ "node", "dist/main.js" ]
