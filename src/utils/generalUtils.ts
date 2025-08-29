@@ -40,3 +40,7 @@ export interface SelfDestructParams {
 	followUp?: string | InteractionReplyOptions;
 	timeout?: number;
 }
+
+export function sleep(ms: number): Promise<void> {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
