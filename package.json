@@ -1,8 +1,4 @@
 {
-	"name": "jubileu-v2",
-	"version": "1.0.0",
-	"description": "",
-	"main": "src/main.ts",
 	"type": "module",
 	"scripts": {
 		"prebuild": "rimraf dist",
@@ -13,24 +9,6 @@
 		"format": "prettier --write \"src/**/*.ts\"",
 		"prepare": "husky"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/guilhermehccruz/jubileu-v2.git"
-	},
-	"keywords": [
-		"typescript",
-		"discord",
-		"bot",
-		"jubileu",
-		"docker",
-		"di"
-	],
-	"author": "Guilherme Cruz <guihccruz60@gmail.com> (https://github.com/guilhermehccruz)",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/guilhermehccruz/jubileu-v2/issues"
-	},
-	"homepage": "https://github.com/guilhermehccruz/jubileu-v2#readme",
 	"devDependencies": {
 		"@eslint/js": "^9.34.0",
 		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
