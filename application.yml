@@ -106,3 +106,7 @@ plugins:
         oauth:
             enabled: true
             refreshToken: ${OAUTH_REFRESH_TOKEN}
+        remoteCipher:
+            url: "https://cipher.kikkia.dev/"
+            password: ""
+            userAgent: "jubileu-v2"
