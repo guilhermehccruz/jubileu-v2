@@ -17,7 +17,10 @@ export class MusicPlayer {
 		return this.queueManager.queue(guildId, () => queue);
 	}
 
-	async parseCommand(interaction: CommandInteraction | ButtonInteraction): Promise<ParsedCommand | null> {
+	async parseCommand(
+		interaction: CommandInteraction | ButtonInteraction,
+		shouldJoin = false,
+	): Promise<ParsedCommand | null> {
 		if (!interaction.deferred) {
 			await interaction.deferReply();
 		}
@@ -59,7 +62,7 @@ export class MusicPlayer {
 			return null;
 		}
 
-		if (bot.voice.channelId === null) {
+		if (bot.voice.channelId === null && shouldJoin) {
 			queue.channel = interaction.channel as TextChannel;
 
 			await queue.guildPlayer.join({

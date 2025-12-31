@@ -53,7 +53,7 @@ export class PlayCommand {
 
 		interaction: CommandInteraction,
 	): Promise<void> {
-		const cmd = await musicPlayer.parseCommand(interaction);
+		const cmd = await musicPlayer.parseCommand(interaction, true);
 		if (!cmd) {
 			return;
 		}
