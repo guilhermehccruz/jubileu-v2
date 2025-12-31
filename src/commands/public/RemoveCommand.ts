@@ -13,7 +13,6 @@ export class RemoveCommand {
 	@SlashWithAliases(
 		{
 			name: 'remove',
-			nameLocalizations: { 'pt-BR': 'remover' },
 			description: 'Removes the song from the indicated positions',
 			descriptionLocalizations: { 'pt-BR': 'Remove a música da fila na posição digitada' },
 		},
