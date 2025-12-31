@@ -52,6 +52,8 @@ export class ForwardCommand {
 
 		await queue.guildPlayer.update({ position: queue.currentPlaybackPosition + seconds * 1000 });
 
-		return selfDestruct({ interaction, followUp: '> Pulado o tempo requisitado' });
+		await selfDestruct({ interaction, followUp: '> Pulado o tempo requisitado' });
+
+		await queue.updateControlMessage({ force: true });
 	}
 }
