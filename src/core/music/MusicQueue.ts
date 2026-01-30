@@ -45,7 +45,7 @@ export class MusicQueue extends Queue {
 
 		const message = await this.channel.send('>>> Se encontrou algum bug, reporte com o comando `/report`');
 
-		selfDestruct({ interaction: message });
+		await selfDestruct({ interaction: message });
 	}
 
 	private controlsRow(): ActionRowBuilder<MessageActionRowComponentBuilder>[] {
@@ -74,10 +74,7 @@ export class MusicQueue extends Queue {
 		this.lockUpdate = true;
 
 		if (!this.currentPlaybackTrack) {
-			selfDestruct({ interaction: this.lastControlMessage, timeout: 0 });
-
 			this.lastControlMessage = undefined;
-
 			this.lockUpdate = false;
 			return;
 		}
@@ -111,21 +108,29 @@ export class MusicQueue extends Queue {
 			embeds: [embed],
 		};
 
-		if (this.lastControlMessage?.id !== this.channel.lastMessageId || options?.force) {
-			selfDestruct({ interaction: this.lastControlMessage, timeout: 0 });
-			this.lastControlMessage = undefined;
+		await this.syncLastControlMessage();
 
-			const message = await this.channel.send(messageOptions).catch((error: unknown) => {
-				console.error(error);
-			});
+		const isEditable =
+			this.lastControlMessage?.editable &&
+			this.lastControlMessage?.id === this.channel.lastMessageId &&
+			!options?.force;
 
-			if (message) {
-				this.lastControlMessage = message;
-			}
-		} else {
-			await this.lastControlMessage.edit(messageOptions).catch((error: unknown) => {
-				console.error(error);
-			});
+		if (isEditable) {
+			await this.lastControlMessage!.edit(messageOptions).catch(() => null);
+			this.lockUpdate = false;
+
+			return;
+		}
+
+		await selfDestruct({ interaction: this.lastControlMessage, timeout: 0 });
+		this.lastControlMessage = undefined;
+
+		const message = await this.channel.send(messageOptions).catch((error: unknown) => {
+			console.error(error);
+		});
+
+		if (message) {
+			this.lastControlMessage = message;
 		}
 
 		this.lockUpdate = false;
@@ -169,8 +174,8 @@ export class MusicQueue extends Queue {
 		const pageOptions = new PaginationResolver(this.resolvePagination, pagesCount);
 
 		const pagination = new Pagination(interaction, pageOptions, {
-			onTimeout: (_, message) =>
-				selfDestruct({
+			onTimeout: async (_, message) =>
+				await selfDestruct({
 					interaction: message,
 					timeout: 0,
 				}),
@@ -322,4 +327,20 @@ export class MusicQueue extends Queue {
 			embeds: [embed],
 		};
 	};
+
+	private async syncLastControlMessage(): Promise<void> {
+		if (!this.lastControlMessage) {
+			this.lastControlMessage = undefined;
+			return;
+		}
+
+		const fetchedMessage = await this.lastControlMessage.fetch().catch(() => null);
+
+		if (!fetchedMessage) {
+			this.lastControlMessage = undefined;
+			return;
+		}
+
+		this.lastControlMessage = fetchedMessage;
+	}
 }

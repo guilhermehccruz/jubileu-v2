@@ -6,11 +6,14 @@ import { injectable } from 'tsyringe';
 
 import { musicPlayer } from '../../core/music/MusicPlayer.js';
 import { SlashWithAliases } from '../../decorators/SlashWithAliases.js';
+import { LeaveService } from '../../services/LeaveService.js';
 import { selfDestruct } from '../../utils/generalUtils.js';
 
 @Discord()
 @injectable()
 export class PlayCommand {
+	constructor(private readonly leaveService: LeaveService) {}
+
 	/**
 	 *
 	 * Links podem ser de:
@@ -94,16 +97,24 @@ export class PlayCommand {
 			embed.setDescription(`${data.tracks.length} da playlist ${data.info.name}`);
 		}
 
+		if (!queue.currentPlaybackTrack) {
+			const next = await queue.playNext();
+
+			if (!next) {
+				await interaction.followUp('Ocorreu um erro ao carregar a música');
+
+				await this.leaveService.execute(interaction);
+
+				return;
+			}
+		}
+
 		await selfDestruct({
 			interaction,
 			followUp: {
 				embeds: [embed],
 			},
 		});
-
-		if (!queue.currentPlaybackTrack) {
-			await queue.playNext();
-		}
 
 		await queue.updateControlMessage();
 	}
