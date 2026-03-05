@@ -1,6 +1,6 @@
 services:
     lavalink:
-        image: fredboat/lavalink:4.1.2
+        image: fredboat/lavalink:4.2.1
         container_name: lavalink
         volumes:
             - ./application.yml:/opt/Lavalink/application.yml
@@ -11,7 +11,15 @@ services:
         env_file: .env
         restart: always
         healthcheck:
-            test: ['CMD', 'curl', '-f', 'http://localhost:2333/version', '-H', 'Authorization;']
+            test:
+                [
+                    "CMD",
+                    "curl",
+                    "-f",
+                    "http://localhost:2333/version",
+                    "-H",
+                    "Authorization;",
+                ]
             interval: 30s
             timeout: 1s
             retries: 5
@@ -30,4 +38,4 @@ services:
                 condition: service_healthy
                 restart: false
         restart: always
-        command: ['pnpm', 'start:dev']
+        command: ["pnpm", "start:dev"]
