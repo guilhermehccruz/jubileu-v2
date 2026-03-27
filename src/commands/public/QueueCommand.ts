@@ -16,7 +16,7 @@ export class QueueButton {
 		},
 		['fila'],
 	)
-	async button(interaction: CommandInteraction): Promise<void> {
+	async queue(interaction: CommandInteraction): Promise<void> {
 		const cmd = await musicPlayer.parseCommand(interaction);
 		if (!cmd) {
 			return;
