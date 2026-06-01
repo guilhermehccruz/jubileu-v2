@@ -106,6 +106,9 @@ plugins:
         oauth:
             enabled: true
             refreshToken: ${OAUTH_REFRESH_TOKEN}
+        pot:
+            token: ${PO_TOKEN}
+            visitorData: ${VISITOR_DATA}
         remoteCipher:
             url: 'https://cipher.kikkia.dev/'
             password: ''
